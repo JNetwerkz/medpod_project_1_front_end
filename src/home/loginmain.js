@@ -36,7 +36,11 @@ class LoginMain extends Component {
   }
 
   handleSubmit (event) {
-    console.log('handleSubmit event', event.target)
+    console.log('handleSubmit event', event)
+    const formData = new FormData (event.currentTarget)
+
+    console.log('formData', formData.entries())
+
     event.preventDefault()
   }
 
