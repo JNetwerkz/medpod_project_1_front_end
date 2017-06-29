@@ -39,7 +39,7 @@ class LoginMain extends Component {
     console.log('handleSubmit event', event)
     const formData = new FormData (event.currentTarget)
 
-    console.log('formData', formData.entries())
+    console.log('formData', formData)
 
     event.preventDefault()
   }
