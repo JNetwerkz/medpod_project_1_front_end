@@ -15,36 +15,38 @@ class LoginMain extends Component {
     this.handleChange = this.handleChange.bind(this)
   }
 
-
   handleChange (field, event) {
     console.log('making changes to form input field')
 
     const changes = {}
-    switch(field) {
+    switch (field) {
       case 'email':
         changes.email = event.target.value
-      break
+        break
       case 'password':
         changes.password = event.target.value
-      break
+        break
       default:
         console.log('error')
-      break
+        break
     }
     console.log('changes is', changes)
     this.setState(changes)
   }
 
   handleSubmit (event) {
-    console.log('handleSubmit event', event)
-    const formData = new FormData (event.currentTarget)
-
-    console.log('formData', formData)
-
     event.preventDefault()
+    console.log('handleSubmit event', event)
+    const formData = new FormData()
+
+    formData.append({
+      email: this.state.email
+    })
+    console.log(formData)
   }
 
   render () {
+    console.log('loginmain props', this.props)
     return (
       <Container fluid>
         <LoginForm
