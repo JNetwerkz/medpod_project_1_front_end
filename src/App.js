@@ -1,20 +1,40 @@
 import React, { Component } from 'react'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { auth, storageKey } from './firebase'
 
 import './App.css'
 
 // import components
-import LoginMain from './home/loginmain'
+import AuthMain from './pages/auth/auth-main'
+import HomeMain from './pages/home/home-main'
+import PrivateRoute from './private-route'
 
 class App extends Component {
+  componentWillMount () {
+    console.log('At componentWillMount')
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        window.localStorage.setItem(storageKey, user.uid)
+        // this.setState({currentUser: user.uid})
+      } else {
+        window.localStorage.removeItem(storageKey)
+        // this.setState({currentUser: null})
+      }
+    })
+  }
+
   render () {
+    console.log(window.localStorage)
     return (
       <BrowserRouter>
         <div className='App'>
           <header />
           <main>
-            <Route exact path='/'
-              render={(props) => <LoginMain {...props} />} />
+            <Switch>
+              <PrivateRoute exact path='/' component={HomeMain} />
+              <Route exact path='/login'
+                render={(props) => <AuthMain {...props} />} />
+            </Switch>
           </main>
         </div>
       </BrowserRouter>

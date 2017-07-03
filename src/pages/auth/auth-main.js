@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
 import { Container } from 'semantic-ui-react'
 
-// import components
-import LoginForm from './components/loginform'
+import axios from 'axios'
 
-class LoginMain extends Component {
+import { auth } from '../../firebase'
+
+// import components
+import LoginForm from './components/login-form'
+
+class AuthMain extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -13,6 +17,8 @@ class LoginMain extends Component {
     }
 
     this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.handleSignOut = this.handleSignOut.bind(this)
   }
 
   handleChange (field, event) {
@@ -36,28 +42,48 @@ class LoginMain extends Component {
 
   handleSubmit (event) {
     event.preventDefault()
-    console.log('handleSubmit event', event)
-    const formData = new FormData()
 
-    formData.append({
-      email: this.state.email
+    auth.signInWithEmailAndPassword(this.state.email, this.state.password)
+      .then((user) => {
+        user.getIdToken(true).then((token) => {
+          console.log('token', token)
+          axios({
+            url: 'http://localhost:8888/',
+            method: 'GET',
+            headers: {'Authorization': `Bearer ${token}`}
+          })
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err))
+        })
+        // window.location = '/'
+      })
+      .catch((err) => {
+        console.log('sign in error', err)
+      })
+  }
+
+  handleSignOut () {
+    auth.signOut().then(() => {
+      window.location = '/login'
     })
-    console.log(formData)
   }
 
   render () {
     console.log('loginmain props', this.props)
     return (
       <Container fluid>
+
         <LoginForm
           email={this.state.email}
           password={this.state.password}
           handleChange={this.handleChange}
           handleSubmit={this.handleSubmit} />
+
+        <button onClick={this.handleSignOut}>Sign Out</button>
       </Container>
     )
   }
 
 }
 
-export default LoginMain
+export default AuthMain
