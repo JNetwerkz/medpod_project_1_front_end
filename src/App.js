@@ -7,6 +7,7 @@ import './App.css'
 // import components
 import AuthMain from './pages/auth/auth-main'
 import HomeMain from './pages/home/home-main'
+import PatientMain from './pages/patient/patient-main'
 import PrivateRoute from './private-route'
 
 class App extends Component {
@@ -32,6 +33,7 @@ class App extends Component {
           <main>
             <Switch>
               <PrivateRoute exact path='/' component={HomeMain} />
+              <PrivateRoute path='/patient' component={PatientMain} />
               <Route exact path='/login'
                 render={(props) => <AuthMain {...props} />} />
             </Switch>
