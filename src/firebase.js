@@ -13,9 +13,11 @@ const firebaseApp = firebase.initializeApp(config)
 
 const auth = firebaseApp.auth()
 const storageKey = 'KEY_FOR_LOCAL_STORAGE'
+const firebaseIdToken = 'ID_TOKEN_FOR_LOCAL_STORAGE'
 
 const isAuthenticated = () => {
+  console.log('running isAuthenticated')
   return !!auth.currentUser || !!window.localStorage.getItem(storageKey)
 }
 
-export {firebaseApp, auth, isAuthenticated, storageKey}
+export {firebaseApp, auth, isAuthenticated, storageKey, firebaseIdToken}

@@ -3,7 +3,6 @@ import React from 'react'
 import { Form, Button } from 'semantic-ui-react'
 
 const PatientNew = (props) => {
-  console.log(props)
   return (
     <Form id='patient_new-form' onChange={(event) => props.handleChange(event)} onSubmit={(event) => props.handleSubmit(event)}>
       <h2>Enter New Patient Information</h2>
