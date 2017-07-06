@@ -7,7 +7,9 @@ import './App.css'
 // import components
 import AuthMain from './pages/auth/auth-main'
 import HomeMain from './pages/home/home-main'
+import NavMain from 'nav/nav-main'
 import PatientMain from './pages/patient/patient-main'
+import TransactionMain from './pages/transaction/transaction-main'
 import PrivateRoute from './private-route'
 
 class App extends Component {
@@ -45,11 +47,14 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className='App'>
-          <header />
+          <header>
+            <NavMain />
+          </header>
           <main>
             <Switch>
               <PrivateRoute exact path='/' component={HomeMain} />
               <PrivateRoute path='/patient' component={PatientMain} />
+              <PrivateRoute path='/transaction' component={TransactionMain} />
               <Route exact path='/login'
                 render={(props) => <AuthMain {...props} />} />
             </Switch>
