@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import axios from 'axios'
 
-import AuthHeader from 'auth-header'
+import { AuthHeader } from 'custom-function'
 
 class PatientShow extends Component {
   constructor (props) {
@@ -25,12 +25,13 @@ class PatientShow extends Component {
     axios({
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/patient/${this.props.match.params.id}`,
-      headers: AuthHeader()
+      
     })
     .then((res) => {
       console.log('PatientShow res', res.data)
       this.setState({ patientShow: res.data })
     })
+    .catch((err) => console.error(err))
   }
 }
 

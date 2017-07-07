@@ -3,7 +3,7 @@ import { Link, Route } from 'react-router-dom'
 
 import axios from 'axios'
 
-import AuthHeader from 'auth-header'
+import { AuthHeader } from 'custom-function'
 
 const PatientRow = (props) => {
   console.log(props)
@@ -53,7 +53,7 @@ class PatientIndex extends Component {
     axios({
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/patient`,
-      headers: AuthHeader()
+      
     })
     .then((res) => {
       console.log('PatientIndex res', res.data)

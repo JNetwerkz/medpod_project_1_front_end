@@ -5,7 +5,7 @@ import axios from 'axios'
 import * as $ from 'jquery'
 import { Container } from 'semantic-ui-react'
 
-import AuthHeader from '../../auth-header'
+import { AuthHeader } from '../../custom-function'
 
 import PatientIndex from './components/patient-index'
 import PatientNew from './components/patient-new'
@@ -37,7 +37,7 @@ class PatientMain extends Component {
       method: 'POST',
       url: `${process.env.REACT_APP_API_ENDPOINT}/patient`,
       data: formData,
-      headers: AuthHeader()
+      
     })
     .then((res) => {
       console.log('new patient data', res.data)
@@ -85,7 +85,7 @@ class PatientMain extends Component {
     axios({
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/patient`,
-      headers: AuthHeader()
+      
     })
     .then((res) => {
       console.log('PatientIndex res', res.data)

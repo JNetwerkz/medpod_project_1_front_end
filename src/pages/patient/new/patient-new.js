@@ -6,7 +6,7 @@ import axios from 'axios'
 
 import { Form, Button } from 'semantic-ui-react'
 
-import AuthHeader from 'auth-header'
+import { AuthHeader } from 'custom-function'
 
 class PatientNew extends Component {
   constructor (props) {
@@ -35,7 +35,7 @@ class PatientNew extends Component {
       method: 'POST',
       url: `${process.env.REACT_APP_API_ENDPOINT}/patient`,
       data: formData,
-      headers: AuthHeader()
+      
     })
     .then((res) => {
       console.log('new patient data', res.data)

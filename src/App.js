@@ -4,6 +4,8 @@ import { auth, storageKey, firebaseIdToken } from './firebase'
 
 import './App.css'
 
+import axios from 'axios'
+
 // import components
 import AuthMain from './pages/auth/auth-main'
 import HomeMain from './pages/home/home-main'
@@ -12,6 +14,8 @@ import PatientMain from './pages/patient/patient-main'
 import TransactionMain from './pages/transaction/transaction-main'
 import PrivateRoute from './private-route'
 
+import { AuthHeader } from 'custom-function'
+
 class App extends Component {
   constructor (props) {
     super(props)
@@ -19,7 +23,9 @@ class App extends Component {
       if (user) {
         console.log('onAuthStateChanged setting storageKey')
         window.localStorage.setItem(storageKey, user.uid)
-        user.getIdToken(true).then((token) => window.localStorage.setItem(firebaseIdToken, token))
+        user.getIdToken(true).then((token) => {
+          window.localStorage.setItem(firebaseIdToken, token)
+        })
         // this.setState({currentUser: user.uid})
       } else {
         console.log('onAuthStateChanged removing storageKey')
@@ -33,17 +39,26 @@ class App extends Component {
   //   console.log('At componentWillMount')
   //   auth.onAuthStateChanged(user => {
   //     if (user) {
+  //       console.log('onAuthStateChanged setting storageKey')
   //       window.localStorage.setItem(storageKey, user.uid)
+  //       user.getIdToken(true).then((token) => {
+  //         window.localStorage.setItem(firebaseIdToken, token)
+  //         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  //         console.log('HEREHERER', axios.defaults.headers.common['Authorization'])
+  //       })
   //       // this.setState({currentUser: user.uid})
   //     } else {
+  //       console.log('onAuthStateChanged removing storageKey')
   //       window.localStorage.removeItem(storageKey)
+  //       window.localStorage.removeItem(firebaseIdToken)
+  //       axios.defaults.headers.common['Authorization'] = null
   //       // this.setState({currentUser: null})
   //     }
   //   })
   // }
 
   render () {
-    console.log(window.localStorage)
+    axios.defaults.headers.common['Authorization'] = AuthHeader()
     return (
       <BrowserRouter>
         <div className='App'>

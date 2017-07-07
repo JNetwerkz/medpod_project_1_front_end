@@ -52,10 +52,11 @@ class AuthMain extends Component {
             method: 'GET',
             headers: {'Authorization': `Bearer ${token}`}
           })
-          .then((res) => console.log(res))
+          .then((res) => {
+            window.location = '/'
+          })
           .catch((err) => console.log(err))
         })
-        // window.location = '/'
       })
       .catch((err) => {
         console.log('sign in error', err)

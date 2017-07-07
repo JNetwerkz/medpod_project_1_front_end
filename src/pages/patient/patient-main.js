@@ -5,7 +5,7 @@ import axios from 'axios'
 import * as $ from 'jquery'
 import { Container } from 'semantic-ui-react'
 
-import AuthHeader from 'auth-header'
+import { AuthHeader } from 'custom-function'
 
 import PatientIndex from './index/patient-index'
 import PatientNew from './new/patient-new'

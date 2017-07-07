@@ -4,6 +4,12 @@ import { Link, Switch, Route } from 'react-router-dom'
 import { Container } from 'semantic-ui-react'
 
 import TransactionNew from './new/transaction-new'
+import TransactionShow from './show/transaction-show'
+import TransactionIndex from './index/transaction-index'
+
+import { AuthHeader } from 'custom-function'
+
+import axios from 'axios'
 
 class TransactionMain extends Component {
   render () {
@@ -18,6 +24,14 @@ class TransactionMain extends Component {
             exact
             render={(props) => <TransactionNew {...props} />}
             path={`${this.props.match.url}/new`}
+          />
+          <Route
+            render={(props) => <TransactionShow {...props} />}
+            path={`${this.props.match.url}/:id`}
+          />
+          <Route
+            render={(props) => <TransactionIndex {...props} />}
+            path={`${this.props.match.url}`}
           />
         </Switch>
       </Container>
