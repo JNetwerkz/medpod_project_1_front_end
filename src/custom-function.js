@@ -11,9 +11,15 @@ const AuthHeader = () => {
 const M6117 = (data) => {
   console.log(data)
 
-  let cusCode = `${data['transaction month'].toString()}-${data['entry number']}-${moment(data['invoice date']).year()}`
+  let cusCode = `M${data['transaction month'].toString()}-${data['entry number']}-${moment(data['invoice date']).year()}`
 
   return cusCode
 }
 
-export { AuthHeader, M6117 }
+const combineName = (obj) => {
+  let firstName = obj['first name'] ? obj['first name'] : ''
+  let lastName = obj['last name'] ? obj['last name'] : ''
+  return `${firstName} ${lastName}`
+}
+
+export { AuthHeader, M6117, combineName }

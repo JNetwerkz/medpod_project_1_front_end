@@ -12,6 +12,7 @@ import HomeMain from './pages/home/home-main'
 import NavMain from 'nav/nav-main'
 import PatientMain from './pages/patient/patient-main'
 import TransactionMain from './pages/transaction/transaction-main'
+import DoctorMain from './pages/doctor/doctor-main'
 import PrivateRoute from './private-route'
 
 import { AuthHeader } from 'custom-function'
@@ -70,6 +71,7 @@ class App extends Component {
               <PrivateRoute exact path='/' component={HomeMain} />
               <PrivateRoute path='/patient' component={PatientMain} />
               <PrivateRoute path='/transaction' component={TransactionMain} />
+              <PrivateRoute path='/doctor' component={DoctorMain} />
               <Route exact path='/login'
                 render={(props) => <AuthMain {...props} />} />
             </Switch>

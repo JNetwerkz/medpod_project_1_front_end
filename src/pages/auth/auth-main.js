@@ -47,15 +47,16 @@ class AuthMain extends Component {
       .then((user) => {
         user.getIdToken(true).then((token) => {
           console.log('token', token)
-          axios({
-            url: 'http://localhost:8888/',
-            method: 'GET',
-            headers: {'Authorization': `Bearer ${token}`}
-          })
-          .then((res) => {
-            window.location = '/'
-          })
-          .catch((err) => console.log(err))
+          window.location = '/'
+          // axios({
+          //   url: 'http://localhost:8888/',
+          //   method: 'GET',
+          //   headers: {'Authorization': `Bearer ${token}`}
+          // })
+          // .then((res) => {
+          //   window.location = '/'
+          // })
+          // .catch((err) => console.log(err))
         })
       })
       .catch((err) => {

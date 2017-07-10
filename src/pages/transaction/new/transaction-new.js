@@ -1,13 +1,11 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
-import Modal from 'react-modal'
 
 import * as $ from 'jquery'
 import axios from 'axios'
 
 import { Form, Button } from 'semantic-ui-react'
 
-import { AuthHeader } from 'custom-function'
 import PatientModal from './patient-modal'
 
 class TransactionNew extends Component {
@@ -20,15 +18,20 @@ class TransactionNew extends Component {
       redirectTo: '',
       // patient modal selection
       patientModalOpen: false,
-      patientSearch: '',
       patientSearchResult: [],
-      selectedPatientName: '',
-      selectedPatientId: ''
+      selectedPatient: {},
+      patientId: '',
+      // doctor modal selection
+      doctorModalOpen: false,
+      doctorSearchResult: [],
+      selectedDoctor: {},
+      doctorId: ''
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.patientModalMethod = this.patientModalMethod.bind(this)
   }
+
   handleChange (event) {
     this.setState({
       transactionNewForm: $('#transaction_new-form').serializeArray()
@@ -43,7 +46,6 @@ class TransactionNew extends Component {
       method: 'POST',
       url: `${process.env.REACT_APP_API_ENDPOINT}/transaction`,
       data: formData
-
     })
     .then((res) => {
       console.log('new transaction data', res.data)
@@ -55,7 +57,7 @@ class TransactionNew extends Component {
     .catch((err) => console.error(err))
   }
 
-  patientModalMethod (type) {
+  patientModalMethod (type, event, data) {
     switch (type) {
       case 'open':
         this.setState({ patientModalOpen: true })
@@ -66,8 +68,38 @@ class TransactionNew extends Component {
         this.setState({ patientModalOpen: false })
         break
 
-      case 'search':
+      case 'change':
+        console.log('searching patient')
+        if (event.currentTarget.value.length >= 2) {
+          axios.get(`${process.env.REACT_APP_API_ENDPOINT}/patient/search`, {
+            params: { search: event.currentTarget.value }
+          })
+          .then((res) => {
+            this.setState({ patientSearchResult: res.data })
+          })
+          .catch((err) => console.error(err))
+        }
+        break
+      case 'select':
+        console.log('select patient')
+        console.log(data)
+        this.setState({
+          selectedPatient: data,
+          id: data._id
+          // patientModalOpen: false
+        })
 
+        const eventBubbleName = new Event('input', { bubbles: true })
+        this.patientNameRef.dispatchEvent(eventBubbleName)
+        const eventBubbleId = new Event('input', { bubbles: true })
+        this.patientIdRef.dispatchEvent(eventBubbleId)
+
+        break
+      case 'test1':
+        console.log(('handle change called'))
+        break
+      case 'test2':
+        console.log(('handle change called'))
         break
       default:
         break
@@ -85,11 +117,26 @@ class TransactionNew extends Component {
           <h2>Enter New Transaction Information</h2>
           <Form.Field>
             <label>Patient</label>
-            <input onClick={() => this.patientModalMethod('open')} type='text' name='patient' defaultValue={this.state.selectedPatientName} />
+            <input onClick={() => this.patientModalMethod('open')} type='text' name='patientName'
+              readOnly
+              onChange={() => console.log()}
+              ref={(input) => {
+                console.log('input', input)
+                this.patientNameRef = input
+              }}
+              value={`${this.state.selectedPatient['first name'] || ''} ${this.state.selectedPatient['last name'] || ''}`} />
           </Form.Field>
           <Form.Field>
-            <label>Patient</label>
-            <input onClick={() => this.patientModalMethod('open')} type='text' name='patient' defaultValue={this.state.selectedPatientId} />
+            <label>Patient_ID</label>
+            <input readOnly hidden
+              type='text'
+              name='patient'
+              onChange={() => console.log()}
+              ref={(input) => {
+                console.log('input', input)
+                this.patientIdRef = input
+              }}
+              value={this.state.patientId} />
           </Form.Field>
           <Form.Field>
             <label>Invoice Date</label>
@@ -111,7 +158,9 @@ class TransactionNew extends Component {
         </Form>
         <PatientModal
           patientModalOpen={this.state.patientModalOpen}
-          modalMethod={this.patientModalMethod} />
+          modalMethod={this.patientModalMethod}
+          patientSearchResult={this.state.patientSearchResult}
+          selectedPatient={this.state.selectedPatient} />
       </div>
     )
   }

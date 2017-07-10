@@ -4,19 +4,19 @@ import axios from 'axios'
 
 import { combineName } from 'custom-function'
 
-class PatientShow extends Component {
+class DoctorShow extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      patientShow: {}
+      doctorShow: {}
     }
   }
   render () {
     console.log(this.props)
     return (
       <div>
-        <h1>Patient Show</h1>
-        <p>{combineName(this.state.patientShow)}</p>
+        <h1>Doctor Show</h1>
+        <p>{combineName(this.state.doctorShow)}</p>
       </div>
     )
   }
@@ -24,15 +24,14 @@ class PatientShow extends Component {
   componentDidMount () {
     axios({
       method: 'GET',
-      url: `${process.env.REACT_APP_API_ENDPOINT}/patient/${this.props.match.params.id}`,
-
+      url: `${process.env.REACT_APP_API_ENDPOINT}/doctor/${this.props.match.params.id}`
     })
     .then((res) => {
-      console.log('PatientShow res', res.data)
-      this.setState({ patientShow: res.data })
+      console.log('DoctorShow res', res.data)
+      this.setState({ doctorShow: res.data })
     })
     .catch((err) => console.error(err))
   }
 }
 
-export default PatientShow
+export default DoctorShow

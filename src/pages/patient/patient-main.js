@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
-import { Link, Route, Switch, Redirect } from 'react-router-dom'
+import { Link, Route, Switch } from 'react-router-dom'
 
-import axios from 'axios'
-import * as $ from 'jquery'
 import { Container } from 'semantic-ui-react'
-
-import { AuthHeader } from 'custom-function'
 
 import PatientIndex from './index/patient-index'
 import PatientNew from './new/patient-new'
@@ -18,9 +14,6 @@ class PatientMain extends Component {
         <h1>Patients</h1>
           <li>
             <Link to={`${this.props.match.url}/new`}>Add Patient</Link>
-          </li>
-          <li>
-            <Link to={`${this.props.match.url}`}>Back</Link>
           </li>
         <Switch>
           <Route

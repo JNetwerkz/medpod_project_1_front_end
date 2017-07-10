@@ -3,14 +3,14 @@ import { Link, Route } from 'react-router-dom'
 
 import axios from 'axios'
 
-import { AuthHeader } from 'custom-function'
+import { combineName } from 'custom-function'
 
 const PatientRow = (props) => {
   console.log(props)
   return (
     <li>
       <Link to={`${props.match.url}/${props.patientData._id}`}>
-        {`${props.patientData['first name']} ${props.patientData['last name']}`}
+        {combineName(props.patientData)}
       </Link>
     </li>
   )
@@ -53,7 +53,7 @@ class PatientIndex extends Component {
     axios({
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/patient`,
-      
+
     })
     .then((res) => {
       console.log('PatientIndex res', res.data)

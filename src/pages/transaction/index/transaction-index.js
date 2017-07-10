@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom'
 
 import axios from 'axios'
 
-import { AuthHeader, M6117 } from 'custom-function'
+import { AuthHeader, M6117, combineName } from 'custom-function'
 
 const TransactionRow = (props) => {
   // M6117(props.transactionData)
   return (
     <li>
       <Link to={`${props.match.url}/${props.transactionData._id}`}>
-        {M6117(props.transactionData)}
+        {`${M6117(props.transactionData)} ${combineName(props.transactionData.patient)}`}
       </Link>
     </li>
   )

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import axios from 'axios'
 
-import { AuthHeader, M6117 } from 'custom-function'
+import { AuthHeader, M6117, combineName } from 'custom-function'
 
 class TransactionShow extends Component {
   constructor (props) {
@@ -12,12 +12,13 @@ class TransactionShow extends Component {
       mounted: false
     }
   }
+
   render () {
     if (!this.state.mounted) return <div>Loading</div>
     return (
       <div>
         <h1>Show Transaction</h1>
-        <p>{M6117(this.state.transactionShow)} {this.state.transactionShow.patient}</p>
+        <p>{M6117(this.state.transactionShow)} {combineName(this.state.transactionShow.patient)}</p>
       </div>
     )
   }
@@ -25,8 +26,7 @@ class TransactionShow extends Component {
   componentDidMount () {
     axios({
       method: 'GET',
-      url: `${process.env.REACT_APP_API_ENDPOINT}/transaction/${this.props.match.params.id}`,
-      
+      url: `${process.env.REACT_APP_API_ENDPOINT}/transaction/${this.props.match.params.id}`
     })
     .then((res) => {
       console.log('TransactionShow res', res.data)

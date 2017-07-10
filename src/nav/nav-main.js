@@ -15,6 +15,9 @@ class NavMain extends Component {
           <NavLink activeStyle={{fontWeight: 'bold', color: 'red'}} to='/transaction'>Transactions</NavLink>
         </li>
         <li>
+          <NavLink activeStyle={{fontWeight: 'bold', color: 'red'}} to='/doctor'>Doctor</NavLink>
+        </li>
+        <li>
           <NavLink activeStyle={{fontWeight: 'bold', color: 'red'}} to='/login'>Login</NavLink>
         </li>
       </Container>
