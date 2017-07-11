@@ -7,6 +7,7 @@ import axios from 'axios'
 import { Form, Button } from 'semantic-ui-react'
 
 import PatientModal from './patient-modal'
+import DoctorModal from './doctor-modal'
 
 class TransactionNew extends Component {
   constructor (props) {
@@ -21,6 +22,7 @@ class TransactionNew extends Component {
       patientSearchResult: [],
       selectedPatient: {},
       patientId: '',
+      searchFocus: false,
       // doctor modal selection
       doctorModalOpen: false,
       doctorSearchResult: [],
@@ -30,6 +32,7 @@ class TransactionNew extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.patientModalMethod = this.patientModalMethod.bind(this)
+    this.doctorModalMethod = this.doctorModalMethod.bind(this)
   }
 
   handleChange (event) {
@@ -60,7 +63,7 @@ class TransactionNew extends Component {
   patientModalMethod (type, event, data) {
     switch (type) {
       case 'open':
-        this.setState({ patientModalOpen: true })
+        this.setState({ patientModalOpen: true, searchFocus: true })
         break
 
       case 'close':
@@ -85,7 +88,7 @@ class TransactionNew extends Component {
         console.log(data)
         this.setState({
           selectedPatient: data,
-          id: data._id
+          patientId: data._id
           // patientModalOpen: false
         })
 
@@ -95,11 +98,48 @@ class TransactionNew extends Component {
         this.patientIdRef.dispatchEvent(eventBubbleId)
 
         break
-      case 'test1':
-        console.log(('handle change called'))
+      default:
         break
-      case 'test2':
-        console.log(('handle change called'))
+    }
+  }
+
+  doctorModalMethod (type, event, data) {
+    switch (type) {
+      case 'open':
+        this.setState({ doctorModalOpen: true })
+        break
+
+      case 'close':
+        console.log('closing modal')
+        this.setState({ doctorModalOpen: false })
+        break
+
+      case 'change':
+        console.log('searching doctor')
+        if (event.currentTarget.value.length >= 2) {
+          axios.get(`${process.env.REACT_APP_API_ENDPOINT}/doctor/search`, {
+            params: { search: event.currentTarget.value }
+          })
+          .then((res) => {
+            this.setState({ doctorSearchResult: res.data })
+          })
+          .catch((err) => console.error(err))
+        }
+        break
+      case 'select':
+        console.log('select doctor')
+        console.log(data)
+        this.setState({
+          selectedDoctor: data,
+          doctorId: data._id
+          // patientModalOpen: false
+        })
+
+        const eventBubbleName = new Event('input', { bubbles: true })
+        this.doctorNameRef.dispatchEvent(eventBubbleName)
+        const eventBubbleId = new Event('input', { bubbles: true })
+        this.doctorIdRef.dispatchEvent(eventBubbleId)
+
         break
       default:
         break
@@ -127,7 +167,7 @@ class TransactionNew extends Component {
               value={`${this.state.selectedPatient['first name'] || ''} ${this.state.selectedPatient['last name'] || ''}`} />
           </Form.Field>
           <Form.Field>
-            <label>Patient_ID</label>
+            {/* <label>Patient_ID</label> */}
             <input readOnly hidden
               type='text'
               name='patient'
@@ -139,16 +179,35 @@ class TransactionNew extends Component {
               value={this.state.patientId} />
           </Form.Field>
           <Form.Field>
+            <label>Doctor</label>
+            <input onClick={() => this.doctorModalMethod('open')} type='text' name='doctorName'
+              readOnly
+              onChange={() => console.log()}
+              ref={(input) => {
+                console.log('input', input)
+                this.doctorNameRef = input
+              }}
+              value={`${this.state.selectedDoctor['first name'] || ''} ${this.state.selectedDoctor['last name'] || ''}`} />
+          </Form.Field>
+          <Form.Field>
+            {/* <label>Doctor_ID</label> */}
+            <input readOnly hidden
+              type='text'
+              name='receiving doctor'
+              onChange={() => console.log()}
+              ref={(input) => {
+                console.log('input', input)
+                this.doctorIdRef = input
+              }}
+              value={this.state.doctorId} />
+          </Form.Field>
+          <Form.Field>
             <label>Invoice Date</label>
             <input type='date' name='invoice date' />
           </Form.Field>
           <Form.Field>
             <label>Invoice Number</label>
             <input type='text' name='invoice number' />
-          </Form.Field>
-          <Form.Field>
-            <label>Attending Doctor</label>
-            <input type='text' name='attending doctor' />
           </Form.Field>
           <Form.Field>
             <label>Charges to Patient</label>
@@ -160,7 +219,13 @@ class TransactionNew extends Component {
           patientModalOpen={this.state.patientModalOpen}
           modalMethod={this.patientModalMethod}
           patientSearchResult={this.state.patientSearchResult}
-          selectedPatient={this.state.selectedPatient} />
+          selectedPatient={this.state.selectedPatient}
+          searchFocus={this.state.searchFocus} />
+        <DoctorModal
+          doctorModalOpen={this.state.doctorModalOpen}
+          modalMethod={this.doctorModalMethod}
+          doctorSearchResult={this.state.doctorSearchResult}
+          selectedDoctor={this.state.selectedDoctor} />
       </div>
     )
   }

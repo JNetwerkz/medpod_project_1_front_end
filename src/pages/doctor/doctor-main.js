@@ -5,6 +5,7 @@ import { Container } from 'semantic-ui-react'
 
 import DoctorNew from './new/doctor-new'
 import DoctorShow from './show/doctor-show'
+import DoctorIndex from './index/doctor-index'
 
 class DoctorMain extends Component {
   render () {
@@ -24,6 +25,11 @@ class DoctorMain extends Component {
             path={`${this.props.match.url}/:id`}
             render={(props) =>
               <DoctorShow {...props} />
+          } />
+          <Route
+            path={`${this.props.match.url}/`}
+            render={(props) =>
+              <DoctorIndex {...props} />
           } />
         </Switch>
       </Container>
