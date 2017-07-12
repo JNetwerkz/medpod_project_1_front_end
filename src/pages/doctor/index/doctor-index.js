@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import axios from 'axios'
 
-import { M6117, combineName } from 'custom-function'
+import { combineName } from 'custom-function'
 
 const DoctorRow = (props) => {
   // M6117(props.doctorData)

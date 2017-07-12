@@ -6,8 +6,8 @@ import axios from 'axios'
 
 import { Form, Button } from 'semantic-ui-react'
 
-import PatientModal from './patient-modal'
-import DoctorModal from './doctor-modal'
+import PatientModal from 'partial/modal/patient-modal'
+import DoctorModal from 'partial/modal/doctor-modal'
 
 class TransactionNew extends Component {
   constructor (props) {

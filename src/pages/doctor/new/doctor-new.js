@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import * as $ from 'jquery'
 
-import { Form, Button, Select } from 'semantic-ui-react'
+import { Form } from 'semantic-ui-react'
 
 const options = [
   { key: 'm', text: 'Male', value: 'male' },

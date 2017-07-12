@@ -22,4 +22,19 @@ const combineName = (obj) => {
   return `${firstName} ${lastName}`
 }
 
-export { AuthHeader, M6117, combineName }
+const monthsSelectOption = [
+  { key: 'jan', text: 'January', value: 1 },
+  { key: 'feb', text: 'February', value: 2 },
+  { key: 'mar', text: 'March', value: 3 },
+  { key: 'apr', text: 'April', value: 4 },
+  { key: 'may', text: 'May', value: 5 },
+  { key: 'jun', text: 'June', value: 6 },
+  { key: 'jul', text: 'July', value: 7 },
+  { key: 'aug', text: 'August', value: 8 },
+  { key: 'sep', text: 'September', value: 9 },
+  { key: 'oct', text: 'October', value: 10 },
+  { key: 'nov', text: 'November', value: 11 },
+  { key: 'dec', text: 'December', value: 12 }
+]
+
+export { AuthHeader, M6117, combineName, monthsSelectOption }
