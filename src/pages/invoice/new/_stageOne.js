@@ -8,7 +8,7 @@ import DoctorModal from 'partial/modal/doctor-modal'
 import CheckboxRow from './_stageOne-checkboxRow'
 
 const InvoiceStageOne = (props) => {
-  console.log(props)
+  // console.log(props)
   const transactionList = props.transactionSearchResult.map((item) => {
     return (
       <CheckboxRow

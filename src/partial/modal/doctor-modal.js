@@ -6,7 +6,6 @@ import { Input, Button } from 'semantic-ui-react'
 import { combineName } from 'custom-function'
 
 const DoctorDetails = (data) => {
-  console.log(data.selectedDoctor)
   return (
     <div>
       <h2>Details</h2>
@@ -18,9 +17,7 @@ const DoctorDetails = (data) => {
 }
 
 const DoctorModal = (props) => {
-  console.log(props)
   const doctorsList = props.doctorSearchResult.map((item) => {
-    console.log(item)
     return <li onClick={(event) => props.modalMethod('select', event, item)} key={item._id}>{`${item['first name']} ${item['last name']}`}</li>
   })
   return (

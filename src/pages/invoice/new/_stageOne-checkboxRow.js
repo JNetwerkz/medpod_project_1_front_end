@@ -5,7 +5,7 @@ import { Checkbox } from 'semantic-ui-react'
 import { M6117 } from 'custom-function'
 
 const CheckboxRow = (props) => {
-  console.log(props)
+  // console.log(props)
   return (
     <div>
       <Checkbox
@@ -14,7 +14,7 @@ const CheckboxRow = (props) => {
           <label>
             <div>
               <p>
-                {props.item._id} {M6117(props.item)}
+                {props.item._id} {M6117(props.item)} checkbox {props.checkedTransaction[props.item._id].checked ? 'true' : 'false'}
               </p>
             </div>
           </label>

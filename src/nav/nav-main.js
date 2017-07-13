@@ -5,7 +5,6 @@ import { Container } from 'semantic-ui-react'
 
 class NavMain extends Component {
   render () {
-    console.log(this.props)
     return (
       <Container fluid>
         <li>

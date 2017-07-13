@@ -16,7 +16,7 @@ const storageKey = 'KEY_FOR_LOCAL_STORAGE'
 const firebaseIdToken = 'ID_TOKEN_FOR_LOCAL_STORAGE'
 
 const isAuthenticated = () => {
-  console.log('running isAuthenticated')
+  // console.log('running isAuthenticated')
   return !!auth.currentUser || !!window.localStorage.getItem(storageKey)
 }
 

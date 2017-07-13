@@ -193,7 +193,7 @@ class TransactionNew extends Component {
             {/* <label>Doctor_ID</label> */}
             <input readOnly hidden
               type='text'
-              name='receiving doctor'
+              name='receiving_doctor'
               onChange={() => console.log()}
               ref={(input) => {
                 console.log('input', input)

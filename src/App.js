@@ -23,14 +23,14 @@ class App extends Component {
     super(props)
     auth.onAuthStateChanged(user => {
       if (user) {
-        console.log('onAuthStateChanged setting storageKey')
+        // console.log('onAuthStateChanged setting storageKey')
         window.localStorage.setItem(storageKey, user.uid)
         user.getIdToken(true).then((token) => {
           window.localStorage.setItem(firebaseIdToken, token)
         })
         // this.setState({currentUser: user.uid})
       } else {
-        console.log('onAuthStateChanged removing storageKey')
+        // console.log('onAuthStateChanged removing storageKey')
         window.localStorage.removeItem(storageKey)
         window.localStorage.removeItem(firebaseIdToken)
         // this.setState({currentUser: null})

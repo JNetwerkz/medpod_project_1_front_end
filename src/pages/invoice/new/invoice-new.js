@@ -4,6 +4,8 @@ import { Switch, Route } from 'react-router-dom'
 import axios from 'axios'
 import moment from 'moment'
 
+import { Button } from 'semantic-ui-react'
+
 import InvoiceStageOne from './_stageOne'
 import InvoiceStageTwo from './_stageTwo'
 import InvoiceNav from '../invoice-nav'
@@ -23,16 +25,14 @@ export default class InvoiceNew extends Component {
       // transaction search result
       transactionSearchResult: [],
       checkedTransaction: {},
-      selectedTransaction: [],
-
-      route: ''
+      selectedTransaction: {}
     }
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
     this.handleSelectChange = this.handleSelectChange.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
     this.doctorModalMethod = this.doctorModalMethod.bind(this)
     this.handleTransactionCheckboxChange = this.handleTransactionCheckboxChange.bind(this)
-    this.handleRouteSwitch = this.handleRouteSwitch.bind(this)
+    this.handleStageTwoMethod = this.handleStageTwoMethod.bind(this)
   }
 
   handleSelectChange (event, value, name) {
@@ -71,12 +71,14 @@ export default class InvoiceNew extends Component {
 
       const checkedTransaction = {}
 
-      const selectedTransaction = res.data.map((item) => {
+      const selectedTransaction = {}
+      res.data.forEach((item) => {
         let selectedObj = {}
         checkedTransaction[item._id] = {checked: true}
         selectedObj.transaction = item._id
-        selectedObj.receivable = { percentage: 0, amount: 0 }
-        return selectedObj
+        selectedObj.data = item
+        selectedObj.receivable = { percentage: '', amount: '' }
+        selectedTransaction[item._id] = selectedObj
       })
 
       this.setState({
@@ -90,19 +92,21 @@ export default class InvoiceNew extends Component {
 
   handleTransactionCheckboxChange (event, data) {
     const checkedTransaction = this.state.checkedTransaction
+    const transactionSearchResult = this.state.transactionSearchResult
 
     checkedTransaction[data.name].checked = data.checked
 
-    const selectedTransaction = this.state.transactionSearchResult.filter((item) => {
+    const selectedTransaction = {}
+
+    transactionSearchResult.forEach((item) => {
       if (checkedTransaction[item._id].checked) {
         let selectedObj = {}
         selectedObj.transaction = item._id
-        selectedObj.receivable = { percentage: 0, amount: 0 }
-        return selectedObj
+        selectedObj.data = item
+        selectedObj.receivable = { percentage: '', amount: '' }
+        selectedTransaction[item._id] = selectedObj
       }
     })
-
-    console.log(selectedTransaction)
 
     this.setState({
       checkedTransaction: checkedTransaction,
@@ -110,8 +114,33 @@ export default class InvoiceNew extends Component {
     })
   }
 
-  handleRouteSwitch (route) {
-    this.setState({ route: route })
+  handleStageTwoMethod (event, type) {
+    console.log('value', event.target.value)
+
+    const transactionId = event.target.name
+    const selectedTransaction = this.state.selectedTransaction
+    const transactionObj = selectedTransaction[transactionId]
+    const receivable = transactionObj.receivable
+    const baseAmt = this.state.selectedTransaction[transactionId].data['transaction amount']
+
+    const toChange = type === 'percentage' ? 'amount' : 'percentage'
+
+    const input = event.target.value ? parseInt(event.target.value) : ''
+
+    if (!input) {
+      receivable[type] = input
+      if (toChange === 'percentage') receivable[toChange] = ''
+      if (toChange === 'amount') receivable[toChange] = ''
+    } else {
+      receivable[type] = input
+      if (toChange === 'percentage') receivable[toChange] = input / baseAmt * 100
+      if (toChange === 'amount') receivable[toChange] = input / 100 * baseAmt
+    }
+    console.log(this.state.selectedTransaction)
+
+    this.setState({
+      selectedTransaction: selectedTransaction
+    })
   }
 
   doctorModalMethod (type, event, data) {
@@ -126,7 +155,7 @@ export default class InvoiceNew extends Component {
         break
 
       case 'change':
-        console.log('searching doctor')
+        // console.log('searching doctor')
         if (event.currentTarget.value.length >= 2) {
           axios.get(`${process.env.REACT_APP_API_ENDPOINT}/doctor/search`, {
             params: { search: event.currentTarget.value }
@@ -138,7 +167,7 @@ export default class InvoiceNew extends Component {
         }
         break
       case 'select':
-        console.log('select doctor')
+        // console.log('select doctor')
         this.setState({
           selectedDoctor: data,
           doctorId: data._id
@@ -162,6 +191,7 @@ export default class InvoiceNew extends Component {
     return (
       <div>
         <InvoiceNav {...this.props} />
+        <Button loading={this.state.loading}></Button>
         <Switch>
           <Route
             exact
@@ -193,6 +223,7 @@ export default class InvoiceNew extends Component {
               <InvoiceStageTwo
                 {...props}
                 selectedTransaction={this.state.selectedTransaction}
+                handleStageTwoMethod={this.handleStageTwoMethod}
               />}
             path={`${this.props.match.url}/setup`}
           />
