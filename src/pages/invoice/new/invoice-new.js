@@ -32,7 +32,8 @@ export default class InvoiceNew extends Component {
     this.handleInputChange = this.handleInputChange.bind(this)
     this.doctorModalMethod = this.doctorModalMethod.bind(this)
     this.handleTransactionCheckboxChange = this.handleTransactionCheckboxChange.bind(this)
-    this.handleStageTwoMethod = this.handleStageTwoMethod.bind(this)
+    this.handleStageTwoAmtPercentChange = this.handleStageTwoAmtPercentChange.bind(this)
+    this.handleStageTwoSubmit = this.handleStageTwoSubmit.bind(this)
   }
 
   handleSelectChange (event, value, name) {
@@ -90,6 +91,46 @@ export default class InvoiceNew extends Component {
     .catch((err) => console.error(err))
   }
 
+  doctorModalMethod (type, event, data) {
+    switch (type) {
+      case 'open':
+        this.setState({ doctorModalOpen: true })
+        break
+
+      case 'close':
+        console.log('closing modal')
+        this.setState({ doctorModalOpen: false })
+        break
+
+      case 'change':
+          // console.log('searching doctor')
+        if (event.currentTarget.value.length >= 2) {
+          axios.get(`${process.env.REACT_APP_API_ENDPOINT}/doctor/search`, {
+            params: { search: event.currentTarget.value }
+          })
+            .then((res) => {
+              this.setState({ doctorSearchResult: res.data })
+            })
+            .catch((err) => console.error(err))
+        }
+        break
+      case 'select':
+          // console.log('select doctor')
+        this.setState({
+          selectedDoctor: data,
+          doctorId: data._id
+            // patientModalOpen: false
+        })
+          // const eventBubbleName = new Event('input', { bubbles: true })
+          // this.doctorNameRef.dispatchEvent(eventBubbleName)
+          // const eventBubbleId = new Event('input', { bubbles: true })
+          // this.doctorIdRef.dispatchEvent(eventBubbleId)
+        break
+      default:
+        break
+    }
+  }
+
   handleTransactionCheckboxChange (event, data) {
     const checkedTransaction = this.state.checkedTransaction
     const transactionSearchResult = this.state.transactionSearchResult
@@ -114,7 +155,7 @@ export default class InvoiceNew extends Component {
     })
   }
 
-  handleStageTwoMethod (event, type) {
+  handleStageTwoAmtPercentChange (event, type) {
     console.log('value', event.target.value)
 
     const transactionId = event.target.name
@@ -143,46 +184,20 @@ export default class InvoiceNew extends Component {
     })
   }
 
-  doctorModalMethod (type, event, data) {
-    switch (type) {
-      case 'open':
-        this.setState({ doctorModalOpen: true })
-        break
-
-      case 'close':
-        console.log('closing modal')
-        this.setState({ doctorModalOpen: false })
-        break
-
-      case 'change':
-        // console.log('searching doctor')
-        if (event.currentTarget.value.length >= 2) {
-          axios.get(`${process.env.REACT_APP_API_ENDPOINT}/doctor/search`, {
-            params: { search: event.currentTarget.value }
-          })
-          .then((res) => {
-            this.setState({ doctorSearchResult: res.data })
-          })
-          .catch((err) => console.error(err))
-        }
-        break
-      case 'select':
-        // console.log('select doctor')
-        this.setState({
-          selectedDoctor: data,
-          doctorId: data._id
-          // patientModalOpen: false
-        })
-
-        // const eventBubbleName = new Event('input', { bubbles: true })
-        // this.doctorNameRef.dispatchEvent(eventBubbleName)
-        // const eventBubbleId = new Event('input', { bubbles: true })
-        // this.doctorIdRef.dispatchEvent(eventBubbleId)
-
-        break
-      default:
-        break
-    }
+  handleStageTwoSubmit (event) {
+    event.preventDefault()
+    const selectedTransaction = this.state.selectedTransaction
+    const formData = { transactions: Object.values(selectedTransaction) }
+    axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_API_ENDPOINT}/invoice`,
+      data: formData
+    })
+    .then((res) => {
+      console.log(res.data)
+    })
+    .catch((err) => console.log(err))
+    console.log(this.state.selectedTransaction)
   }
 
   render () {
@@ -191,7 +206,7 @@ export default class InvoiceNew extends Component {
     return (
       <div>
         <InvoiceNav {...this.props} />
-        <Button loading={this.state.loading}></Button>
+        <Button loading={this.state.loading} />
         <Switch>
           <Route
             exact
@@ -223,7 +238,8 @@ export default class InvoiceNew extends Component {
               <InvoiceStageTwo
                 {...props}
                 selectedTransaction={this.state.selectedTransaction}
-                handleStageTwoMethod={this.handleStageTwoMethod}
+                handleStageTwoAmtPercentChange={this.handleStageTwoAmtPercentChange}
+                handleStageTwoSubmit={this.handleStageTwoSubmit}
               />}
             path={`${this.props.match.url}/setup`}
           />

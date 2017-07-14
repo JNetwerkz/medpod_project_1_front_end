@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { Form, Checkbox, Button } from 'semantic-ui-react'
+import { Form } from 'semantic-ui-react'
 
 import { monthsSelectOption } from 'custom-function'
 import DoctorModal from 'partial/modal/doctor-modal'
