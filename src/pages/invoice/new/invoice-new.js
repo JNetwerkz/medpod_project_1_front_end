@@ -28,7 +28,10 @@ export default class InvoiceNew extends Component {
       // transaction search result
       transactionSearchResult: [],
       checkedTransaction: {},
-      selectedTransaction: {}
+      selectedTransaction: {},
+      // addons
+      addonSelection: [],
+      selectedAddon: {}
     }
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
     this.handleSelectChange = this.handleSelectChange.bind(this)
@@ -36,7 +39,13 @@ export default class InvoiceNew extends Component {
     this.doctorModalMethod = this.doctorModalMethod.bind(this)
     this.handleTransactionCheckboxChange = this.handleTransactionCheckboxChange.bind(this)
     this.handleStageTwoAmtPercentChange = this.handleStageTwoAmtPercentChange.bind(this)
+    this.handleStageTwoAddonMethod = this.handleStageTwoAddonMethod.bind(this)
     this.handleStageTwoSubmit = this.handleStageTwoSubmit.bind(this)
+    this.printingStuff = this.printingStuff.bind(this)
+  }
+
+  printingStuff (stuff) {
+    console.log(this.state[stuff])
   }
 
   handleSelectChange (event, value, name) {
@@ -187,6 +196,35 @@ export default class InvoiceNew extends Component {
     })
   }
 
+  handleStageTwoAddonMethod (event, type, transactionId, index, value) {
+    event.preventDefault()
+    let selectedAddon = this.state.selectedAddon
+    switch (type) {
+      case 'add':
+        console.log(transactionId)
+
+        if (Array.isArray(selectedAddon[transactionId])) {
+          selectedAddon[transactionId].push({item: ''})
+        } else {
+          selectedAddon[transactionId] = []
+          selectedAddon[transactionId].push({item: ''})
+        }
+        console.log('selectedAddon.transactionId', selectedAddon.transactionId)
+
+        this.setState({ selectedAddon })
+
+        break
+      case 'select':
+        console.log('handleStageTwoAddonMethod select')
+        selectedAddon[transactionId][index].item = value
+
+        this.setState({ selectedAddon })
+        break
+      default:
+        break
+    }
+  }
+
   handleStageTwoSubmit (event) {
     event.preventDefault()
     const selectedTransaction = this.state.selectedTransaction
@@ -208,6 +246,21 @@ export default class InvoiceNew extends Component {
     .catch((err) => console.log(err))
   }
 
+  componentDidMount () {
+    axios
+    .get(`${process.env.REACT_APP_API_ENDPOINT}/addon`)
+    .then((res) => {
+      console.log(res.data)
+      //  { key: 'Chinese', text: 'Chinese', value: 'Chinese' },
+      const addonSelection = res.data.map((item) => {
+        let { _id: key, name: text, _id: value } = item
+        return { key, text, value }
+      })
+      this.setState({ addonSelection })
+    })
+    .catch((err) => console.log(err))
+  }
+
   render () {
     if (this.state.redirectToShow) {
       console.log('redirectToShow trans new', this.state.redirectTo)
@@ -216,7 +269,8 @@ export default class InvoiceNew extends Component {
     return (
       <div>
         <InvoiceNav {...this.props} />
-        <Button loading={this.state.loading} />
+        <Button loading={this.state.loading} onClick={() => this.printingStuff('selectedTransaction')}>Print selectedTransaction</Button>
+        <Button loading={this.state.loading} onClick={() => this.printingStuff('selectedAddon')}>Print selectedAddon</Button>
         <Switch>
           <Route
             exact
@@ -247,9 +301,12 @@ export default class InvoiceNew extends Component {
             render={(props) =>
               <InvoiceStageTwo
                 {...props}
-                selectedTransaction={this.state.selectedTransaction}
                 handleStageTwoAmtPercentChange={this.handleStageTwoAmtPercentChange}
                 handleStageTwoSubmit={this.handleStageTwoSubmit}
+                handleStageTwoAddonMethod={this.handleStageTwoAddonMethod}
+                selectedTransaction={this.state.selectedTransaction}
+                addonSelection={this.state.addonSelection}
+                selectedAddon={this.state.selectedAddon}
               />}
             path={`${this.props.match.url}/setup`}
           />
@@ -270,4 +327,5 @@ export default class InvoiceNew extends Component {
       </div>
     )
   }
+
 }

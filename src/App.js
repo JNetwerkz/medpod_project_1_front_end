@@ -13,6 +13,8 @@ import NavMain from 'nav/nav-main'
 import PatientMain from './pages/patient/patient-main'
 import TransactionMain from './pages/transaction/transaction-main'
 import DoctorMain from './pages/doctor/doctor-main'
+import HospitalMain from './pages/hospital/hospital-main'
+import AddonMain from './pages/addon/addon-main'
 import AgentMain from './pages/agent/agent-main'
 import InvoiceMain from './pages/invoice/invoice-main'
 import PrivateRoute from './private-route'
@@ -74,6 +76,8 @@ class App extends Component {
               <PrivateRoute path='/patient' component={PatientMain} />
               <PrivateRoute path='/transaction' component={TransactionMain} />
               <PrivateRoute path='/doctor' component={DoctorMain} />
+              <PrivateRoute path='/hospital' component={HospitalMain} />
+              <PrivateRoute path='/addon' component={AddonMain} />
               <PrivateRoute path='/agent' component={AgentMain} />
               <PrivateRoute path='/invoice' component={InvoiceMain} />
               <Route exact path='/login'

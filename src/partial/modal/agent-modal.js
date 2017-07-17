@@ -5,33 +5,33 @@ import { Input, Button } from 'semantic-ui-react'
 
 import { combineName } from 'custom-function'
 
-const PatientDetails = (data) => {
-  console.log(data.selectedPatient)
+const AgentDetails = (data) => {
+  console.log(data.selectedAgent)
   return (
     <div>
       <h2>Details</h2>
       <ul>
-        <li>{combineName(data.selectedPatient)}</li>
+        <li>{combineName(data.selectedAgent)}</li>
       </ul>
     </div>
   )
 }
 
-const PatientModal = (props) => {
+const AgentModal = (props) => {
   console.log(props)
-  const patientsList = props.patientSearchResult.map((item) => {
+  const agentsList = props.agentSearchResult.map((item) => {
     console.log(item)
     return <li onClick={(event) => props.modalMethod('select', event, item)} key={item._id}>{`${item['first name']} ${item['last name']}`}</li>
   })
   return (
     <Modal
-      isOpen={props.patientModalOpen}
+      isOpen={props.agentModalOpen}
       onRequestClose={() => props.modalMethod('close')}
-      contentLabel='Patient Search Modal'>
+      contentLabel='Agent Search Modal'>
       <h1>MODAL BOX</h1>
-      {patientsList}
-      <Input autoFocus onChange={(event) => props.modalMethod('change', event)} placeholder='Search Patient..' />
-      <PatientDetails selectedPatient={props.selectedPatient} />
+      {agentsList}
+      <Input autoFocus onChange={(event) => props.modalMethod('change', event)} placeholder='Search Agent..' />
+      <AgentDetails selectedAgent={props.selectedAgent} />
       <Button onClick={
         () => props.modalMethod('close')}>
         Close
@@ -40,4 +40,4 @@ const PatientModal = (props) => {
   )
 }
 
-export default PatientModal
+export default AgentModal

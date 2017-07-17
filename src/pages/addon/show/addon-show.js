@@ -4,19 +4,19 @@ import axios from 'axios'
 
 import { combineName } from 'custom-function'
 
-export default class AgentShow extends Component {
+export default class AddonShow extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      agentShow: {}
+      addonShow: {}
     }
   }
   render () {
     console.log(this.props)
     return (
       <div>
-        <h1>Agent Show</h1>
-        <p>{combineName(this.state.agentShow)}</p>
+        <h1>Addon Show</h1>
+        <p>{this.state.addonShow.name}</p>
       </div>
     )
   }
@@ -24,11 +24,11 @@ export default class AgentShow extends Component {
   componentDidMount () {
     axios({
       method: 'GET',
-      url: `${process.env.REACT_APP_API_ENDPOINT}/agent/${this.props.match.params.id}`
+      url: `${process.env.REACT_APP_API_ENDPOINT}/addon/${this.props.match.params.id}`
     })
     .then((res) => {
-      console.log('AgentShow res', res.data)
-      this.setState({ agentShow: res.data })
+      console.log('AddonShow res', res.data)
+      this.setState({ addonShow: res.data })
     })
     .catch((err) => console.error(err))
   }
