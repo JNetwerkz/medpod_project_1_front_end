@@ -5,6 +5,7 @@ import { Container } from 'semantic-ui-react'
 
 import InvoiceNew from './new/invoice-new'
 import InvoiceShow from './show/invoice-show'
+import InvoiceIndex from './index/invoice-index'
 import InvoiceNav from './invoice-nav'
 // import TransactionShow from './show/transaction-show'
 // import TransactionIndex from './index/transaction-index'
@@ -21,16 +22,12 @@ export default class InvoiceMain extends Component {
           />
           <Route
             render={(props) => <InvoiceShow {...props} />}
-            path={`${this.props.match.url}/show`}
-          />
-          {/* <Route
-            render={(props) => <TransactionShow {...props} />}
             path={`${this.props.match.url}/:id`}
           />
           <Route
-            render={(props) => <TransactionIndex {...props} />}
+            render={(props) => <InvoiceIndex {...props} />}
             path={`${this.props.match.url}`}
-          /> */}
+          />
         </Switch>
       </Container>
     )

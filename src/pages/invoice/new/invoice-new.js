@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Redirect } from 'react-router-dom'
 
 import axios from 'axios'
 import moment from 'moment'
@@ -14,6 +14,9 @@ export default class InvoiceNew extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      //
+      redirectToShow: false,
+      redirectTo: '',
       //
       'transaction month': '',
       'transaction year': moment().year(),
@@ -188,6 +191,7 @@ export default class InvoiceNew extends Component {
     event.preventDefault()
     const selectedTransaction = this.state.selectedTransaction
     const formData = { transactions: Object.values(selectedTransaction) }
+    formData['invoicing_doctor'] = this.state.doctorId
     axios({
       method: 'POST',
       url: `${process.env.REACT_APP_API_ENDPOINT}/invoice`,
@@ -195,14 +199,20 @@ export default class InvoiceNew extends Component {
     })
     .then((res) => {
       console.log(res.data)
+
+      this.setState({
+        redirectToShow: true,
+        redirectTo: res.data._id
+      })
     })
     .catch((err) => console.log(err))
-    console.log(this.state.selectedTransaction)
   }
 
   render () {
-    // if (this.state.route === 'setup') return <Redirect to={this.state.route} />
-    // if (this.state.route === 'setup') return <Redirect to={`${this.props.match.url}/${this.state.route}`} />
+    if (this.state.redirectToShow) {
+      console.log('redirectToShow trans new', this.state.redirectTo)
+      return <Redirect to={`/invoice/${this.state.redirectTo}`} />
+    }
     return (
       <div>
         <InvoiceNav {...this.props} />

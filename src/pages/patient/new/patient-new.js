@@ -34,9 +34,8 @@ class PatientNew extends Component {
     axios({
       method: 'POST',
       url: `${process.env.REACT_APP_API_ENDPOINT}/patient`,
-      data: formData,
-      
-    })
+      data: formData
+     })
     .then((res) => {
       console.log('new patient data', res.data)
       this.setState({
