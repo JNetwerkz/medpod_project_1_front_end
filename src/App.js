@@ -25,64 +25,55 @@ import { AuthHeader } from 'custom-function'
 class App extends Component {
   constructor (props) {
     super(props)
-
+    this.state = {
+      loading: true
+    }
   }
-  // componentWillMount () {
-  //   console.log('At componentWillMount')
-  //   auth.onAuthStateChanged(user => {
-  //     if (user) {
-  //       console.log('onAuthStateChanged setting storageKey')
-  //       window.localStorage.setItem(storageKey, user.uid)
-  //       user.getIdToken(true).then((token) => {
-  //         window.localStorage.setItem(firebaseIdToken, token)
-  //         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-  //         console.log('HEREHERER', axios.defaults.headers.common['Authorization'])
-  //       })
-  //       // this.setState({currentUser: user.uid})
-  //     } else {
-  //       console.log('onAuthStateChanged removing storageKey')
-  //       window.localStorage.removeItem(storageKey)
-  //       window.localStorage.removeItem(firebaseIdToken)
-  //       axios.defaults.headers.common['Authorization'] = null
-  //       // this.setState({currentUser: null})
-  //     }
-  //   })
-  // }
 
-  componentWillMount () {
+  componentDidMount () {
     auth.onAuthStateChanged(user => {
+      console.log('onAuthStateChanged user', user)
       if (user) {
-        // console.log('onAuthStateChanged setting storageKey')
         window.localStorage.setItem(storageKey, user.uid)
 
         user.getIdToken(true).then((token) => {
           window.localStorage.setItem(firebaseIdToken, token)
-            db.ref(`/users/${user.uid}`).once('value').then((snapshot) => {
-              console.log(snapshot.val())
-              window.localStorage.setItem(userType, snapshot.val())
+
+          axios
+          .get(`${process.env.REACT_APP_FIREBASE_DATABASE_URL}${token}`)
+          .then((res) => {
+            window.localStorage.setItem(userType, res.data[user.uid])
+            axios.defaults.headers.common['Authorization'] = AuthHeader()
+            this.setState({
+              loading: false
             })
-          // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+          })
+          .catch((err) => {
+            console.error(err)
+          })
         })
-        // this.setState({currentUser: user.uid})
       } else {
-        // console.log('onAuthStateChanged removing storageKey')
+        console.log('onAuthStateChanged removing storageKey')
         window.localStorage.removeItem(storageKey)
         window.localStorage.removeItem(firebaseIdToken)
         window.localStorage.removeItem(userType)
-        // axios.defaults.headers.common['Authorization'] = ''
-        // this.setState({currentUser: null})
+        axios.defaults.headers.common['Authorization'] = ''
+        this.setState({
+          loading: false
+        })
       }
     })
-    axios.defaults.headers.common['Authorization'] = AuthHeader()
   }
 
   render () {
+    if (this.state.loading) return <h1>Loading</h1>
     return (
       <BrowserRouter>
         <div className='App'>
           <header>
             <NavMain />
           </header>
+          <button onClick={() => console.log(window.localStorage)}>Print localStorage</button>
           <main>
             <Switch>
               <PrivateRoute exact path='/' component={HomeMain} />

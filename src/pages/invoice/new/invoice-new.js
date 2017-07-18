@@ -226,6 +226,35 @@ export default class InvoiceNew extends Component {
 
         this.setState({ selectedAddon })
         break
+      case 'remove':
+        console.log('handleStageTwoAddonMethod delete')
+        console.log(index)
+        const removed = selectedAddon[transactionId].splice(index, 1)
+
+        console.log('removed', removed)
+        console.log('selectedAddon', selectedAddon)
+
+        this.setState({ selectedAddon })
+        break
+      case 'createAddon':
+        console.log('handleStageTwoAddonMethod createAddon')
+        console.log(value)
+
+        axios({
+          method: 'POST',
+          url: `${process.env.REACT_APP_API_ENDPOINT}/addon`,
+          data: { name: value }
+        })
+        .then((res) => {
+          const addonSelection = this.state.addonSelection
+          let { _id: key, name: text, _id: value } = res.data
+          addonSelection.unshift({ key, text, value })
+          selectedAddon[transactionId][index].item = res.data._id
+          this.setState({ selectedAddon, addonSelection })
+        })
+        .catch((err) => console.log(err))
+
+        break
       default:
         break
     }

@@ -48,28 +48,12 @@ const userAccess = {
 }
 
 const isAuthenticated = () => {
-  console.log('running isAuthenticated', auth.currentUser)
+  console.log('running isAuthenticated', auth.currentUser, window.localStorage.getItem(storageKey))
   return !!auth.currentUser || !!window.localStorage.getItem(storageKey)
 }
 
 const isGrantedAccess = (path) => {
-  const typeOfUser = window.localStorage.getItem(userType)
-
-  console.log('type of user', typeOfUser)
-
-  if (typeOfUser) {
-    console.log('here1')
-    return (
-      userAccess[typeOfUser][path]
-    )
-  } else {
-    console.log('here2')
-    db.ref(`/users/${window.localStorage.getItem(storageKey)}`).once('value').then((snapshot) => {
-      console.log(snapshot.val())
-      return userAccess[snapshot.val()][path]
-    })
-  }
+  return userAccess[window.localStorage.getItem(userType)][path]
 }
-
 
 export {firebaseApp, auth, db, isAuthenticated, isGrantedAccess, storageKey, firebaseIdToken, userType}
