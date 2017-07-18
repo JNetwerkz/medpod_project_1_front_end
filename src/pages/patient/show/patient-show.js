@@ -24,8 +24,7 @@ class PatientShow extends Component {
   componentDidMount () {
     axios({
       method: 'GET',
-      url: `${process.env.REACT_APP_API_ENDPOINT}/patient/${this.props.match.params.id}`,
-
+      url: `${process.env.REACT_APP_API_ENDPOINT}/patient/${this.props.match.params.id}`
     })
     .then((res) => {
       console.log('PatientShow res', res.data)

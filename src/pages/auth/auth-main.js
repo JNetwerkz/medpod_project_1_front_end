@@ -43,11 +43,14 @@ class AuthMain extends Component {
   handleSubmit (event) {
     event.preventDefault()
 
+    const fromState = this.props.location.state
+
     auth.signInWithEmailAndPassword(this.state.email, this.state.password)
       .then((user) => {
         user.getIdToken(true).then((token) => {
           console.log('token', token)
-          window.location = '/'
+
+          window.location = (fromState) ? fromState.from.pathname : '/'
           // axios({
           //   url: 'http://localhost:8888/',
           //   method: 'GET',
@@ -71,7 +74,7 @@ class AuthMain extends Component {
   }
 
   render () {
-    console.log('loginmain props', this.props)
+    console.log('loginmain props', this)
     return (
       <Container fluid>
 

@@ -204,10 +204,10 @@ export default class InvoiceNew extends Component {
         console.log(transactionId)
 
         if (Array.isArray(selectedAddon[transactionId])) {
-          selectedAddon[transactionId].push({item: ''})
+          selectedAddon[transactionId].push({item: '', amount: ''})
         } else {
           selectedAddon[transactionId] = []
-          selectedAddon[transactionId].push({item: ''})
+          selectedAddon[transactionId].push({item: '', amount: ''})
         }
         console.log('selectedAddon.transactionId', selectedAddon.transactionId)
 
@@ -220,6 +220,12 @@ export default class InvoiceNew extends Component {
 
         this.setState({ selectedAddon })
         break
+      case 'amtInput':
+        console.log('handleStageTwoAddonMethod amtInput')
+        selectedAddon[transactionId][index].amount = value
+
+        this.setState({ selectedAddon })
+        break
       default:
         break
     }
@@ -228,8 +234,18 @@ export default class InvoiceNew extends Component {
   handleStageTwoSubmit (event) {
     event.preventDefault()
     const selectedTransaction = this.state.selectedTransaction
-    const formData = { transactions: Object.values(selectedTransaction) }
+    let formData = { transactions: Object.values(selectedTransaction) }
     formData['invoicing_doctor'] = this.state.doctorId
+
+    formData.transactions = formData.transactions.map((item) => {
+      const selectedAddon = this.state.selectedAddon
+      if (Array.isArray(selectedAddon[item.transaction])) item.addons = selectedAddon[item.transaction]
+
+      return item
+    })
+
+    console.log(formData)
+
     axios({
       method: 'POST',
       url: `${process.env.REACT_APP_API_ENDPOINT}/invoice`,
