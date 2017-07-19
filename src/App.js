@@ -20,6 +20,8 @@ import AgentMain from './pages/agent/agent-main'
 import InvoiceMain from './pages/invoice/invoice-main'
 import PrivateRoute from './private-route'
 
+import TestMain from './pages/test/test-main'
+
 import { AuthHeader } from 'custom-function'
 
 class App extends Component {
@@ -112,6 +114,8 @@ class App extends Component {
           <button onClick={() => console.log(window.localStorage)}>Print localStorage</button>
           <main>
             <Switch>
+              <Route exact path='/test'
+                render={(props) => <TestMain {...props} />} />
               <PrivateRoute exact path='/' component={HomeMain} />
               <PrivateRoute path='/patient' component={PatientMain} />
               <PrivateRoute path='/transaction' component={TransactionMain} />
