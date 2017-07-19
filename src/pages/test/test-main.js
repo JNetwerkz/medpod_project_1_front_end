@@ -31,8 +31,11 @@ export default class TestMain extends Component {
     const s3 = new aws.S3()
     console.log(s3)
 
+    var fileKey = 'front-end-web-developer-interview-questions.pdf'
+    var fileKey2 = 'General Assembly-88.jpg'
+
     s3.getObject(
-      { Bucket: 'testingbucket-medipod', Key: 'front-end-web-developer-interview-questions.pdf'},
+      { Bucket: 'testingbucket-medipod', Key: fileKey2},
       (err, data) => {
         if (err) console.log(err)
         console.log(data.Body)
@@ -40,7 +43,7 @@ export default class TestMain extends Component {
         // var file = new File(data.Body, 'file.pdf', {type: 'application/pdf;charset=utf-8'})
         var file = new Blob([data.Body], {type: 'application/octet-binary'})
         // var file = new Blob(data.Body, {type: 'application/pdf;charset=utf-8'})
-        FileSaver.saveAs(file, 'front-end-web-developer-interview-questions.pdf')
+        FileSaver.saveAs(file, fileKey2)
       }
     )
   }
