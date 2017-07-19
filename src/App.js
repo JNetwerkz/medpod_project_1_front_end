@@ -32,24 +32,25 @@ class App extends Component {
 
   componentDidMount () {
     auth.onAuthStateChanged(user => {
-      console.log('onAuthStateChanged user', user)
+      console.log(user)
       if (user) {
         window.localStorage.setItem(storageKey, user.uid)
-
-        user.getIdToken(true).then((token) => {
+        console.log('step 1', window.localStorage.getItem(storageKey))
+        user.getIdToken(true)
+        .then((token) => {
           window.localStorage.setItem(firebaseIdToken, token)
-
-          axios
-          .get(`${process.env.REACT_APP_FIREBASE_DATABASE_URL}${token}`)
-          .then((res) => {
-            window.localStorage.setItem(userType, res.data[user.uid])
-            axios.defaults.headers.common['Authorization'] = AuthHeader()
-            this.setState({
-              loading: false
-            })
-          })
-          .catch((err) => {
-            console.error(err)
+          console.log('step 2', window.localStorage.getItem(firebaseIdToken))
+          return token
+        })
+        .then((token) => {
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+          return axios.get(`${process.env.REACT_APP_FIREBASE_DATABASE_URL}${token}`)
+        })
+        .then((res) => {
+          window.localStorage.setItem(userType, res.data[user.uid])
+          console.log('step 3', window.localStorage.getItem(userType))
+          return this.setState({
+            loading: false
           })
         })
       } else {
@@ -58,12 +59,47 @@ class App extends Component {
         window.localStorage.removeItem(firebaseIdToken)
         window.localStorage.removeItem(userType)
         axios.defaults.headers.common['Authorization'] = ''
-        this.setState({
+        return this.setState({
           loading: false
         })
       }
     })
   }
+  // componentDidMount () {
+  //   auth.onAuthStateChanged(user => {
+  //     console.log('onAuthStateChanged user', user)
+  //     if (user) {
+  //       window.localStorage.setItem(storageKey, user.uid)
+  //       console.log('step 1', window.localStorage.getItem(storageKey))
+  //       user.getIdToken(true).then((token) => {
+  //         window.localStorage.setItem(firebaseIdToken, token)
+  //         console.log('step 2', window.localStorage.getItem(firebaseIdToken))
+  //         axios
+  //         .get(`${process.env.REACT_APP_FIREBASE_DATABASE_URL}${token}`)
+  //         .then((res) => {
+  //           window.localStorage.setItem(userType, res.data[user.uid])
+  //               console.log('step 3', window.localStorage.getItem(userType))
+  //           axios.defaults.headers.common['Authorization'] = AuthHeader()
+  //           this.setState({
+  //             loading: false
+  //           })
+  //         })
+  //         .catch((err) => {
+  //           console.error(err)
+  //         })
+  //       })
+  //     } else {
+  //       console.log('onAuthStateChanged removing storageKey')
+  //       window.localStorage.removeItem(storageKey)
+  //       window.localStorage.removeItem(firebaseIdToken)
+  //       window.localStorage.removeItem(userType)
+  //       axios.defaults.headers.common['Authorization'] = ''
+  //       this.setState({
+  //         loading: false
+  //       })
+  //     }
+  //   })
+  // }
 
   render () {
     if (this.state.loading) return <h1>Loading</h1>
