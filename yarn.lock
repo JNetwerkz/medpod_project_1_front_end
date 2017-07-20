@@ -2443,6 +2443,10 @@ file-entry-cache@^2.0.0:
     flat-cache "^1.2.1"
     object-assign "^4.0.1"
 
+file-extension@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/file-extension/-/file-extension-3.1.2.tgz#eed169877eeba004aa890bf3f11b4a82935e5914"
+
 file-loader@0.11.1:
   version "0.11.1"
   resolved "https://registry.yarnpkg.com/file-loader/-/file-loader-0.11.1.tgz#6b328ee1234a729e4e47d36375dd6d35c0e1db84"
