@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import moment from 'moment'
 import * as fileExtension from 'file-extension'
+import * as FileSaver from 'file-saver'
 
 import { Button } from 'semantic-ui-react'
 
@@ -10,12 +11,14 @@ import { AuthHeader, M6117, combineName } from 'custom-function'
 import { s3, s3Bucket as Bucket } from 'aws'
 
 import FileInputRow from './_fileInputRow'
+import FileRow from './_fileRow'
 
 class TransactionShow extends Component {
   constructor (props) {
     super(props)
     this.state = {
       transactionShow: {},
+      uploadedFiles: [],
       mounted: false,
       //
       fileTypeSelection: [
@@ -25,7 +28,7 @@ class TransactionShow extends Component {
         { key: 'identification', text: 'Identification Document', value: 'identification' },
         { key: 'others', text: 'Others', value: 'other' }
       ],
-      files: [],
+      filesToUpload: [],
       filesStatus: []
     }
 
@@ -33,30 +36,65 @@ class TransactionShow extends Component {
     this.handleDeleteInput = this.handleDeleteInput.bind(this)
     this.handleFileUpload = this.handleFileUpload.bind(this)
     this.handleFileInputChange = this.handleFileInputChange.bind(this)
+    this.handleFileDownload = this.handleFileDownload.bind(this)
+    this.handleFileDelete = this.handleFileDelete.bind(this)
   }
 
+// handle download & delete of uploaded files
+  handleFileDownload (index) {
+    const uploadedFiles = this.state.uploadedFiles
+    const { Key } = uploadedFiles[index]
+    const downloadPromise = s3.getObject({ Bucket, Key }).promise()
+
+    return downloadPromise
+    .then((res) => {
+      const file = new Blob([ res.Body ])
+      return FileSaver.saveAs(file, Key)
+    })
+  }
+
+  handleFileDelete (index) {
+    const uploadedFiles = this.state.uploadedFiles
+    const { Key, _id } = uploadedFiles[index]
+    const deletePromise = s3.deleteObject({ Bucket, Key }).promise()
+
+    return deletePromise
+    .then((res) => {
+      console.log(res)
+      return axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/file/${_id}`)
+    })
+    .then((res) => {
+      if (res.status === 200) {
+        uploadedFiles.splice(index, 1)
+        this.setState({ uploadedFiles })
+      }
+    })
+  }
+
+// adds <input> to upload file
   handleAddInput () {
-    const files = this.state.files
+    const filesToUpload = this.state.filesToUpload
     const filesStatus = this.state.filesStatus
-    files.push({ file: '', description: '', fileType: '', uploading: false })
+    filesToUpload.push({ file: '', description: '', fileType: '', uploading: false })
     // filesStatus.push({ uploading: false })
 
     this.setState({
-      files, filesStatus
+      filesToUpload, filesStatus
     })
   }
 
   handleDeleteInput (index) {
-    const files = this.state.files
-    files.splice(index, 1)
+    const filesToUpload = this.state.filesToUpload
+    filesToUpload.splice(index, 1)
 
     this.setState({
-      files
+      filesToUpload
     })
   }
 
+// handles uploading of file
   handleFileUpload (index) {
-    const files = this.state.files, stamp = moment().format('DDMMYYHHmmssSS')
+    const filesToUpload = this.state.filesToUpload, stamp = moment().format('DDMMYYHHmmssSS')
     const {
       _id: transactionId,
       patient: { _id: patientId },
@@ -68,7 +106,7 @@ class TransactionShow extends Component {
       file,
       fileType,
       file: { name: fileName }
-    } = files[index]
+    } = filesToUpload[index]
 
     const Key = `${patientId}_${fileType || ''}_${stamp}.${fileExtension(fileName)}`
 
@@ -88,6 +126,13 @@ class TransactionShow extends Component {
         })
         .then((res) => {
           console.log(res)
+          if (res.status === 200) {
+            const uploadedFiles = this.state.uploadedFiles
+            uploadedFiles.unshift(res.data)
+            filesToUpload.splice(index, 1)
+
+            this.setState({ uploadedFiles, filesToUpload })
+          }
         })
     )
   }
@@ -117,29 +162,31 @@ class TransactionShow extends Component {
   //   .catch((err) => console.error(err))
   // }
 
+
+// handle onChange event of <input> file
   handleFileInputChange (event, value, index, type) {
-    const files = this.state.files
+    const filesToUpload = this.state.filesToUpload
     switch (type) {
       case 'fileChange':
-        files[index].file = event.target.files[0] || ''
-        files[index].file = event.target.files[0] || ''
+        filesToUpload[index].file = event.target.files[0] || ''
+        filesToUpload[index].file = event.target.files[0] || ''
 
         this.setState({
-          files
+          filesToUpload
         })
         break
       case 'descripChange':
-        files[index].description = value || ''
+        filesToUpload[index].description = value || ''
 
         this.setState({
-          files
+          filesToUpload
         })
         break
       case 'fileTypeChange':
-        files[index].fileType = value || ''
+        filesToUpload[index].fileType = value || ''
 
         this.setState({
-          files
+          filesToUpload
         })
         break
       default:
@@ -149,7 +196,7 @@ class TransactionShow extends Component {
 
   render () {
     if (!this.state.mounted) return <div>Loading</div>
-    const FileUpload = this.state.files.map((file, index) => {
+    const FileUpload = this.state.filesToUpload.map((file, index) => {
       return <FileInputRow
         key={`upload-${index}`}
         data={file}
@@ -160,6 +207,15 @@ class TransactionShow extends Component {
         fileTypeSelection={this.state.fileTypeSelection}
       />
     })
+    const UploadedFiles = this.state.uploadedFiles.map((file, index) => {
+      return <FileRow
+        data={file}
+        key={file._id}
+        index={index}
+        handleFileDownload={this.handleFileDownload}
+        handleFileDelete={this.handleFileDelete}
+      />
+    })
     return (
       <div>
         <h1>Show Transaction</h1>
@@ -168,12 +224,13 @@ class TransactionShow extends Component {
           <h3>
               Uploaded Files
             </h3>
+            {UploadedFiles}
         </div>
         <div>
           <h3>
               Upload Files here
             </h3>
-          <Button onClick={() => console.log(this.state.files)}>Add Upload</Button>
+          <Button onClick={() => console.log(this.state.filesToUpload)}>Add Upload</Button>
           <Button onClick={this.handleAddInput}>Add Upload</Button>
           {FileUpload}
         </div>
@@ -182,13 +239,18 @@ class TransactionShow extends Component {
   }
 
   componentDidMount () {
-    axios({
-      method: 'GET',
-      url: `${process.env.REACT_APP_API_ENDPOINT}/transaction/${this.props.match.params.id}`
-    })
+    axios
+    .get(`${process.env.REACT_APP_API_ENDPOINT}/transaction/${this.props.match.params.id}`)
     .then((res) => {
       console.log('TransactionShow res', res.data)
       this.setState({ transactionShow: res.data, mounted: true })
+
+      return axios
+      .get(`${process.env.REACT_APP_API_ENDPOINT}/file`, { params: { transaction: res.data._id } })
+    })
+    .then((res) => {
+      console.log(res)
+      this.setState({ uploadedFiles: res.data })
     })
     .catch((err) => console.error(err))
   }
