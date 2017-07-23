@@ -5,6 +5,7 @@ import { auth, db, storageKey, firebaseIdToken, userType } from './firebase'
 import './App.css'
 
 import axios from 'axios'
+import { Sidebar, Segment, Menu, Button, Loader, Dimmer } from 'semantic-ui-react'
 
 // import components
 import AuthMain from './pages/auth/auth-main'
@@ -22,14 +23,19 @@ import PrivateRoute from './private-route'
 
 import TestMain from './pages/test/test-main'
 
-import { AuthHeader } from 'custom-function'
-
 class App extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      loading: true
+      loading: true,
+      sideBarShow: false
     }
+
+    this.showSideBar = this.showSideBar.bind(this)
+  }
+
+  showSideBar () {
+    this.setState({ sideBarShow: !this.state.sideBarShow })
   }
 
   componentDidMount () {
@@ -104,36 +110,77 @@ class App extends Component {
   // }
 
   render () {
-    if (this.state.loading) return <h1>Loading</h1>
+    const { sideBarShow } = this.state
+    console.log(sideBarShow)
+
+    if (this.state.loading) {
+      return (
+        <Segment style={{height: '100vh'}}>
+          <Dimmer active>
+            <Loader size='massive'>Loading</Loader>
+          </Dimmer>
+        </Segment>
+      )
+    }
+
     return (
-      <BrowserRouter>
         <div className='App'>
-          <header>
-            <NavMain />
-          </header>
-          <button onClick={() => console.log(window.localStorage)}>Print localStorage</button>
-          <main>
-            <Switch>
-              <Route exact path='/test'
-                render={(props) => <TestMain {...props} />} />
-              <PrivateRoute exact path='/' component={HomeMain} />
-              <PrivateRoute path='/patient' component={PatientMain} />
-              <PrivateRoute path='/transaction' component={TransactionMain} />
-              <PrivateRoute path='/doctor' component={DoctorMain} />
-              <PrivateRoute path='/hospital' component={HospitalMain} />
-              <PrivateRoute path='/addon' component={AddonMain} />
-              <PrivateRoute path='/agent' component={AgentMain} />
-              <PrivateRoute path='/invoice' component={InvoiceMain} />
-              <Route exact path='/login'
-                render={(props) => <AuthMain {...props} />} />
-              <Route exact path='/unauthorised'
-                render={(props) => <UnauthorisedMain {...props} />} />
-            </Switch>
-          </main>
+          <BrowserRouter>
+          <Sidebar.Pushable as={Segment}>
+            <Sidebar as={Menu} animation='push' width='thin' visible={sideBarShow} vertical inverted>
+              <Route path='/' render={({ location }) => <NavMain {...location} />} />
+            </Sidebar>
+
+            <Sidebar.Pusher>
+              <Button icon='sidebar' onClick={this.showSideBar} />
+              <Switch>
+                <Route exact path='/test'
+                  render={(props) => <TestMain {...props} />} />
+                <PrivateRoute exact path='/' component={HomeMain} />
+                <PrivateRoute path='/patient' component={PatientMain} />
+                <PrivateRoute path='/transaction' component={TransactionMain} />
+                <PrivateRoute path='/doctor' component={DoctorMain} />
+                <PrivateRoute path='/hospital' component={HospitalMain} />
+                <PrivateRoute path='/addon' component={AddonMain} />
+                <PrivateRoute path='/agent' component={AgentMain} />
+                <PrivateRoute path='/invoice' component={InvoiceMain} />
+                <Route exact path='/login'
+                  render={(props) => <AuthMain {...props} />} />
+                <Route exact path='/unauthorised'
+                  render={(props) => <UnauthorisedMain {...props} />} />
+              </Switch>
+           </Sidebar.Pusher>
+         </Sidebar.Pushable>
+         </BrowserRouter>
         </div>
-      </BrowserRouter>
     )
   }
 }
 
 export default App
+
+{/* <div className='App'>
+  <header>
+    <Route path='/' render={({ location }) => <NavMain {...location} />} />
+  </header>
+  <button onClick={() => console.log(window.localStorage)}>Print localStorage</button>
+  <main>
+    <Icon name='sidebar' size='big' />
+    <Switch>
+      <Route exact path='/test'
+        render={(props) => <TestMain {...props} />} />
+      <PrivateRoute exact path='/' component={HomeMain} />
+      <PrivateRoute path='/patient' component={PatientMain} />
+      <PrivateRoute path='/transaction' component={TransactionMain} />
+      <PrivateRoute path='/doctor' component={DoctorMain} />
+      <PrivateRoute path='/hospital' component={HospitalMain} />
+      <PrivateRoute path='/addon' component={AddonMain} />
+      <PrivateRoute path='/agent' component={AgentMain} />
+      <PrivateRoute path='/invoice' component={InvoiceMain} />
+      <Route exact path='/login'
+        render={(props) => <AuthMain {...props} />} />
+      <Route exact path='/unauthorised'
+        render={(props) => <UnauthorisedMain {...props} />} />
+    </Switch>
+  </main>
+</div> */}
