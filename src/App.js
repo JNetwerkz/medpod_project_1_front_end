@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Switch, Link } from 'react-router-dom'
 import { auth, db, storageKey, firebaseIdToken, userType } from './firebase'
 
 import './App.css'
 
 import axios from 'axios'
-import { Sidebar, Segment, Menu, Button, Loader, Dimmer } from 'semantic-ui-react'
+import { Sidebar, Segment, Menu, Button, Loader, Dimmer, Header, Dropdown } from 'semantic-ui-react'
 
 // import components
 import AuthMain from './pages/auth/auth-main'
@@ -127,29 +127,58 @@ class App extends Component {
         <div className='App'>
           <BrowserRouter>
           <Sidebar.Pushable as={Segment}>
-            <Sidebar as={Menu} animation='push' width='thin' visible={sideBarShow} vertical inverted>
+            <Sidebar as={Menu} animation='uncover' width='thin' visible={sideBarShow} vertical inverted>
               <Route path='/' render={({ location }) => <NavMain {...location} />} />
             </Sidebar>
 
             <Sidebar.Pusher>
-              <Button icon='sidebar' onClick={this.showSideBar} />
-              <Switch>
-                <Route exact path='/test'
-                  render={(props) => <TestMain {...props} />} />
-                <PrivateRoute exact path='/' component={HomeMain} />
-                <PrivateRoute path='/patient' component={PatientMain} />
-                <PrivateRoute path='/transaction' component={TransactionMain} />
-                <PrivateRoute path='/doctor' component={DoctorMain} />
-                <PrivateRoute path='/hospital' component={HospitalMain} />
-                <PrivateRoute path='/addon' component={AddonMain} />
-                <PrivateRoute path='/agent' component={AgentMain} />
-                <PrivateRoute path='/invoice' component={InvoiceMain} />
-                <Route exact path='/login'
-                  render={(props) => <AuthMain {...props} />} />
-                <Route exact path='/unauthorised'
-                  render={(props) => <UnauthorisedMain {...props} />} />
-              </Switch>
+              <div className='flex flex--row'>
+                <Segment basic className='flex__menu-button flex--column'>
+                  <section>
+                    <Button icon='sidebar' onClick={this.showSideBar} />
+                  </section>
+
+                  <section>
+                    <Dropdown icon='filter' floating button className='icon'>
+                      <Dropdown.Menu>
+                        <Dropdown.Header content='New' />
+                        <Dropdown.Menu scrolling>
+                          <Route path='/' render={() => <Dropdown.Item key={'transaction'} text='Transaction' as={Link} to={`/transaction/new`} />} />
+                          <Route path='/' render={() => <Dropdown.Item key={'invoice'} text='Invoice' as={Link} to={`/invoice/new`} />} />
+                          <Dropdown.Divider />
+                          <Route path='/' render={() => <Dropdown.Item key={'patient'} text='Patient' as={Link} to={`/patient/new`} />} />
+                          <Route path='/' render={() => <Dropdown.Item key={'doctor'} text='Doctor' as={Link} to={`/doctor/new`} />} />
+                          <Route path='/' render={() => <Dropdown.Item key={'hospital'} text='Hospital' as={Link} to={`/hospital/new`} />} />
+                          <Route path='/' render={() => <Dropdown.Item key={'addon'} text='Addon' as={Link} to={`/addon/new`} />} />
+                          <Route path='/' render={() => <Dropdown.Item key={'agent'} text='Agent' as={Link} to={`/agent/new`} />} />
+                        </Dropdown.Menu>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </section>
+                </Segment>
+
+                <Segment basic className='flex__maincontent flex--grow'>
+                  <Switch>
+                    <Route exact path='/test'
+                    render={(props) => <TestMain {...props} />} />
+                    <PrivateRoute exact path='/' component={HomeMain} />
+                    <PrivateRoute path='/patient' component={PatientMain} />
+                    <PrivateRoute path='/transaction' component={TransactionMain} />
+                    <PrivateRoute path='/doctor' component={DoctorMain} />
+                    <PrivateRoute path='/hospital' component={HospitalMain} />
+                    <PrivateRoute path='/addon' component={AddonMain} />
+                    <PrivateRoute path='/agent' component={AgentMain} />
+                    <PrivateRoute path='/invoice' component={InvoiceMain} />
+                    <Route exact path='/login'
+                    render={(props) => <AuthMain {...props} />} />
+                    <Route exact path='/unauthorised'
+                    render={(props) => <UnauthorisedMain {...props} />} />
+                  </Switch>
+                </Segment>
+
+              </div>
            </Sidebar.Pusher>
+
          </Sidebar.Pushable>
          </BrowserRouter>
         </div>

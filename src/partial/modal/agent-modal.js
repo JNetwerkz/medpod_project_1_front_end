@@ -1,12 +1,11 @@
 import React from 'react'
 import Modal from 'react-modal'
 
-import { Input, Button } from 'semantic-ui-react'
+import { Input, Button, Header, Icon, List, Segment } from 'semantic-ui-react'
 
 import { combineName } from 'custom-function'
 
 const AgentDetails = (data) => {
-  console.log(data.selectedAgent)
   return (
     <div>
       <h2>Details</h2>
@@ -18,24 +17,48 @@ const AgentDetails = (data) => {
 }
 
 const AgentModal = (props) => {
-  console.log(props)
   const agentsList = props.agentSearchResult.map((item) => {
-    console.log(item)
-    return <li onClick={(event) => props.modalMethod('select', event, item)} key={item._id}>{`${item['first name']} ${item['last name']}`}</li>
+    return (
+      <List.Item key={item._id} onClick={(event) => props.modalMethod('select', event, item)}>
+          <List.Content>
+            <List.Header>{combineName(item)}</List.Header>
+            {item.gender}
+          </List.Content>
+      </List.Item>
+    )
   })
+
   return (
     <Modal
       isOpen={props.agentModalOpen}
       onRequestClose={() => props.modalMethod('close')}
       contentLabel='Agent Search Modal'>
-      <h1>MODAL BOX</h1>
-      {agentsList}
-      <Input autoFocus onChange={(event) => props.modalMethod('change', event)} placeholder='Search Agent..' />
-      <AgentDetails selectedAgent={props.selectedAgent} />
-      <Button onClick={
-        () => props.modalMethod('close')}>
-        Close
-      </Button>
+      <div className='grid grid__modalbox'>
+        <Header as='h1' dividing className='grid__modalbox-header'>
+            <Icon name='spy' />
+            <Header.Content>
+              Agents
+            </Header.Content>
+          <Header.Subheader>
+            Search and select agent
+          </Header.Subheader>
+        </Header>
+        <section className='grid__modalbox-searcharea'>
+          <Input className='grid__modalbox-searchinput' fluid icon='search' autoFocus onChange={(event) => props.modalMethod('change', event)} placeholder='Search Agent..' />
+          <Segment className='grid__modalbox-searchresult'>
+            <List relaxed divided selection verticalAlign='middle' size='big'>
+              {agentsList.length ? agentsList : 'Search results return empty!'}
+            </List>
+          </Segment>
+        </section>
+        <section className='grid__modalbox-details'>
+          <AgentDetails selectedAgent={props.selectedAgent} />
+          <Button onClick={
+            () => props.modalMethod('close')}>
+            Close
+          </Button>
+        </section>
+      </div>
     </Modal>
   )
 }

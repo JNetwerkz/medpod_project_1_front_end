@@ -1,11 +1,64 @@
 .App {
-  text-align: center;
+  /*text-align: center;*/
   height: 100vh;
 }
 
 .App main {
-
   /*width: 90%;*/
   /*margin: 0 auto;*/
   /*background-color: lightgrey;*/
+}
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flex--row {
+  flex-direction: row;
+}
+.flex--column {
+  flex-direction: column;
+}
+
+.flex > .segment + .segment {
+  margin-top: 0;
+}
+
+.flex--grow {
+  flex-grow: 1;
+}
+
+.flex--grow2 {
+  flex-grow: 2;
+}
+
+.grid {
+  display: grid;
+}
+
+.grid__modalbox {
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 1.5em;
+  grid-template-areas:
+    "modalbox-header modalbox-header"
+    "modalbox-searcharea modalbox-details";
+}
+
+.grid__modalbox-header {
+  grid-area: modalbox-header;
+}
+
+.grid__modalbox-searcharea {
+  grid-area: modalbox-searcharea;
+}
+
+.grid__modalbox-searchresult {
+  height: 550px;
+  overflow-y: auto;
+}
+
+.grid__modalbox-details {
+  grid-area: modalbox-details;
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link, Switch, Route } from 'react-router-dom'
 
-import { Container } from 'semantic-ui-react'
+import { Container, Header, Icon, Dropdown } from 'semantic-ui-react'
 
 import TransactionNew from './new/transaction-new'
 import TransactionShow from './show/transaction-show'
@@ -14,11 +14,25 @@ import axios from 'axios'
 class TransactionMain extends Component {
   render () {
     return (
-      <Container fluid>
-        <h1>Transactions</h1>
-        <li>
-          <Link to={`${this.props.match.url}/new`}>Add Transaction</Link>
-        </li>
+      <Container>
+        <Header as='h1' dividing>
+          <Link to={this.props.match.url}>
+            <Icon name='file text outline' />
+            <Header.Content>
+                Transactions
+            </Header.Content>
+          </Link>
+          <Header.Subheader>
+            <Dropdown as='h4' text={'Manage Transactions / Invoice from Hospital'}>
+              <Dropdown.Menu>
+                <Dropdown.Menu scrolling>
+                  <Dropdown.Item as={Link} to={`/transaction/new`} icon='plus' text='Add New Transaction / Invoice' />
+                </Dropdown.Menu>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Header.Subheader>
+        </Header>
+        
         <Switch>
           <Route
             exact

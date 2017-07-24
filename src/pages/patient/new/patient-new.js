@@ -4,28 +4,58 @@ import { Redirect } from 'react-router-dom'
 import * as $ from 'jquery'
 import axios from 'axios'
 
-import { Form, Button } from 'semantic-ui-react'
+import { Form, Button, Header, Input, Select, Container } from 'semantic-ui-react'
 
 import AgentModal from 'partial/modal/agent-modal'
+
+const options = [
+  { key: 'm', text: 'Male', value: 'male' },
+  { key: 'f', text: 'Female', value: 'female' },
+  { key: 'o', text: 'Others', value: 'others' }
+]
 
 class PatientNew extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      patientNewForm: [],
       redirectToShow: false,
       redirectTo: '',
+      // form input fields
+      'first name': '',
+      'last name': '',
+      'gender': '',
+      'ic / passport': '',
+      'referral_agent': '',
       //
       agentModalOpen: false,
       agentSearchResult: [],
       selectedAgent: {},
-      agentId: '',
       searchFocus: false
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleChange = this.handleChange.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.handleSelectChange = this.handleSelectChange.bind(this)
     this.agentModalMethod = this.agentModalMethod.bind(this)
+  }
+
+  handleInputChange (event) {
+    const target = event.target
+    const value = target.type === 'checkbox' ? target.checked : target.value
+    const name = target.name
+
+    console.log(name, value)
+
+    this.setState({
+      [name]: value
+    })
+  }
+
+  handleSelectChange (event, value, name) {
+    console.log(name, value)
+    this.setState({
+      [name]: value
+    })
   }
 
   handleChange () {
@@ -36,13 +66,20 @@ class PatientNew extends Component {
 
   handleSubmit (event) {
     event.preventDefault()
-    const formData = this.state.patientNewForm
+
+    const formData = {
+      'first name': this.state['first name'],
+      'last name': this.state['last name'],
+      gender: this.state.gender,
+      'ic / passport': this.state['ic / passport'],
+      referral_agent: this.state.referral_agent
+    }
 
     axios({
       method: 'POST',
       url: `${process.env.REACT_APP_API_ENDPOINT}/patient`,
       data: formData
-     })
+    })
     .then((res) => {
       console.log('new patient data', res.data)
       this.setState({
@@ -81,7 +118,7 @@ class PatientNew extends Component {
         console.log(data)
         this.setState({
           selectedAgent: data,
-          agentId: data._id
+          referral_agent: data._id
           // patientModalOpen: false
         })
 
@@ -98,49 +135,57 @@ class PatientNew extends Component {
 
   render () {
     if (this.state.redirectToShow) return <Redirect to={this.state.redirectTo} />
+    const {
+      'first name': firstName,
+      'last name': lastName,
+      gender,
+      'ic / passport': icPassport,
+      referral_agent: referralAgent
+    } = this.state
+
     return (
-      <div>
-        <Form id='patient_new-form' onChange={(event) => this.handleChange(event)} onSubmit={(event) => this.handleSubmit(event)}>
-          <h2>Enter New Patient Information</h2>
-          <Form.Field>
-            <label>First Name</label>
-            <input type='text' name='first name'></input>
-          </Form.Field>
-          <Form.Field>
-            <label>Last Name</label>
-            <input type='text' name='last name'></input>
-          </Form.Field>
-          <Form.Field>
-            <label>IC / Passport</label>
-            <input type='text' name='ic / passport'></input>
-          </Form.Field>
-          <Form.Field>
-            <label>Gender</label>
-            <input type='text' name='gender'></input>
-          </Form.Field>
-          <Form.Field>
-            <label>Referral Agent</label>
-            <input onClick={() => this.agentModalMethod('open')} type='text' name='agentName'
-              readOnly
-              onChange={() => console.log()}
-              ref={(input) => {
-                console.log('input', input)
-                this.agentNameRef = input
-              }}
-              value={`${this.state.selectedAgent['first name'] || ''} ${this.state.selectedAgent['last name'] || ''}`} />
-          </Form.Field>
-          <Form.Field>
-            {/* <label>Doctor_ID</label> */}
-            <input readOnly hidden
-              type='text'
-              name='referral_agent'
-              onChange={() => console.log()}
-              ref={(input) => {
-                console.log('input', input)
-                this.agentIdRef = input
-              }}
-              value={this.state.agentId} />
-          </Form.Field>
+      <Container fluid>
+        <Header as='h3' block inverted>
+          Input New Patient Information
+        </Header>
+        <Form id='patient_new-form' onSubmit={(event) => this.handleSubmit(event)}>
+          <Form.Group widths='equal'>
+            <Form.Field control={Input} label='First name' name='first name' placeholder='First name' value={firstName} onChange={this.handleInputChange} />
+
+            <Form.Field control={Input} label='Last name' name='last name' placeholder='Last name' value={lastName} onChange={this.handleInputChange} />
+
+            <Form.Field control={Input} label='IC / Passport' name='ic / passport' placeholder='IC / Passport' value={icPassport} onChange={this.handleInputChange} />
+
+            <Form.Field control={Select} label='Gender' options={options} placeholder='Gender' value={gender} onChange={(e, {value}) => this.handleSelectChange(e, value, 'gender')} />
+          </Form.Group>
+
+          <Form.Group widths='equal'>
+            <Form.Field>
+              <label>Referral Agent</label>
+              <input onClick={() => this.agentModalMethod('open')} type='text' name='agentName'
+                placeholder='Click here to search for agent'
+                readOnly
+                onChange={() => console.log()}
+                ref={(input) => {
+                  console.log('input', input)
+                  this.agentNameRef = input
+                }}
+                value={`${this.state.selectedAgent['first name'] || ''} ${this.state.selectedAgent['last name'] || ''}`} />
+            </Form.Field>
+
+            <Form.Field>
+              <label>Referral_Agent ID</label>
+              <input readOnly
+                type='text'
+                value={referralAgent}
+                name='referral_agent'
+                onChange={() => console.log()}
+                ref={(input) => {
+                  this.agentIdRef = input
+                }}
+              />
+            </Form.Field>
+          </Form.Group>
           <Button type='submit'>Submit</Button>
         </Form>
         <AgentModal
@@ -150,7 +195,7 @@ class PatientNew extends Component {
           selectedAgent={this.state.selectedAgent}
           searchFocus={this.state.searchFocus}
          />
-      </div>
+      </Container>
     )
   }
 }

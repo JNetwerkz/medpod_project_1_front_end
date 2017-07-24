@@ -16,19 +16,6 @@ const PatientRow = (props) => {
   )
 }
 
-// const PatientIndex = (props) => {
-//   console.log(props)
-//   let PatientRows = props.patientIndex.map((item) => {
-//     return <PatientRow key={item._id} patientData={item} match={props.match} />
-//   })
-//   return (
-//     <div>
-//       <h1>Index</h1>
-//         <PatientRows />
-//     </div>
-//   )
-// }
-
 class PatientIndex extends Component {
   constructor (props) {
     super(props)
@@ -52,8 +39,7 @@ class PatientIndex extends Component {
   componentDidMount () {
     axios({
       method: 'GET',
-      url: `${process.env.REACT_APP_API_ENDPOINT}/patient`,
-
+      url: `${process.env.REACT_APP_API_ENDPOINT}/patient`
     })
     .then((res) => {
       console.log('PatientIndex res', res.data)

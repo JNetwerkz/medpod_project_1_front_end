@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 import * as $ from 'jquery'
 import axios from 'axios'
 
-import { Form, Button } from 'semantic-ui-react'
+import { Form, Input, Button, Header, Container } from 'semantic-ui-react'
 
 import PatientModal from 'partial/modal/patient-modal'
 import DoctorModal from 'partial/modal/doctor-modal'
@@ -17,22 +17,47 @@ class TransactionNew extends Component {
       transactionNewForm: [],
       redirectToShow: false,
       redirectTo: '',
+      // form data
+      'invoice date': '',
+      patient: '',
+      'receiving_doctor': '',
+      'invoice number': '',
+      'transaction amount': '',
       // patient modal selection
       patientModalOpen: false,
       patientSearchResult: [],
       selectedPatient: {},
-      patientId: '',
       searchFocus: false,
       // doctor modal selection
       doctorModalOpen: false,
       doctorSearchResult: [],
-      selectedDoctor: {},
-      doctorId: ''
+      selectedDoctor: {}
     }
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.handleSelectChange = this.handleSelectChange.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.patientModalMethod = this.patientModalMethod.bind(this)
     this.doctorModalMethod = this.doctorModalMethod.bind(this)
+  }
+
+  handleInputChange (event) {
+    const target = event.target
+    const value = target.type === 'checkbox' ? target.checked : target.value
+    const name = target.name
+
+    console.log(name, value)
+
+    this.setState({
+      [name]: value
+    })
+  }
+
+  handleSelectChange (event, value, name) {
+    console.log(name, value)
+    this.setState({
+      [name]: value
+    })
   }
 
   handleChange (event) {
@@ -43,8 +68,15 @@ class TransactionNew extends Component {
 
   handleSubmit (event) {
     event.preventDefault()
-    const formData = this.state.transactionNewForm
-    console.log(formData)
+
+    const formData = {
+      patient: this.state.patient,
+      receiving_doctor: this.state.receiving_doctor,
+      'invoice date': this.state['invoice date'],
+      'invoice number': this.state['invoice number'],
+      'transaction amount': this.state['transaction amount']
+    }
+
     axios({
       method: 'POST',
       url: `${process.env.REACT_APP_API_ENDPOINT}/transaction`,
@@ -88,7 +120,7 @@ class TransactionNew extends Component {
         console.log(data)
         this.setState({
           selectedPatient: data,
-          patientId: data._id
+          patient: data._id
           // patientModalOpen: false
         })
 
@@ -131,7 +163,7 @@ class TransactionNew extends Component {
         console.log(data)
         this.setState({
           selectedDoctor: data,
-          doctorId: data._id
+          receiving_doctor: data._id
           // patientModalOpen: false
         })
 
@@ -152,67 +184,65 @@ class TransactionNew extends Component {
       return <Redirect to={this.state.redirectTo} />
     }
     return (
-      <div>
-        <Form id='transaction_new-form' onChange={(event) => this.handleChange(event)} onSubmit={(event) => this.handleSubmit(event)}>
+      <Container fluid>
+        <Header as='h3' block inverted>
+          Input New Transaction / Invoice Information
+        </Header>
+        <Form id='transaction_new-form' onSubmit={(event) => this.handleSubmit(event)}>
           <h2>Enter New Transaction Information</h2>
-          <Form.Field>
-            <label>Patient</label>
-            <input onClick={() => this.patientModalMethod('open')} type='text' name='patientName'
-              readOnly
-              onChange={() => console.log()}
-              ref={(input) => {
-                console.log('input', input)
-                this.patientNameRef = input
-              }}
-              value={`${this.state.selectedPatient['first name'] || ''} ${this.state.selectedPatient['last name'] || ''}`} />
-          </Form.Field>
-          <Form.Field>
-            {/* <label>Patient_ID</label> */}
-            <input readOnly hidden
-              type='text'
-              name='patient'
-              onChange={() => console.log()}
-              ref={(input) => {
-                console.log('input', input)
-                this.patientIdRef = input
-              }}
-              value={this.state.patientId} />
-          </Form.Field>
-          <Form.Field>
-            <label>Doctor</label>
-            <input onClick={() => this.doctorModalMethod('open')} type='text' name='doctorName'
-              readOnly
-              onChange={() => console.log()}
-              ref={(input) => {
-                console.log('input', input)
-                this.doctorNameRef = input
-              }}
-              value={`${this.state.selectedDoctor['first name'] || ''} ${this.state.selectedDoctor['last name'] || ''}`} />
-          </Form.Field>
-          <Form.Field>
-            {/* <label>Doctor_ID</label> */}
-            <input readOnly hidden
-              type='text'
-              name='receiving_doctor'
-              onChange={() => console.log()}
-              ref={(input) => {
-                console.log('input', input)
-                this.doctorIdRef = input
-              }}
-              value={this.state.doctorId} />
-          </Form.Field>
-          <Form.Field>
-            <label>Invoice Date</label>
-            <input type='date' name='invoice date' />
-          </Form.Field>
-          <Form.Field>
-            <label>Invoice Number</label>
-            <input type='text' name='invoice number' />
-          </Form.Field>
-          <Form.Field>
-            <label>Charges to Patient</label>
-            <input type='number' name='transaction amount' />
-          </Form.Field>
+          <Form.Group widths='equal'>
+            <Form.Field>
+              <label>Patient</label>
+              <input onClick={() => this.patientModalMethod('open')} type='text' name='patientName'
+                readOnly
+                onChange={() => console.log()}
+                ref={(input) => {
+                  console.log('input', input)
+                  this.patientNameRef = input
+                }}
+                value={`${this.state.selectedPatient['first name'] || ''} ${this.state.selectedPatient['last name'] || ''}`} />
+            </Form.Field>
+            <Form.Field>
+              <label>Patient ID</label>
+              <input readOnly
+                type='text'
+                name='patient'
+                onChange={() => console.log()}
+                ref={(input) => {
+                  console.log('input', input)
+                  this.patientIdRef = input
+                }}
+                value={this.state.patient} />
+            </Form.Field>
+          </Form.Group>
+          <Form.Group widths='equal'>
+            <Form.Field>
+              <label>Doctor</label>
+              <input onClick={() => this.doctorModalMethod('open')} type='text' name='doctorName'
+                readOnly
+                onChange={() => console.log()}
+                ref={(input) => {
+                  console.log('input', input)
+                  this.doctorNameRef = input
+                }}
+                value={`${this.state.selectedDoctor['first name'] || ''} ${this.state.selectedDoctor['last name'] || ''}`} />
+            </Form.Field>
+            <Form.Field>
+              <label>Doctor ID</label>
+              <input readOnly
+                type='text'
+                name='receiving_doctor'
+                onChange={() => console.log()}
+                ref={(input) => {
+                  console.log('input', input)
+                  this.doctorIdRef = input
+                }}
+                value={this.state['receiving_doctor']} />
+            </Form.Field>
+          </Form.Group>
+          <Form.Field type='date' control={Input} label='Date of Transaction / Invoice' name='invoice date' placeholder='Date' onChange={this.handleInputChange} />
+          <Form.Field type='text' control={Input} label='Transaction / Invoice Number' name='invoice number' placeholder='Transaction / Invoice Number' onChange={this.handleInputChange} />
+          <Form.Field type='number' control={Input} label='Transaction / Invoice Amount' name='transaction amount' placeholder='Transaction / Invoice Amount' onChange={this.handleInputChange} />
           <Button type='submit'>Submit</Button>
         </Form>
         <PatientModal
@@ -226,7 +256,7 @@ class TransactionNew extends Component {
           modalMethod={this.doctorModalMethod}
           doctorSearchResult={this.state.doctorSearchResult}
           selectedDoctor={this.state.selectedDoctor} />
-      </div>
+      </Container>
     )
   }
 }

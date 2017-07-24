@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import * as $ from 'jquery'
 
-import { Form } from 'semantic-ui-react'
+import { Form, Container, Header } from 'semantic-ui-react'
 
 const options = [
   { key: 'm', text: 'Male', value: 'male' },
@@ -49,13 +49,6 @@ export default class AgentNew extends Component {
     })
   }
 
-  // handleChange () {
-  //   console.log($('#doctor_new-form'))
-  //   this.setState({
-  //     doctorNewForm: $('#doctor_new-form').serializeArray()
-  //   })
-  // }
-
   handleSubmit (event) {
     event.preventDefault()
     const formData = this.state
@@ -80,23 +73,19 @@ export default class AgentNew extends Component {
   render () {
     if (this.state.redirectToShow) return <Redirect to={this.state.redirectTo} />
     return (
-      <div>
-        <h2>New</h2>
+      <Container fluid>
+        <Header as='h3' block inverted>
+          Input New Agent Information
+        </Header>
         <Form id='agent_new-form' onSubmit={(event) => this.handleSubmit(event)}>
           <Form.Group widths='equal'>
             <Form.Input label='First name' placeholder='First name' name='first name' onChange={this.handleInputChange} />
             <Form.Input label='Last name' placeholder='Last name' name='last name' onChange={this.handleInputChange} />
             <Form.Select label='Gender' options={options} placeholder='Gender' onChange={(e, {value}) => this.handleSelectChange(e, value, 'gender')} />
-            {/* <Form.Field control={Select} label='Gender' options={options} placeholder='Gender' onChange={(e, {value}, {text}) => this.handleSelectChange(e, value, text)} /> */}
-            {/* <Form.Field label='Gender' placeholder='Gender' name='gender' control='select' value={this.state['gender']} onChange={this.handleInputChange}>
-              <option value='male'>Male</option>
-              <option value='female'>Female</option>
-              <option value='others'>Others</option>
-            </Form.Field> */}
           </Form.Group>
           <Form.Button>Submit</Form.Button>
         </Form>
-      </div>
+      </Container>
     )
   }
 }
