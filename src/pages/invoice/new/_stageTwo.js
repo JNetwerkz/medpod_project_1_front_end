@@ -1,8 +1,9 @@
 import React from 'react'
 
-import { Form } from 'semantic-ui-react'
+import { Form, Container, Table } from 'semantic-ui-react'
 
 import SetupRow from './_stageTwo-setupRow'
+import TableRow from './_stageTwo-tableRow'
 
 const InvoiceStageTwo = (props) => {
   console.log(props)
@@ -10,23 +11,47 @@ const InvoiceStageTwo = (props) => {
     console.log('props.selectedAddon[item.transaction]', props.selectedAddon[item.transaction])
     let addonForTransaction = props.selectedAddon[item.transaction] ? props.selectedAddon[item.transaction] : []
     console.log('addonForTransaction', addonForTransaction)
-    return <SetupRow {...item}
+    return <TableRow {...item}
       key={item.transaction}
       onChangeHandler={props.handleStageTwoAmtPercentChange}
-      addonHandler={props.handleStageTwoAddonMethod}
-      addonSelection={props.addonSelection}
-      addonForTransaction={addonForTransaction}
+      // addonHandler={props.handleStageTwoAddonMethod}
+      // addonSelection={props.addonSelection}
+      // addonForTransaction={addonForTransaction}
     />
   })
 
   return (
-    <div>
-      <h3>Modify Percentage</h3>
-      <Form onSubmit={props.handleStageTwoSubmit}>
-        {SetupRows}
-        <Form.Button>Submit</Form.Button>
-      </Form>
-    </div>
+    <Container fluid>
+      <Table color='blue' celled padded selectable>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>
+              Transaction Record
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              Patient Name
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              Transaction Amount
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              Percentage (%)
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              Chargeable Amount
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+
+        <Table.Body>
+          {SetupRows}
+        </Table.Body>
+      </Table>
+      {/* <Form onSubmit={props.handleStageTwoSubmit}> */}
+
+        {/* <Form.Button>Submit</Form.Button> */}
+      {/* </Form> */}
+    </Container>
   )
 }
 

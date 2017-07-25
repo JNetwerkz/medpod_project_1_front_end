@@ -7,7 +7,7 @@ import PatientIndex from './index/patient-index'
 import PatientNew from './new/patient-new'
 import PatientShow from './show/patient-show'
 
-class PatientMain extends Component {
+export default class PatientMain extends Component {
   render () {
     return (
       <Container>
@@ -53,5 +53,3 @@ class PatientMain extends Component {
     )
   }
 }
-
-export default PatientMain

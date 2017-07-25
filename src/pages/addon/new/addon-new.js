@@ -2,9 +2,8 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 
 import axios from 'axios'
-import * as $ from 'jquery'
 
-import { Form } from 'semantic-ui-react'
+import { Form, Header, Container } from 'semantic-ui-react'
 
 export default class AddonNew extends Component {
   constructor (props) {
@@ -72,22 +71,17 @@ export default class AddonNew extends Component {
   render () {
     if (this.state.redirectToShow) return <Redirect to={this.state.redirectTo} />
     return (
-      <div>
-        <h2>New</h2>
+      <Container fluid>
+        <Header as='h3' block inverted>
+          Create New Add-on
+        </Header>
         <Form id='addon_new-form' onSubmit={(event) => this.handleSubmit(event)}>
           <Form.Group widths='equal'>
             <Form.Input label='Name' placeholder='Name' name='name' onChange={this.handleInputChange} />
-            {/* <Form.Select label='Gender' options={options} placeholder='Gender' onChange={(e, {value}) => this.handleSelectChange(e, value, 'gender')} /> */}
-            {/* <Form.Field control={Select} label='Gender' options={options} placeholder='Gender' onChange={(e, {value}, {text}) => this.handleSelectChange(e, value, text)} /> */}
-            {/* <Form.Field label='Gender' placeholder='Gender' name='gender' control='select' value={this.state['gender']} onChange={this.handleInputChange}>
-              <option value='male'>Male</option>
-              <option value='female'>Female</option>
-              <option value='others'>Others</option>
-            </Form.Field> */}
           </Form.Group>
           <Form.Button>Submit</Form.Button>
         </Form>
-      </div>
+      </Container>
     )
   }
 }

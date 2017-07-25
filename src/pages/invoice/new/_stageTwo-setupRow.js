@@ -28,6 +28,7 @@ const SetupRow = (props) => {
         </Form.Field>
         <Form.Field>
           <Input
+            required
             icon='percent'
             type='number'
             name={props.transaction}
@@ -36,6 +37,7 @@ const SetupRow = (props) => {
         </Form.Field>
         <Form.Field>
           <Input
+            required
             label='Chargeable'
             type='number'
             name={props.transaction}

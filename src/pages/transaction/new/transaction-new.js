@@ -186,10 +186,9 @@ class TransactionNew extends Component {
     return (
       <Container fluid>
         <Header as='h3' block inverted>
-          Input New Transaction / Invoice Information
+          Create New Transaction / Invoice
         </Header>
         <Form id='transaction_new-form' onSubmit={(event) => this.handleSubmit(event)}>
-          <h2>Enter New Transaction Information</h2>
           <Form.Group widths='equal'>
             <Form.Field>
               <label>Patient</label>
@@ -240,9 +239,11 @@ class TransactionNew extends Component {
                 value={this.state['receiving_doctor']} />
             </Form.Field>
           </Form.Group>
-          <Form.Field type='date' control={Input} label='Date of Transaction / Invoice' name='invoice date' placeholder='Date' onChange={this.handleInputChange} />
-          <Form.Field type='text' control={Input} label='Transaction / Invoice Number' name='invoice number' placeholder='Transaction / Invoice Number' onChange={this.handleInputChange} />
-          <Form.Field type='number' control={Input} label='Transaction / Invoice Amount' name='transaction amount' placeholder='Transaction / Invoice Amount' onChange={this.handleInputChange} />
+          <Form.Group widths='equal'>
+            <Form.Field type='date' control={Input} label='Date of Transaction / Invoice' name='invoice date' placeholder='Date' onChange={this.handleInputChange} />
+            <Form.Field type='text' control={Input} label='Transaction / Invoice Number' name='invoice number' placeholder='Transaction / Invoice Number' onChange={this.handleInputChange} />
+            <Form.Field type='number' control={Input} label='Transaction / Invoice Amount' name='transaction amount' placeholder='Transaction / Invoice Amount' onChange={this.handleInputChange} />
+          </Form.Group>
           <Button type='submit'>Submit</Button>
         </Form>
         <PatientModal

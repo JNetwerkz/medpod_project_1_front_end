@@ -4,7 +4,7 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import axios from 'axios'
 import moment from 'moment'
 
-import { Button } from 'semantic-ui-react'
+import { Button, Form, Header, Input, Select, Container, Divider } from 'semantic-ui-react'
 
 import InvoiceStageOne from './_stageOne'
 import InvoiceStageTwo from './_stageTwo'
@@ -178,7 +178,7 @@ export default class InvoiceNew extends Component {
 
     const toChange = type === 'percentage' ? 'amount' : 'percentage'
 
-    const input = event.target.value ? parseInt(event.target.value) : ''
+    const input = event.target.value ? parseFloat(event.target.value) : ''
 
     if (!input) {
       receivable[type] = input
@@ -186,8 +186,8 @@ export default class InvoiceNew extends Component {
       if (toChange === 'amount') receivable[toChange] = ''
     } else {
       receivable[type] = input
-      if (toChange === 'percentage') receivable[toChange] = input / baseAmt * 100
-      if (toChange === 'amount') receivable[toChange] = input / 100 * baseAmt
+      if (toChange === 'percentage') receivable[toChange] = Math.ceil(input / baseAmt * 100)
+      if (toChange === 'amount') receivable[toChange] = Math.ceil(input / 100 * baseAmt)
     }
     console.log(this.state.selectedTransaction)
 
@@ -312,10 +312,15 @@ export default class InvoiceNew extends Component {
       return <Redirect to={`/invoice/${this.state.redirectTo}`} />
     }
     return (
-      <div>
-        <InvoiceNav {...this.props} />
-        <Button loading={this.state.loading} onClick={() => this.printingStuff('selectedTransaction')}>Print selectedTransaction</Button>
-        <Button loading={this.state.loading} onClick={() => this.printingStuff('selectedAddon')}>Print selectedAddon</Button>
+      <Container fluid>
+          <Header as='h3' block inverted textAlign='center'>
+            Create New Invoice
+          </Header>
+          <InvoiceNav {...this.props} transactionSearchResult={this.state.transactionSearchResult} />
+        <Divider hidden />
+
+        {/* <Button loading={this.state.loading} onClick={() => this.printingStuff('selectedTransaction')}>Print selectedTransaction</Button>
+        <Button loading={this.state.loading} onClick={() => this.printingStuff('selectedAddon')}>Print selectedAddon</Button> */}
         <Switch>
           <Route
             exact
@@ -369,7 +374,7 @@ export default class InvoiceNew extends Component {
           selectedDoctor={this.state.selectedDoctor}
           doctorId={this.state.doctorId}
         /> */}
-      </div>
+      </Container>
     )
   }
 

@@ -46,7 +46,7 @@ const DoctorModal = (props) => {
           <Input className='grid__modalbox-searchinput' fluid icon='search' autoFocus onChange={(event) => props.modalMethod('change', event)} placeholder='Search Doctor..' />
           <Segment className='grid__modalbox-searchresult'>
             <List relaxed divided selection verticalAlign='middle' size='big'>
-              {doctorsList.length ? doctorsList : 'Search results return empty!'}
+              {doctorsList.length ? doctorsList : <Header as='h4'>Search results return empty!</Header>}
             </List>
           </Segment>
         </section>

@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 import * as $ from 'jquery'
 import axios from 'axios'
 
-import { Form, Button, Header, Input, Select, Container } from 'semantic-ui-react'
+import { Form, Header, Input, Select, Container } from 'semantic-ui-react'
 
 import AgentModal from 'partial/modal/agent-modal'
 
@@ -186,7 +186,7 @@ class PatientNew extends Component {
               />
             </Form.Field>
           </Form.Group>
-          <Button type='submit'>Submit</Button>
+          <Form.Button type='submit'>Submit</Form.Button>
         </Form>
         <AgentModal
           agentModalOpen={this.state.agentModalOpen}

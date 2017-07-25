@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link, Switch, Route } from 'react-router-dom'
 
-import { Container } from 'semantic-ui-react'
+import { Container, Header, Icon, Dropdown } from 'semantic-ui-react'
 
 import InvoiceNew from './new/invoice-new'
 import InvoiceShow from './show/invoice-show'
@@ -13,8 +13,25 @@ import InvoiceNav from './invoice-nav'
 export default class InvoiceMain extends Component {
   render () {
     return (
-      <Container fluid>
-        <h1>Invoice</h1>
+      <Container>
+        <Header as='h1' dividing>
+          <Link to={this.props.match.url}>
+            <Icon name='wordpress forms' />
+            <Header.Content>
+                Invoices
+            </Header.Content>
+          </Link>
+          <Header.Subheader>
+            <Dropdown as='h4' text={'Manage Invoices'}>
+              <Dropdown.Menu>
+                <Dropdown.Menu scrolling>
+                  <Dropdown.Item as={Link} to={`/invoice/new`} icon='plus' text='Add New Invoice' />
+                </Dropdown.Menu>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Header.Subheader>
+        </Header>
+
         <Switch>
           <Route
             render={(props) => <InvoiceNew {...props} />}

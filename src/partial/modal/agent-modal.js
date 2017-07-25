@@ -47,7 +47,7 @@ const AgentModal = (props) => {
           <Input className='grid__modalbox-searchinput' fluid icon='search' autoFocus onChange={(event) => props.modalMethod('change', event)} placeholder='Search Agent..' />
           <Segment className='grid__modalbox-searchresult'>
             <List relaxed divided selection verticalAlign='middle' size='big'>
-              {agentsList.length ? agentsList : 'Search results return empty!'}
+              {agentsList.length ? agentsList : <Header as='h4'>Search results return empty!</Header>}
             </List>
           </Segment>
         </section>
