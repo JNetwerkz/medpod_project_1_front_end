@@ -41,9 +41,6 @@ const SearchResults = (props) => {
             <Table.HeaderCell>
               Select
             </Table.HeaderCell>
-            <Table.HeaderCell>
-              Select
-            </Table.HeaderCell>
           </Table.Row>
         </Table.Header>
 
@@ -53,7 +50,7 @@ const SearchResults = (props) => {
       </Table>
       <Popup
         trigger={
-          <Button primary as={Link} to={`${props.match.url}/setup`} floated='right'>Confirm</Button>
+          <Button primary as={Link} to={`${props.match.url}/setup_invoice_amount`} floated='right'>Confirm</Button>
         }
         content='Next: Setup invoice amount'
         position='left center'

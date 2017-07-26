@@ -25,9 +25,6 @@ const TableRow = (props) => {
                 name={item._id}
                 onChange={(event, data) => props.handleTransactionCheckboxChange(event, data)} checked={props.checkedTransaction[item._id].checked} />
             </Table.Cell>
-            <Table.Cell>
-              <input />
-            </Table.Cell>
           </Table.Row>
   )
 }

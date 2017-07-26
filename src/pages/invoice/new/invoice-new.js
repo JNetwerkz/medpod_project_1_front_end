@@ -8,6 +8,7 @@ import { Button, Form, Header, Input, Select, Container, Divider } from 'semanti
 
 import InvoiceStageOne from './_stageOne'
 import InvoiceStageTwo from './_stageTwo'
+import InvoiceStageThree from './_stageThree'
 import InvoiceNav from '../invoice-nav'
 
 export default class InvoiceNew extends Component {
@@ -167,7 +168,7 @@ export default class InvoiceNew extends Component {
     })
   }
 
-  handleStageTwoAmtPercentChange (event, type) {
+  handleStageTwoAmtPercentChange (event, inputType) {
     console.log('value', event.target.value)
 
     const transactionId = event.target.name
@@ -176,21 +177,28 @@ export default class InvoiceNew extends Component {
     const receivable = transactionObj.receivable
     const baseAmt = this.state.selectedTransaction[transactionId].data['transaction amount']
 
-    const toChange = type === 'percentage' ? 'amount' : 'percentage'
+    const outputType = inputType === 'percentage' ? 'amount' : 'percentage'
 
-    const input = event.target.value ? parseFloat(event.target.value) : ''
+    const stringInput = event.target.value
+    const floatInput = event.target.value ? parseFloat(event.target.value) : ''
 
-    if (!input) {
-      receivable[type] = input
-      if (toChange === 'percentage') receivable[toChange] = ''
-      if (toChange === 'amount') receivable[toChange] = ''
+    if (stringInput === '') {
+      receivable[inputType] = stringInput
+      receivable[outputType] = ''
     } else {
-      receivable[type] = input
-      if (toChange === 'percentage') receivable[toChange] = Math.ceil(input / baseAmt * 100)
-      if (toChange === 'amount') receivable[toChange] = Math.ceil(input / 100 * baseAmt)
-    }
-    console.log(this.state.selectedTransaction)
+      let floatOutput
+      let stringOutput
 
+      // percentage = totalAmt / baseAmt
+      if (outputType === 'percentage') floatOutput = floatInput / baseAmt * 100
+      // baseAmt * percentage = totalAmt
+      if (outputType === 'amount') floatOutput = floatInput * baseAmt / 100
+
+      stringOutput = floatOutput.toFixed(2).toString()
+
+      receivable[inputType] = stringInput
+      receivable[outputType] = stringOutput
+    }
     this.setState({
       selectedTransaction: selectedTransaction
     })
@@ -198,6 +206,8 @@ export default class InvoiceNew extends Component {
 
   handleStageTwoAddonMethod (event, type, transactionId, index, value) {
     event.preventDefault()
+    console.log(event)
+    console.log(event.type)
     let selectedAddon = this.state.selectedAddon
     switch (type) {
       case 'add':
@@ -209,30 +219,31 @@ export default class InvoiceNew extends Component {
           selectedAddon[transactionId] = []
           selectedAddon[transactionId].push({item: '', amount: ''})
         }
-        console.log('selectedAddon.transactionId', selectedAddon.transactionId)
+        // console.log('selectedAddon.transactionId', selectedAddon.transactionId)
 
         this.setState({ selectedAddon })
 
         break
       case 'select':
-        console.log('handleStageTwoAddonMethod select')
+        // console.log('handleStageTwoAddonMethod select')
         selectedAddon[transactionId][index].item = value
 
         this.setState({ selectedAddon })
         break
       case 'amtInput':
-        console.log('handleStageTwoAddonMethod amtInput')
-        selectedAddon[transactionId][index].amount = value
+        // console.log('handleStageTwoAddonMethod amtInput')
+        const valueFromEventInput = event.target.value
+        selectedAddon[transactionId][index].amount = valueFromEventInput
 
         this.setState({ selectedAddon })
         break
       case 'remove':
-        console.log('handleStageTwoAddonMethod delete')
-        console.log(index)
+        // console.log('handleStageTwoAddonMethod delete')
+        // console.log(index)
         const removed = selectedAddon[transactionId].splice(index, 1)
 
-        console.log('removed', removed)
-        console.log('selectedAddon', selectedAddon)
+        // console.log('removed', removed)
+        // console.log('selectedAddon', selectedAddon)
 
         this.setState({ selectedAddon })
         break
@@ -273,8 +284,6 @@ export default class InvoiceNew extends Component {
       return item
     })
 
-    console.log(formData)
-
     axios({
       method: 'POST',
       url: `${process.env.REACT_APP_API_ENDPOINT}/invoice`,
@@ -308,12 +317,11 @@ export default class InvoiceNew extends Component {
 
   render () {
     if (this.state.redirectToShow) {
-      console.log('redirectToShow trans new', this.state.redirectTo)
       return <Redirect to={`/invoice/${this.state.redirectTo}`} />
     }
     return (
       <Container fluid>
-          <Header as='h3' block inverted textAlign='center'>
+          <Header as='h3' block inverted>
             Create New Invoice
           </Header>
           <InvoiceNav {...this.props} transactionSearchResult={this.state.transactionSearchResult} />
@@ -358,7 +366,21 @@ export default class InvoiceNew extends Component {
                 addonSelection={this.state.addonSelection}
                 selectedAddon={this.state.selectedAddon}
               />}
-            path={`${this.props.match.url}/setup`}
+            path={`${this.props.match.url}/setup_invoice_amount`}
+          />
+          <Route
+            exact
+            render={(props) =>
+              <InvoiceStageThree
+                {...props}
+                // handleStageTwoAmtPercentChange={this.handleStageTwoAmtPercentChange}
+                handleStageTwoSubmit={this.handleStageTwoSubmit}
+                handleStageTwoAddonMethod={this.handleStageTwoAddonMethod}
+                selectedTransaction={this.state.selectedTransaction}
+                addonSelection={this.state.addonSelection}
+                selectedAddon={this.state.selectedAddon}
+              />}
+            path={`${this.props.match.url}/setup_addon_amount`}
           />
         </Switch>
         {/* <InvoiceStageOne

@@ -6,7 +6,6 @@ import AddonRow from './_stageTwo-addonRow'
 import { M6117 } from 'custom-function'
 
 const SetupRow = (props) => {
-  console.log(props)
   const AddonRows = props.addonForTransaction.map((addon, index) => {
     return (
       <AddonRow

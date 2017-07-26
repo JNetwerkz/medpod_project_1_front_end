@@ -22,11 +22,15 @@ class InvoiceNav extends Component {
             !this.props.transactionSearchResult.length
             ? '..'
             : <div className='block--inline'>
-                <Breadcrumb.Section exact activeStyle={customStyle} as={NavLink} to={`${this.props.match.url}/setup`}>
+                <Breadcrumb.Section exact activeStyle={customStyle} as={NavLink} to={`${this.props.match.url}/setup_invoice_amount`}>
                   Setup Invoice Amount
                 </Breadcrumb.Section>
                 <Breadcrumb.Divider icon='right angle' />
               </div>
+          }
+
+          {
+            
           }
 
         </Breadcrumb>

@@ -17,7 +17,9 @@ const InvoiceStageOne = (props) => {
             <Form.Input label='Year' placeholder='IE: 2017' name='transaction year' value={props.transactionYear} onChange={props.handleInputChange} />
             <Form.Field>
               <label>Doctor</label>
-              <input onClick={() => props.doctorModalMethod('open')} type='text' name='doctorName'
+              <input
+
+                onClick={() => props.doctorModalMethod('open')} type='text' name='doctorName'
                 readOnly
                 onChange={() => console.log()}
                 // ref={(input) => {
@@ -40,7 +42,7 @@ const InvoiceStageOne = (props) => {
             </Form.Field>
             <Form.Field>
               <label>&nbsp;</label>
-              <Form.Button fluid>
+              <Form.Button type='submit' fluid>
                 Search
               </Form.Button>
             </Form.Field>

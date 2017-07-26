@@ -1,56 +1,75 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-import { Form, Container, Table } from 'semantic-ui-react'
+import { Form, Container, Table, Popup, Button, Segment, Header, Divider } from 'semantic-ui-react'
 
 import SetupRow from './_stageTwo-setupRow'
 import TableRow from './_stageTwo-tableRow'
+import GrandTotal from './_stageTwo-grandTotal'
+
+import { M6117, combineName } from 'custom-function'
 
 const InvoiceStageTwo = (props) => {
-  console.log(props)
-  const SetupRows = Object.values(props.selectedTransaction).map((item) => {
-    console.log('props.selectedAddon[item.transaction]', props.selectedAddon[item.transaction])
-    let addonForTransaction = props.selectedAddon[item.transaction] ? props.selectedAddon[item.transaction] : []
-    console.log('addonForTransaction', addonForTransaction)
-    return <TableRow {...item}
-      key={item.transaction}
-      onChangeHandler={props.handleStageTwoAmtPercentChange}
-      // addonHandler={props.handleStageTwoAddonMethod}
-      // addonSelection={props.addonSelection}
-      // addonForTransaction={addonForTransaction}
-    />
+  const {
+    selectedTransaction,
+    selectedAddon
+  } = props
+
+  const TableRows = Object.values(selectedTransaction).map((item) => {
+    let addonForTransaction =
+      selectedAddon[item.transaction]
+      ? selectedAddon[item.transaction]
+      : []
+
+    return (
+      <Container fluid key={item.transaction}>
+        <Header as='h3' attached='top' block>
+          {`${M6117(item.data)}`} | {`${combineName(item.data.patient)}`} | {`Dr. ${combineName(item.data.receiving_doctor)}`}
+        </Header>
+        <Segment attached>
+          <TableRow {...item}
+            onChangeHandler={props.handleStageTwoAmtPercentChange}
+            addonHandler={props.handleStageTwoAddonMethod}
+            addonSelection={props.addonSelection}
+            addonForTransaction={addonForTransaction}
+          />
+        </Segment>
+        <Divider hidden />
+      </Container>
+    )
   })
 
   return (
     <Container fluid>
-      <Table color='blue' celled padded selectable>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>
-              Transaction Record
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              Patient Name
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              Transaction Amount
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              Percentage (%)
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              Chargeable Amount
-            </Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
+      <form onSubmit={props.handleStageTwoSubmit}>
+        {/* <Popup
+          trigger={
+            <Button primary as={Link} to={`/invoice/new/setup_addon_amount`} floated='right'>Confirm</Button>
+          }
+          content='Next: Setup addon amount'
+          position='left center'
+        /> */}
+        {TableRows}
+        <section>
+          <Segment.Group>
+            <Segment inverted>
+              <Header as='h2' inverted>
+                Grand Total
+              </Header>
+            </Segment>
+            <Segment>
+              <GrandTotal
+                selectedAddon={selectedAddon}
+                selectedTransaction={selectedTransaction}
+              />
+            </Segment>
+          </Segment.Group>
 
-        <Table.Body>
-          {SetupRows}
-        </Table.Body>
-      </Table>
-      {/* <Form onSubmit={props.handleStageTwoSubmit}> */}
-
-        {/* <Form.Button>Submit</Form.Button> */}
-      {/* </Form> */}
+          <Button type='submit' primary floated='right'>
+            Create
+          </Button>
+        </section>
+      </form>
     </Container>
   )
 }
