@@ -124,7 +124,7 @@ class App extends Component {
     }
 
     return (
-        <div className='App'>
+        <div className='App' id='react-no-print'>
           <BrowserRouter>
           <Sidebar.Pushable as={Segment}>
             <Sidebar as={Menu} animation='uncover' width='thin' visible={sideBarShow} vertical inverted>
