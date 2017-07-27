@@ -61,13 +61,9 @@ const GrandTotal = (props) => {
       return acc
     }, 0)
 
-    console.log('grandTotalAmount', grandTotalAmount)
-    console.log('receivableTotal', receivableTotal)
-    console.log('addOnTotal', addOnTotal)
     let subTotal = receivableTotal + addOnTotal
-    console.log('subTotal', subTotal)
+
     grandTotalAmount = grandTotalAmount + subTotal
-    console.log('grandTotalAmount', grandTotalAmount)
 
     // let addonForTransaction =
     //   selectedAddon[item.transaction]

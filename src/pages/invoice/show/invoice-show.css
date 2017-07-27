@@ -2,31 +2,70 @@ body {
   background: rgb(204,204,204);
 }
 
-/*page[size="A4"] {
-  background: red;
-  width: 21cm;
-  height: 29.7cm;
-  display: block;
-  margin: 0 auto;
-  margin-bottom: 0.5cm;
-  box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
-}*/
-
-page.A4 {
+.A4 {
+  padding: 2em;
   background: white;
   width: 21cm;
-  /*height: 29.7cm;*/
+  min-height: 29cm;
   display: block;
   margin: 0 auto;
-  margin-bottom: 0.5cm;
   box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
 }
 
+.grid__invoice {
+  position: relative;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: auto auto auto 1fr;
+  grid-row-gap: 2em;
+  align-items: stretch;
+  grid-template-areas:
+    "grid__invoice-header grid__invoice-header"
+    "grid__invoice-topleft grid__invoice-topright"
+    "grid__invoice-mid grid__invoice-mid"
+    "grid__invoice-bottom grid__invoice-bottom";
+}
+
+.grid__invoice-header {
+  text-align: center;
+  grid-area: grid__invoice-header;
+}
+
+.grid__invoice-topleft {
+  /*background-color: green;*/
+  grid-area: grid__invoice-topleft;
+}
+.grid__invoice-topright {
+  /*background-color: blue;*/
+  grid-area: grid__invoice-topright;
+}
+.grid__invoice-mid {
+  min-height: 20cm;
+  /*background-color: red;*/
+  grid-area: grid__invoice-mid;
+}
+.grid__invoice-bottom {
+  align-self: stretch;
+  /*position: absolute;
+  bottom: 0;*/
+  /*background-color: yellow;*/
+  grid-area: grid__invoice-bottom;
+}
+
+
+
 @media print {
+  .A4 {
+    padding: 0;
+  }
+  th {
+    /*page-break-after: auto;*/
+    page-break-inside: auto;
+    page-break-before: always;
+  }
   @page
   {
       size:  auto;   /* auto is the initial value */
-      margin: 0mm;  /* this affects the margin in the printer settings */
+      margin: 2em;  /* this affects the margin in the printer settings */
   }
 
   html
@@ -37,7 +76,8 @@ page.A4 {
 
   body
   {
-      border: solid 1px blue ;
-      margin: 10mm 15mm 10mm 15mm; /* margin you want for the content */
+      /*border: solid 1px blue ;*/
+       /* margin you want for the content */
+      /*margin: 10mm 15mm 10mm 15mm;*/
   }
 }

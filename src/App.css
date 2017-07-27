@@ -33,6 +33,10 @@
   flex-grow: 2;
 }
 
+.flex--jc-end {
+  justify-content: flex-end;
+}
+
 .grid {
   display: grid;
 }
