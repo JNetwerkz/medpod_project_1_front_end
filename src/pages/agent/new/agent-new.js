@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 
 import axios from 'axios'
-import * as $ from 'jquery'
 
 import { Form, Container, Header } from 'semantic-ui-react'
 
@@ -73,9 +72,9 @@ export default class AgentNew extends Component {
   render () {
     if (this.state.redirectToShow) return <Redirect to={this.state.redirectTo} />
     return (
-      <Container fluid>
-        <Header as='h3' block inverted>
-          Input New Agent Information
+      <Container>
+        <Header as='h1'>
+          NEW AGENT
         </Header>
         <Form id='agent_new-form' onSubmit={(event) => this.handleSubmit(event)}>
           <Form.Group widths='equal'>

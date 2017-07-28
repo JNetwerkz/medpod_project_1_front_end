@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Switch, Route, Link } from 'react-router-dom'
 
-import { Container, Header, Icon, Dropdown } from 'semantic-ui-react'
+import { Container, Header, Icon, Dropdown, Divider } from 'semantic-ui-react'
 
 import AgentNew from './new/agent-new'
 import AgentShow from './show/agent-show'
@@ -10,7 +10,7 @@ import AgentIndex from './index/agent-index'
 export default class AgentMain extends Component {
   render () {
     return (
-      <Container>
+      <Container fluid>
         <Header as='h1' dividing>
           <Link to={this.props.match.url}>
             <Icon name='spy' />
@@ -28,7 +28,7 @@ export default class AgentMain extends Component {
             </Dropdown>
           </Header.Subheader>
         </Header>
-
+        <Divider section hidden />
         <Switch>
           <Route exact
             path={`${this.props.match.url}/new`}

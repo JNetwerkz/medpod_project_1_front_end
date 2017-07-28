@@ -1,38 +1,138 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
+import { Container, Header, Table, Menu, Icon, Search } from 'semantic-ui-react'
+
 import axios from 'axios'
 
-import { combineName } from 'custom-function'
-
-const AgentRow = (props) => {
-  // M6117(props.doctorData)
-  return (
-    <li>
-      <Link to={`${props.match.url}/${props.agentData._id}`}>
-        {`${combineName(props.agentData)}`}
-      </Link>
-    </li>
-  )
-}
+import IndexRow from './_index-row'
 
 export default class AgentIndex extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      agentIndex: []
+      agentIndex: [],
+      searchInput: '',
+      page: '',
+      pages: '',
+      total: '',
+      searchLoading: false
     }
+
+    this.handlePaginate = this.handlePaginate.bind(this)
+    this.handleSearchChange = this.handleSearchChange.bind(this)
+  }
+
+  handleSearchChange (event, value) {
+    console.log(value)
+    this.setState({ searchLoading: true })
+    axios({
+      method: 'GET',
+      url: `${process.env.REACT_APP_API_ENDPOINT}/agent`,
+      params: {
+        search: value
+      }
+    })
+    .then((res) => {
+      const {
+        docs: agentIndex,
+        page,
+        pages,
+        total
+      } = res.data
+
+      this.setState({ agentIndex, page, pages, total, searchLoading: false })
+    })
+  }
+
+  handlePaginate (event) {
+    axios({
+      method: 'GET',
+      url: `${process.env.REACT_APP_API_ENDPOINT}/agent`,
+      params: {
+        page: parseInt(event.target.dataset.page)
+      }
+    })
+    .then((res) => {
+      const {
+        docs: agentIndex,
+        page,
+        pages,
+        total
+      } = res.data
+
+      this.setState({ agentIndex, page, pages, total })
+    })
   }
 
   render () {
-    let AgentRows = this.state.agentIndex.map((item) => {
-      return <AgentRow key={item._id} agentData={item} match={this.props.match} />
+    const {
+      pages,
+      agentIndex,
+      page,
+      searchLoading
+    } = this.state
+
+    const nextPage = page === pages ? pages : page + 1
+    const prevPage = page === 1 ? 1 : page - 1
+
+    const {
+      handlePaginate,
+      handleSearchChange
+    } = this
+
+    const IndexRows = agentIndex.map((item) => {
+      return <IndexRow key={item._id} agentData={item} match={this.props.match} />
+    })
+
+    const pagesArray = Array.from({length: pages}, (v, i) => i + 1)
+
+    const MenuItems = pagesArray.map((item, index) => {
+      console.log(typeof item)
+      return (
+        <Menu.Item link
+          onClick={handlePaginate}
+          data-page={item}
+          active={page === item}
+          key={'item' + item}>{item}
+        </Menu.Item>
+      )
     })
     return (
-      <div>
-        <h1>Index</h1>
-        {AgentRows}
-      </div>
+      <Container>
+        <Search
+          showNoResults={false}
+          loading={searchLoading}
+          // onResultSelect={this.handleResultSelect}
+          onSearchChange={handleSearchChange}
+          // results={results}
+          // value={value}
+          // {...this.props}
+        />
+        <Table celled basic selectable definition>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell />
+              <Table.HeaderCell>First Name</Table.HeaderCell>
+              <Table.HeaderCell>Last Name</Table.HeaderCell>
+              <Table.HeaderCell>Gender</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+
+          <Table.Body>
+            {IndexRows}
+          </Table.Body>
+        </Table>
+        <Menu floated='right' pagination>
+          <Menu.Item as='a' data-page={prevPage} icon onClick={handlePaginate}>
+            <Icon name='left chevron' />
+          </Menu.Item>
+          {MenuItems}
+          <Menu.Item as='a' data-page={nextPage} icon>
+            <Icon name='right chevron' />
+          </Menu.Item>
+        </Menu>
+      </Container>
     )
   }
 
@@ -43,7 +143,15 @@ export default class AgentIndex extends Component {
     })
     .then((res) => {
       console.log('AgentIndex res', res.data)
-      this.setState({ agentIndex: res.data })
+
+      const {
+        docs: agentIndex,
+        page,
+        pages,
+        total
+      } = res.data
+
+      this.setState({ agentIndex, page, pages, total })
     })
   }
 }

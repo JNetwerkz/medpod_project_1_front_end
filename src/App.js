@@ -52,7 +52,7 @@ class App extends Component {
         })
         .then((token) => {
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-          return axios.get(`${process.env.REACT_APP_FIREBASE_DATABASE_URL}${token}`)
+          return axios.get(`${process.env.REACT_APP_FIREBASE_DATABASE_URL}/users.json?auth=${token}`)
         })
         .then((res) => {
           window.localStorage.setItem(userType, res.data[user.uid])
