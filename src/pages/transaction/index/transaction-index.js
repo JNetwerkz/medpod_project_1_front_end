@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Container, Header, Table, Menu, Icon, Search, Form } from 'semantic-ui-react'
 
 import axios from 'axios'
+import qs from 'qs'
 import moment from 'moment'
 
 import { AuthHeader, M6117, combineName, monthsSelectOption } from 'custom-function'
@@ -79,12 +80,15 @@ class TransactionIndex extends Component {
       'transaction month': transactionMonth,
       receiving_doctor
     }
+    const queryString = qs.stringify(formData)
+
+    console.log(queryString)
 
     axios({
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/transaction`,
       params: {
-        search: formData
+        search: queryString
       }
     })
     .then((res) => {
