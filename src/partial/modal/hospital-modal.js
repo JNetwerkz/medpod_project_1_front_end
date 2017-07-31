@@ -24,6 +24,7 @@ const HospitalModal = (props) => {
       </List.Item>
     )
   })
+  console.log(props)
 
   return (
     <Modal

@@ -28,7 +28,6 @@ export default class AgentMain extends Component {
             </Dropdown>
           </Header.Subheader>
         </Header>
-        <Divider section hidden />
         <Switch>
           <Route exact
             path={`${this.props.match.url}/new`}

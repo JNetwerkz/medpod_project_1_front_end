@@ -31,7 +31,7 @@ const DoctorModal = (props) => {
     <Modal
       isOpen={props.doctorModalOpen}
       onRequestClose={() => props.modalMethod('close')}
-      contentLabel='Doctor Search Modal'>
+      contentLabel='doctor search modal'>
       <div className='grid grid__modalbox'>
         <Header as='h1' dividing className='grid__modalbox-header'>
             <Icon name='doctor' />

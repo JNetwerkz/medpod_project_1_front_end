@@ -14,7 +14,7 @@ import axios from 'axios'
 class TransactionMain extends Component {
   render () {
     return (
-      <Container>
+      <Container fluid>
         <Header as='h1' dividing>
           <Link to={this.props.match.url}>
             <Icon name='file text outline' />
@@ -32,7 +32,7 @@ class TransactionMain extends Component {
             </Dropdown>
           </Header.Subheader>
         </Header>
-        
+
         <Switch>
           <Route
             exact

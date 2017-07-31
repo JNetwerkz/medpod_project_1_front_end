@@ -10,7 +10,7 @@ import PatientShow from './show/patient-show'
 export default class PatientMain extends Component {
   render () {
     return (
-      <Container>
+      <Container fluid>
         <Header as='h1' dividing>
           <Link to={this.props.match.url}>
             <Icon name='users' />

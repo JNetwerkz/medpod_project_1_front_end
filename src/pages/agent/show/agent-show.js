@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
 
-import { Input, Button, Container, Header, Segment, Grid, Form } from 'semantic-ui-react'
+import { Input, Button, Container, Header, Segment, Form } from 'semantic-ui-react'
 import axios from 'axios'
-
-import { combineName } from 'custom-function'
-import './agent-show.css'
 
 export default class AgentShow extends Component {
   constructor (props) {
@@ -19,6 +16,7 @@ export default class AgentShow extends Component {
 
     this.handleEditState = this.handleEditState.bind(this)
     this.handleEditChange = this.handleEditChange.bind(this)
+    this.handleUpdateSubmit = this.handleUpdateSubmit.bind(this)
   }
 
   handleEditState (event) {
@@ -49,6 +47,24 @@ export default class AgentShow extends Component {
     console.log(name, value)
   }
 
+  handleUpdateSubmit () {
+    const {
+      agentShow,
+      notEditing,
+      ...formData
+    } = this.state
+
+    axios({
+      method: 'PUT',
+      url: `${process.env.REACT_APP_API_ENDPOINT}/agent/${this.props.match.params.id}`,
+      data: formData
+    })
+    .then((res) => {
+      this.setState({ agentShow: res.data, notEditing: true, ...res.data })
+    })
+    .catch((err) => console.error(err))
+  }
+
   render () {
     console.log(this.state)
     const {
@@ -61,28 +77,30 @@ export default class AgentShow extends Component {
 
     const {
       handleEditState,
-      handleEditChange
+      handleEditChange,
+      handleUpdateSubmit
     } = this
 
     const editButton = notEditing
-    ? <Button type='button' onClick={handleEditState}>Edit</Button>
-    : <Button type='button' onClick={handleEditState}>Cancel</Button>
+    ? <Button type='button' primary floated='right' onClick={handleEditState}>Edit</Button>
+    : <Button type='button' primary floated='right' onClick={handleEditState}>Cancel</Button>
 
     return (
       <Container>
-        <h1>Agent Show</h1>
-        {editButton}
+        <Header as='h1'>
+          {firstName} {lastName}
+          {editButton}
+        </Header>
         <Form>
-        <Grid columns='equal'>
-          <Grid.Column>
-            <Form.Field>
-              <label>First Name</label>
-              {
+          <Segment>
+            <Form.Group widths='equal'>
+                <Form.Field>
+                  <label>First Name</label>
+                  {
                 notEditing
-                ? firstName
+                ? <p>{firstName}</p>
                 : <Input
-                  size='massive'
-                  className='testing'
+                  size='huge'
                   value={firstName}
                   onChange={handleEditChange}
                   name='first name'
@@ -90,43 +108,42 @@ export default class AgentShow extends Component {
                   disabled={notEditing}
                    />
               }
-              {/* {firstName} */}
-              {/* <Input
-                size='massive'
-                className='testing'
-                value={firstName}
-                onChange={handleEditChange}
-                name='first name'
-                transparent
-                disabled={notEditing}
-                 /> */}
-            </Form.Field>
-          </Grid.Column>
-          <Grid.Column>
-            <Form.Field>
-              <label>Last Name</label>
-              <Input
-                value={lastName}
-                onChange={handleEditChange}
-                name='last name'
-                transparent
-                disabled={notEditing}
-                 />
-            </Form.Field>
-          </Grid.Column>
-          <Grid.Column>
-            <Form.Field>
-              <label>Gender</label>
-              <Input
-                value={gender}
-                onChange={handleEditChange}
-                name='gender'
-                transparent
-                disabled={notEditing}
-                 />
-            </Form.Field>
-          </Grid.Column>
-        </Grid>
+                </Form.Field>
+                <Form.Field>
+                  <label>Last Name</label>
+                  {
+                notEditing
+                ? <p>{lastName}</p>
+                : <Input
+                  size='huge'
+                  value={lastName}
+                  onChange={handleEditChange}
+                  name='last name'
+                  // transparent
+                  disabled={notEditing}
+                   />
+              }
+                </Form.Field>
+                <Form.Field>
+                  <label>Gender</label>
+                  {
+                notEditing
+                ? <p>{gender}</p>
+                : <Input
+                  size='huge'
+                  value={gender}
+                  onChange={handleEditChange}
+                  name='gender'
+                  // transparent
+                  disabled={notEditing}
+                   />
+              }
+                </Form.Field>
+            </Form.Group>
+          </Segment>
+          <Button onClick={handleUpdateSubmit} positive>
+            Confirm
+          </Button>
         </Form>
       </Container>
     )
@@ -139,7 +156,7 @@ export default class AgentShow extends Component {
     })
     .then((res) => {
       console.log('AgentShow res', res.data)
-      this.setState({ agentShow: res.data, agentShowEdit: res.data, ...res.data })
+      this.setState({ agentShow: res.data, ...res.data })
     })
     .catch((err) => console.error(err))
   }

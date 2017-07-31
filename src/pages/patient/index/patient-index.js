@@ -1,38 +1,138 @@
 import React, { Component } from 'react'
 import { Link, Route } from 'react-router-dom'
 
+import { Menu, Table, Container, Search, Icon } from 'semantic-ui-react'
 import axios from 'axios'
 
 import { combineName } from 'custom-function'
-
-const PatientRow = (props) => {
-  console.log(props)
-  return (
-    <li>
-      <Link to={`${props.match.url}/${props.patientData._id}`}>
-        {combineName(props.patientData)}
-      </Link>
-    </li>
-  )
-}
+import IndexRow from './_index-row'
 
 class PatientIndex extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      patientIndex: []
+      patientIndex: [],
+      searchInput: '',
+      page: '',
+      pages: '',
+      total: '',
+      searchLoading: false
     }
+    this.handlePaginate = this.handlePaginate.bind(this)
+    this.handleSearchChange = this.handleSearchChange.bind(this)
   }
 
-  render () {
-    let PatientRows = this.state.patientIndex.map((item) => {
-      return <PatientRow key={item._id} patientData={item} match={this.props.match} />
+  handleSearchChange (event, value) {
+    console.log(value)
+    this.setState({ searchLoading: true })
+    axios({
+      method: 'GET',
+      url: `${process.env.REACT_APP_API_ENDPOINT}/patient`,
+      params: {
+        search: value
+      }
     })
+    .then((res) => {
+      const {
+        docs: patientIndex,
+        page,
+        pages,
+        total
+      } = res.data
+
+      this.setState({ patientIndex, page, pages, total, searchLoading: false })
+    })
+  }
+
+  handlePaginate (event) {
+    axios({
+      method: 'GET',
+      url: `${process.env.REACT_APP_API_ENDPOINT}/patient`,
+      params: {
+        page: parseInt(event.target.dataset.page)
+      }
+    })
+    .then((res) => {
+      const {
+        docs: patientIndex,
+        page,
+        pages,
+        total
+      } = res.data
+
+      this.setState({ patientIndex, page, pages, total })
+    })
+  }
+  render () {
+    const {
+      pages,
+      patientIndex,
+      page,
+      searchLoading
+    } = this.state
+
+    const nextPage = page === pages ? pages : page + 1
+    const prevPage = page === 1 ? 1 : page - 1
+
+    const {
+      handlePaginate,
+      handleSearchChange
+    } = this
+
+    const IndexRows = patientIndex.map((item) => {
+      return <IndexRow key={item._id} patientData={item} match={this.props.match} />
+    })
+
+    const pagesArray = Array.from({length: pages}, (v, i) => i + 1)
+
+    const MenuItems = pagesArray.map((item, index) => {
+      return (
+        <Menu.Item link
+          onClick={handlePaginate}
+          data-page={item}
+          active={page === item}
+          key={'item' + item}>
+          {item}
+        </Menu.Item>
+      )
+    })
+
     return (
-      <div>
-        <h1>Index</h1>
-        {PatientRows}
-      </div>
+
+      <Container>
+        <Search
+          showNoResults={false}
+          loading={searchLoading}
+          // onResultSelect={this.handleResultSelect}
+          onSearchChange={handleSearchChange}
+          // results={results}
+          // value={value}
+          // {...this.props}
+        />
+        <Table celled basic selectable definition>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell />
+              <Table.HeaderCell>First Name</Table.HeaderCell>
+              <Table.HeaderCell>Last Name</Table.HeaderCell>
+              <Table.HeaderCell>Gender</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+
+          <Table.Body>
+            {IndexRows}
+          </Table.Body>
+        </Table>
+        <Menu floated='right' pagination>
+          <Menu.Item as='a' data-page={prevPage} icon onClick={handlePaginate}>
+            <Icon name='left chevron' />
+          </Menu.Item>
+          {MenuItems}
+          <Menu.Item as='a' data-page={nextPage} icon>
+            <Icon name='right chevron' />
+          </Menu.Item>
+        </Menu>
+      </Container>
     )
   }
 
@@ -43,7 +143,14 @@ class PatientIndex extends Component {
     })
     .then((res) => {
       console.log('PatientIndex res', res.data)
-      this.setState({ patientIndex: res.data })
+      const {
+        docs: patientIndex,
+        page,
+        pages,
+        total
+      } = res.data
+
+      this.setState({ patientIndex, page, pages, total })
     })
   }
 }
