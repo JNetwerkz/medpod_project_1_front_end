@@ -9,7 +9,7 @@ const AuthHeader = () => {
 }
 
 const M6117 = (data) => {
-  let cusCode = `M${data['transaction month'].toString()}-${data['entry number']}-${moment(data['invoice date']).year()}`
+  let cusCode = `M${data['transaction month'].toString()}.${data['entry number']}.${moment(data['invoice date']).format('YY')}`
 
   return cusCode
 }
@@ -21,6 +21,7 @@ const combineName = (obj) => {
 }
 
 const monthsSelectOption = [
+  { key: '', text: '', value: '' },
   { key: 'jan', text: 'January', value: 1 },
   { key: 'feb', text: 'February', value: 2 },
   { key: 'mar', text: 'March', value: 3 },

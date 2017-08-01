@@ -113,7 +113,7 @@ class DoctorIndex extends Component {
         <Table celled basic selectable definition>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell />
+              <Table.HeaderCell>Name</Table.HeaderCell>
               <Table.HeaderCell>First Name</Table.HeaderCell>
               <Table.HeaderCell>Last Name</Table.HeaderCell>
               <Table.HeaderCell>Gender</Table.HeaderCell>

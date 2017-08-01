@@ -9,22 +9,12 @@ import moment from 'moment'
 
 import { AuthHeader, M6117, combineName, monthsSelectOption } from 'custom-function'
 
+import IndexRow from './_index-row'
 import DoctorModal from 'partial/modal/doctor-modal'
 
 // import TransactionIndexSearch from './_index-search'
 
-const TransactionRow = (props) => {
-  // M6117(props.transactionData)
-  return (
-    <li>
-      <Link to={`${props.match.url}/${props.transactionData._id}`}>
-        {`${M6117(props.transactionData)} ${combineName(props.transactionData.patient)}`}
-      </Link>
-    </li>
-  )
-}
-
-class TransactionIndex extends Component {
+export default class TransactionIndex extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -37,7 +27,7 @@ class TransactionIndex extends Component {
       //
       doctorModalOpen: false,
       'transaction year': moment().year(),
-      'transaction month': '',
+      'transaction month': moment().month() + 1,
       doctorSearchResult: [],
       selectedDoctor: {},
       doctorId: ''
@@ -145,11 +135,25 @@ class TransactionIndex extends Component {
   }
 
   handlePaginate (event) {
+    const {
+      'transaction year': transactionYear,
+      'transaction month': transactionMonth,
+      doctorId: receiving_doctor
+    } = this.state
+
+    const formData = {
+      'transaction year': transactionYear,
+      'transaction month': transactionMonth,
+      receiving_doctor
+    }
+    const queryString = qs.stringify(formData)
+
     axios({
       method: 'GET',
-      url: `${process.env.REACT_APP_API_ENDPOINT}/transactionIndex`,
+      url: `${process.env.REACT_APP_API_ENDPOINT}/transaction`,
       params: {
-        page: parseInt(event.target.dataset.page)
+        page: parseInt(event.target.dataset.page),
+        search: queryString
       }
     })
     .then((res) => {
@@ -165,21 +169,48 @@ class TransactionIndex extends Component {
   }
 
   render () {
+    console.log(this.state)
     const {
       'transaction year': transactionYear,
       'transaction month': transactionMonth,
       selectedDoctor,
       doctorId,
       doctorSearchResult,
-      doctorModalOpen
+      doctorModalOpen,
+      pages,
+      transactionIndex,
+      page,
+      searchLoading
     } = this.state
+
+    const nextPage = page === pages ? pages : page + 1
+    const prevPage = page === 1 ? 1 : page - 1
 
     const {
       handleSelectChange,
       handleInputChange,
       doctorModalMethod,
-      handleSearchChange
+      handleSearchChange,
+      handlePaginate
     } = this
+
+    const IndexRows = transactionIndex.map((item) => {
+      return <IndexRow key={item._id} transactionData={item} match={this.props.match} />
+    })
+
+    const pagesArray = Array.from({length: pages}, (v, i) => i + 1)
+
+    const MenuItems = pagesArray.map((item, index) => {
+      console.log(typeof item)
+      return (
+        <Menu.Item link
+          onClick={handlePaginate}
+          data-page={item}
+          active={page === item}
+          key={'item' + item}>{item}
+        </Menu.Item>
+      )
+    })
 
     return (
       <Container>
@@ -229,6 +260,31 @@ class TransactionIndex extends Component {
             </Form.Field>
           </Form.Group>
         </Form>
+        <Table celled basic selectable definition>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Transaction Record</Table.HeaderCell>
+              <Table.HeaderCell>Invoice Number</Table.HeaderCell>
+              <Table.HeaderCell>Invoice Date</Table.HeaderCell>
+              <Table.HeaderCell>Patient</Table.HeaderCell>
+              <Table.HeaderCell>Doctor</Table.HeaderCell>
+              <Table.HeaderCell>Transaction Amount</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+
+          <Table.Body>
+            {IndexRows}
+          </Table.Body>
+        </Table>
+        <Menu floated='right' pagination>
+          <Menu.Item as='a' data-page={prevPage} icon onClick={handlePaginate}>
+            <Icon name='left chevron' />
+          </Menu.Item>
+          {MenuItems}
+          <Menu.Item as='a' data-page={nextPage} icon>
+            <Icon name='right chevron' />
+          </Menu.Item>
+        </Menu>
         <DoctorModal
           doctorModalOpen={doctorModalOpen}
           modalMethod={doctorModalMethod}
@@ -239,15 +295,33 @@ class TransactionIndex extends Component {
   }
 
   componentDidMount () {
+    const formData = {
+      'transaction year': this.state['transaction year'],
+      'transaction month': this.state['transaction month']
+    }
+
+    const queryString = qs.stringify(formData)
+
+    console.log(queryString)
+
     axios({
       method: 'GET',
-      url: `${process.env.REACT_APP_API_ENDPOINT}/transaction`
+      url: `${process.env.REACT_APP_API_ENDPOINT}/transaction`,
+      params: {
+        search: queryString,
+        page: 1
+      }
     })
     .then((res) => {
       console.log('TransactionIndex res', res.data)
-      this.setState({ transactionIndex: res.data })
+      const {
+        docs: transactionIndex,
+        page,
+        pages,
+        total
+      } = res.data
+
+      this.setState({ transactionIndex, page, pages, total })
     })
   }
 }
-
-export default TransactionIndex

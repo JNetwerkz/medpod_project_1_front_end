@@ -13,7 +13,7 @@ import InvoiceNav from './invoice-nav'
 export default class InvoiceMain extends Component {
   render () {
     return (
-      <Container>
+      <Container fluid>
         <Header as='h1' dividing>
           <Link to={this.props.match.url}>
             <Icon name='wordpress forms' />

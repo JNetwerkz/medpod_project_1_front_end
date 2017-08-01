@@ -75,6 +75,13 @@
     "grid__invoice-new-search"
     "grid__invoice-new-results";
 }
+.grid__invoice-new-search {
+  grid-area: grid__invoice-new-search;
+}
+
+.grid_invoice-new-results {
+  grid-area: grid_invoice-new-results;
+}
 
 .block--inline {
   display: inline-block;

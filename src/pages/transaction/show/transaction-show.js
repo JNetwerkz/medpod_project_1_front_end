@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+
+import { Container, Segment, Button, Header, Form, Input, Grid, Item } from 'semantic-ui-react'
 
 import axios from 'axios'
 import moment from 'moment'
+import * as currencyFormatter from 'currency-formatter'
 import * as fileExtension from 'file-extension'
 import * as FileSaver from 'file-saver'
-
-import { Button } from 'semantic-ui-react'
 
 import { AuthHeader, M6117, combineName } from 'custom-function'
 import { s3, s3Bucket as Bucket } from 'aws'
@@ -42,7 +44,10 @@ class TransactionShow extends Component {
 
 // handle download & delete of uploaded files
   handleFileDownload (index) {
-    const uploadedFiles = this.state.uploadedFiles
+    const {
+      uploadedFiles
+    } = this.state
+
     const { Key } = uploadedFiles[index]
     const downloadPromise = s3.getObject({ Bucket, Key }).promise()
 
@@ -54,7 +59,10 @@ class TransactionShow extends Component {
   }
 
   handleFileDelete (index) {
-    const uploadedFiles = this.state.uploadedFiles
+    const {
+      uploadedFiles
+    } = this.state
+
     const { Key, _id } = uploadedFiles[index]
     const deletePromise = s3.deleteObject({ Bucket, Key }).promise()
 
@@ -73,8 +81,11 @@ class TransactionShow extends Component {
 
 // adds <input> to upload file
   handleAddInput () {
-    const filesToUpload = this.state.filesToUpload
-    const filesStatus = this.state.filesStatus
+    const {
+      filesToUpload,
+      filesStatus
+    } = this.state
+
     filesToUpload.push({ file: '', description: '', fileType: '', uploading: false })
     // filesStatus.push({ uploading: false })
 
@@ -84,7 +95,10 @@ class TransactionShow extends Component {
   }
 
   handleDeleteInput (index) {
-    const filesToUpload = this.state.filesToUpload
+    const {
+      filesToUpload
+    } = this.state
+
     filesToUpload.splice(index, 1)
 
     this.setState({
@@ -94,12 +108,16 @@ class TransactionShow extends Component {
 
 // handles uploading of file
   handleFileUpload (index) {
-    const filesToUpload = this.state.filesToUpload, stamp = moment().format('DDMMYYHHmmssSS')
+    const {
+      filesToUpload,
+      transactionShow
+    } = this.state
+    const stamp = moment().format('DDMMYYHHmmssSS')
     const {
       _id: transactionId,
       patient: { _id: patientId },
       'receiving_doctor': { _id: doctorId }
-    } = this.state.transactionShow
+    } = transactionShow
 
     const {
       description,
@@ -127,7 +145,10 @@ class TransactionShow extends Component {
         .then((res) => {
           console.log(res)
           if (res.status === 200) {
-            const uploadedFiles = this.state.uploadedFiles
+            const {
+              uploadedFiles
+            } = this.state
+
             uploadedFiles.unshift(res.data)
             filesToUpload.splice(index, 1)
 
@@ -138,8 +159,8 @@ class TransactionShow extends Component {
   }
 
   // handleAllFileUpload () {
-  //   const patientId = this.state.transactionShow.patient._id
-  //   const files = this.state.files
+  //   const patientId = this.transactionShow.patient._id
+  //   const files = this.files
   //
   //   const uploadPromise = files.map((item) => {
   //     console.log(item)
@@ -162,10 +183,12 @@ class TransactionShow extends Component {
   //   .catch((err) => console.error(err))
   // }
 
-
 // handle onChange event of <input> file
   handleFileInputChange (event, value, index, type) {
-    const filesToUpload = this.state.filesToUpload
+    const {
+      filesToUpload
+    } = this.state
+
     switch (type) {
       case 'fileChange':
         filesToUpload[index].file = event.target.files[0] || ''
@@ -196,45 +219,110 @@ class TransactionShow extends Component {
 
   render () {
     if (!this.state.mounted) return <div>Loading</div>
-    const FileUpload = this.state.filesToUpload.map((file, index) => {
+    const {
+      filesToUpload,
+      uploadedFiles,
+      fileTypeSelection,
+      transactionShow
+    } = this.state
+
+    const {
+      handleFileInputChange,
+      handleDeleteInput,
+      handleFileUpload,
+      handleFileDownload,
+      handleFileDelete,
+      handleAddInput
+    } = this
+
+    const {
+      patient,
+      receiving_doctor,
+      'invoice date': invoiceDate,
+      'invoice number': invoiceNumber,
+      'transaction amount': transactionAmount
+    } = transactionShow
+
+    const momentInvoiceDate = moment(invoiceDate).format('DD MMM YYYY')
+    const formattedTransactionAmount = currencyFormatter.format(transactionAmount, { code: 'SGD' })
+
+    const patientName = combineName(patient)
+    const doctorName = combineName(receiving_doctor)
+
+    const FileUpload = filesToUpload.map((file, index) => {
       return <FileInputRow
         key={`upload-${index}`}
         data={file}
         index={index}
-        handleChange={this.handleFileInputChange}
-        handleDeleteInput={this.handleDeleteInput}
-        handleFileUpload={this.handleFileUpload}
-        fileTypeSelection={this.state.fileTypeSelection}
+        handleChange={handleFileInputChange}
+        handleDeleteInput={handleDeleteInput}
+        handleFileUpload={handleFileUpload}
+        fileTypeSelection={fileTypeSelection}
       />
     })
-    const UploadedFiles = this.state.uploadedFiles.map((file, index) => {
+    const UploadedFiles = uploadedFiles.map((file, index) => {
       return <FileRow
         data={file}
         key={file._id}
         index={index}
-        handleFileDownload={this.handleFileDownload}
-        handleFileDelete={this.handleFileDelete}
+        handleFileDownload={handleFileDownload}
+        handleFileDelete={handleFileDelete}
       />
     })
     return (
-      <div>
-        <h1>Show Transaction</h1>
-        <p>{M6117(this.state.transactionShow)} {combineName(this.state.transactionShow.patient)}</p>
-        <div>
-          <h3>
-              Uploaded Files
-            </h3>
-            {UploadedFiles}
-        </div>
-        <div>
-          <h3>
-              Upload Files here
-            </h3>
-          <Button onClick={() => console.log(this.state.filesToUpload)}>Add Upload</Button>
-          <Button onClick={this.handleAddInput}>Add Upload</Button>
-          {FileUpload}
-        </div>
-      </div>
+      <Container>
+        <Header as='h1'>
+          {M6117(transactionShow)} | {patientName} | Dr. {doctorName}
+        </Header>
+        <Segment>
+          <Form>
+            <Form.Group widths='equal'>
+              <Form.Field>
+                <label>Patient</label>
+                <p><Link to={`/patient/${patient._id}`} />{patientName}</p>
+              </Form.Field>
+              <Form.Field>
+                <label>Doctor</label>
+                <p><Link to={`/doctor/${receiving_doctor._id}`} />Dr. {doctorName}</p>
+              </Form.Field>
+              <Form.Field>
+                <label>Invoice Number</label>
+                <p>{invoiceNumber}</p>
+              </Form.Field>
+              <Form.Field>
+                <label>Invoice Date</label>
+                <p>{momentInvoiceDate}</p>
+              </Form.Field>
+            </Form.Group>
+            <Form.Group widths='equal'>
+              <Form.Field>
+                <label>Transaction Amount</label>
+                <p>{formattedTransactionAmount}</p>
+              </Form.Field>
+            </Form.Group>
+          </Form>
+        </Segment>
+        <Header as='h2'>
+          Files
+        </Header>
+        <Segment>
+          <Grid divided>
+            <Grid.Row columns={2} >
+              <Grid.Column>
+                <Item.Group divided relaxed>
+                  {UploadedFiles}
+                </Item.Group>
+              </Grid.Column>
+              <Grid.Column>
+                <Button floated='right' compact primary onClick={handleAddInput}>Add Upload</Button>
+                <Item.Group divided relaxed>
+                  {FileUpload}
+                </Item.Group>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Segment>
+      </Container>
     )
   }
 
