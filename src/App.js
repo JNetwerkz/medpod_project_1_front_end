@@ -124,8 +124,8 @@ class App extends Component {
     }
 
     return (
-        <div className='App' id='react-no-print'>
-          <BrowserRouter>
+      <div className='App' id='react-no-print'>
+        <BrowserRouter>
           <Sidebar.Pushable as={Segment}>
             <Sidebar as={Menu} animation='uncover' width='thin' visible={sideBarShow} vertical inverted>
               <Route path='/' render={({ location }) => <NavMain {...location} />} />
@@ -143,15 +143,15 @@ class App extends Component {
                       <Dropdown.Menu>
                         <Dropdown.Header content='New' />
                         <Dropdown.Menu scrolling>
-                          <Route path='/' render={() => <Dropdown.Item key={'transaction'} text='Transaction' as={Link} to={`/transaction/new`} />} />
-                          <Route path='/' render={() => <Dropdown.Item key={'invoice'} text='Invoice' as={Link} to={`/invoice/new`} />} />
-                          <Dropdown.Divider />
-                          <Route path='/' render={() => <Dropdown.Item key={'patient'} text='Patient' as={Link} to={`/patient/new`} />} />
-                          <Route path='/' render={() => <Dropdown.Item key={'doctor'} text='Doctor' as={Link} to={`/doctor/new`} />} />
-                          <Route path='/' render={() => <Dropdown.Item key={'hospital'} text='Hospital' as={Link} to={`/hospital/new`} />} />
-                          <Route path='/' render={() => <Dropdown.Item key={'addon'} text='Addon' as={Link} to={`/addon/new`} />} />
-                          <Route path='/' render={() => <Dropdown.Item key={'agent'} text='Agent' as={Link} to={`/agent/new`} />} />
-                        </Dropdown.Menu>
+                            <Route path='/' render={() => <Dropdown.Item key={'transaction'} text='Transaction' as={Link} to={`/transaction/new`} />} />
+                            <Route path='/' render={() => <Dropdown.Item key={'invoice'} text='Invoice' as={Link} to={`/invoice/new`} />} />
+                            <Dropdown.Divider />
+                            <Route path='/' render={() => <Dropdown.Item key={'patient'} text='Patient' as={Link} to={`/patient/new`} />} />
+                            <Route path='/' render={() => <Dropdown.Item key={'doctor'} text='Doctor' as={Link} to={`/doctor/new`} />} />
+                            <Route path='/' render={() => <Dropdown.Item key={'hospital'} text='Hospital' as={Link} to={`/hospital/new`} />} />
+                            <Route path='/' render={() => <Dropdown.Item key={'addon'} text='Addon' as={Link} to={`/addon/new`} />} />
+                            <Route path='/' render={() => <Dropdown.Item key={'agent'} text='Agent' as={Link} to={`/agent/new`} />} />
+                          </Dropdown.Menu>
                       </Dropdown.Menu>
                     </Dropdown>
                   </section>
@@ -160,7 +160,7 @@ class App extends Component {
                 <Segment basic className='flex__maincontent flex--grow'>
                   <Switch>
                     <Route exact path='/test'
-                    render={(props) => <TestMain {...props} />} />
+                      render={(props) => <TestMain {...props} />} />
                     <PrivateRoute exact path='/' component={HomeMain} />
                     <PrivateRoute path='/patient' component={PatientMain} />
                     <PrivateRoute path='/transaction' component={TransactionMain} />
@@ -170,25 +170,25 @@ class App extends Component {
                     <PrivateRoute path='/agent' component={AgentMain} />
                     <PrivateRoute path='/invoice' component={InvoiceMain} />
                     <Route exact path='/login'
-                    render={(props) => <AuthMain {...props} />} />
+                      render={(props) => <AuthMain {...props} />} />
                     <Route exact path='/unauthorised'
-                    render={(props) => <UnauthorisedMain {...props} />} />
+                      render={(props) => <UnauthorisedMain {...props} />} />
                   </Switch>
                 </Segment>
 
               </div>
-           </Sidebar.Pusher>
+            </Sidebar.Pusher>
 
-         </Sidebar.Pushable>
-         </BrowserRouter>
-        </div>
+          </Sidebar.Pushable>
+        </BrowserRouter>
+      </div>
     )
   }
 }
 
 export default App
 
-{/* <div className='App'>
+{ /* <div className='App'>
   <header>
     <Route path='/' render={({ location }) => <NavMain {...location} />} />
   </header>
@@ -212,4 +212,4 @@ export default App
         render={(props) => <UnauthorisedMain {...props} />} />
     </Switch>
   </main>
-</div> */}
+</div> */ }

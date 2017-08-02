@@ -36,4 +36,10 @@ const monthsSelectOption = [
   { key: 'dec', text: 'December', value: 12 }
 ]
 
-export { AuthHeader, M6117, combineName, monthsSelectOption }
+const genderOption = [
+  { key: 'm', text: 'Male', value: 'male' },
+  { key: 'f', text: 'Female', value: 'female' },
+  { key: 'o', text: 'Others', value: 'others' }
+]
+
+export { AuthHeader, M6117, combineName, monthsSelectOption, genderOption }

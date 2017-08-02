@@ -5,6 +5,8 @@ import axios from 'axios'
 
 import { Form, Header, Container } from 'semantic-ui-react'
 
+import ErrorMessage from 'partial/error'
+
 export default class AddonNew extends Component {
   constructor (props) {
     super(props)
@@ -13,7 +15,8 @@ export default class AddonNew extends Component {
       redirectTo: '',
 
       // form input fields
-      'name': ''
+      'name': '',
+      errors: null
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -60,7 +63,13 @@ export default class AddonNew extends Component {
     })
     .then((res) => {
       console.log('new addon data', res.data)
-      this.setState({
+      const {
+        errors
+      } = res.data
+
+      errors
+      ? this.setState({ errors })
+      : this.setState({
         redirectToShow: true,
         redirectTo: res.data._id
       })
@@ -70,8 +79,13 @@ export default class AddonNew extends Component {
 
   render () {
     if (this.state.redirectToShow) return <Redirect to={this.state.redirectTo} />
+    const {
+      errors
+    } = this.state
+
     return (
       <Container fluid>
+        <ErrorMessage errors={errors} />
         <Header as='h3' block inverted>
           Create New Add-on
         </Header>

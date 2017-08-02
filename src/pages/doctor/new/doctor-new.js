@@ -2,17 +2,11 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 
 import axios from 'axios'
-import * as $ from 'jquery'
 
 import { Form, Header, Container } from 'semantic-ui-react'
-
+import { genderOption } from 'custom-function'
 import HospitalModal from 'partial/modal/hospital-modal'
-
-const options = [
-  { key: 'm', text: 'Male', value: 'male' },
-  { key: 'f', text: 'Female', value: 'female' },
-  { key: 'o', text: 'Others', value: 'others' }
-]
+import ErrorMessage from 'partial/error'
 
 class DoctorNew extends Component {
   constructor (props) {
@@ -29,7 +23,8 @@ class DoctorNew extends Component {
       hospitalModalOpen: false,
       hospitalSearchResult: [],
       selectedHospital: {},
-      searchFocus: false
+      searchFocus: false,
+      errors: null
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -61,7 +56,7 @@ class DoctorNew extends Component {
     event.preventDefault()
     const formData = this.state
 
-    console.log(formData)
+    if (!formData.hospital) return this.setState({ errors: ['Please select Hospital from search function provided'] })
 
     axios({
       method: 'POST',
@@ -69,8 +64,10 @@ class DoctorNew extends Component {
       data: formData
     })
     .then((res) => {
-      console.log('new doctor data', res.data)
-      this.setState({
+      const { errors } = res.data
+      errors
+      ? this.setState({ errors })
+      : this.setState({
         redirectToShow: true,
         redirectTo: res.data._id
       })
@@ -123,10 +120,13 @@ class DoctorNew extends Component {
 
   render () {
     if (this.state.redirectToShow) return <Redirect to={this.state.redirectTo} />
+    const { errors } = this.state
+
     return (
-      <Container fluid>
-        <Header as='h3' block inverted>
-          Input New Doctor Information
+      <Container>
+        <ErrorMessage errors={errors} />
+        <Header as='h1'>
+          New Doctor
         </Header>
         <Form id='doctor_new-form' onSubmit={(event) => this.handleSubmit(event)}>
           <Form.Group widths='equal'>
@@ -134,7 +134,7 @@ class DoctorNew extends Component {
 
             <Form.Input label='Last name' placeholder='Last name' name='last name' onChange={this.handleInputChange} />
 
-            <Form.Select label='Gender' options={options} placeholder='Gender' onChange={(e, {value}) => this.handleSelectChange(e, value, 'gender')} />
+            <Form.Select label='Gender' options={genderOption} placeholder='Gender' onChange={(e, {value}) => this.handleSelectChange(e, value, 'gender')} />
           </Form.Group>
           <Form.Group widths='equal'>
             <Form.Field>

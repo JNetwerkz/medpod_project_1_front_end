@@ -7,7 +7,7 @@ import * as currencyFormatter from 'currency-formatter'
 
 import { M6117, combineName } from 'custom-function'
 
-const IndexRow = ({ transactionData, match }) => {
+const IndexRow = ({ transactionData }) => {
   const {
     'invoice number': invoiceNumber,
     'invoice date': invoiceDate,
@@ -40,7 +40,7 @@ const IndexRow = ({ transactionData, match }) => {
   return (
     <Table.Row>
         <Table.Cell collapsing textAlign='right'>
-          <Link to={`${match.url}/${_id}`}>
+          <Link to={`/transaction/${_id}`}>
           {transactionRecord}
           </Link>
         </Table.Cell>

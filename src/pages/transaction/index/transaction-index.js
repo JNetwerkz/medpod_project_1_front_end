@@ -50,8 +50,6 @@ export default class TransactionIndex extends Component {
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
 
-    console.log(name, value)
-
     this.setState({
       [name]: value
     })
@@ -71,8 +69,6 @@ export default class TransactionIndex extends Component {
       receiving_doctor
     }
     const queryString = qs.stringify(formData)
-
-    console.log(queryString)
 
     axios({
       method: 'GET',
@@ -268,6 +264,7 @@ export default class TransactionIndex extends Component {
               <Table.HeaderCell>Invoice Date</Table.HeaderCell>
               <Table.HeaderCell>Patient</Table.HeaderCell>
               <Table.HeaderCell>Doctor</Table.HeaderCell>
+              <Table.HeaderCell>Agent</Table.HeaderCell>
               <Table.HeaderCell>Transaction Amount</Table.HeaderCell>
             </Table.Row>
           </Table.Header>

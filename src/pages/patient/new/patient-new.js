@@ -7,6 +7,7 @@ import axios from 'axios'
 import { Form, Header, Input, Select, Container } from 'semantic-ui-react'
 
 import AgentModal from 'partial/modal/agent-modal'
+import ErrorMessage from 'partial/error'
 
 const options = [
   { key: 'm', text: 'Male', value: 'male' },
@@ -30,7 +31,8 @@ class PatientNew extends Component {
       agentModalOpen: false,
       agentSearchResult: [],
       selectedAgent: {},
-      searchFocus: false
+      searchFocus: false,
+      errors: null
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -75,14 +77,18 @@ class PatientNew extends Component {
       referral_agent: this.state.referral_agent
     }
 
+    if (!formData.hospital) return this.setState({ errors: ['Please select Agent from search function provided'] })
+
     axios({
       method: 'POST',
       url: `${process.env.REACT_APP_API_ENDPOINT}/patient`,
       data: formData
     })
     .then((res) => {
-      console.log('new patient data', res.data)
-      this.setState({
+      const { errors } = res.data
+      errors
+      ? this.setState({ errors })
+      : this.setState({
         redirectToShow: true,
         redirectTo: res.data._id
       })
@@ -140,13 +146,16 @@ class PatientNew extends Component {
       'last name': lastName,
       gender,
       'ic / passport': icPassport,
-      referral_agent: referralAgent
+      referral_agent: referralAgent,
+      errors
     } = this.state
 
+
     return (
-      <Container fluid>
-        <Header as='h3' block inverted>
-          Input New Patient Information
+      <Container>
+        <ErrorMessage errors={errors} />
+        <Header as='h1'>
+          New Patient
         </Header>
         <Form id='patient_new-form' onSubmit={(event) => this.handleSubmit(event)}>
           <Form.Group widths='equal'>

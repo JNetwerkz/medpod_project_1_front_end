@@ -3,7 +3,8 @@ import { Redirect } from 'react-router-dom'
 
 import axios from 'axios'
 
-import { Form, Button, Header, Input, Select, Container } from 'semantic-ui-react'
+import { Form, Header, Container } from 'semantic-ui-react'
+import ErrorMessage from 'partial/error'
 
 export default class HospitalNew extends Component {
   constructor (props) {
@@ -14,7 +15,8 @@ export default class HospitalNew extends Component {
 
       // form input fields
       'name': '',
-      'address': ''
+      'address': '',
+      errors: null
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -53,8 +55,10 @@ export default class HospitalNew extends Component {
       data: formData
     })
     .then((res) => {
-      console.log('new hospital data', res.data)
-      this.setState({
+      const { errors } = res.data
+      errors
+      ? this.setState({ errors })
+      : this.setState({
         redirectToShow: true,
         redirectTo: res.data._id
       })
@@ -64,10 +68,12 @@ export default class HospitalNew extends Component {
 
   render () {
     if (this.state.redirectToShow) return <Redirect to={this.state.redirectTo} />
+    const { errors } = this.state
     return (
-      <Container fluid>
-        <Header as='h3' block inverted>
-          Input New Hospital Information
+      <Container>
+        <ErrorMessage errors={errors} />
+        <Header as='h1'>
+          New Hospital
         </Header>
         <Form id='hospital_new-form' onSubmit={(event) => this.handleSubmit(event)}>
           <Form.Group widths='equal'>
