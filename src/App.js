@@ -133,7 +133,7 @@ class App extends Component {
 
             <Sidebar.Pusher>
               <div className='flex flex--row'>
-                <Segment basic className='flex__menu-button flex--column'>
+                <Segment basic className='flex__menu-button flex--column' id='app__leftcolumn'>
                   <section>
                     <Button icon='sidebar' onClick={this.showSideBar} />
                   </section>
@@ -157,7 +157,7 @@ class App extends Component {
                   </section>
                 </Segment>
 
-                <Segment basic className='flex__maincontent flex--grow'>
+                <Segment basic className='flex__maincontent flex--grow' id='app__rightcolumn'>
                   <Switch>
                     <Route exact path='/test'
                       render={(props) => <TestMain {...props} />} />

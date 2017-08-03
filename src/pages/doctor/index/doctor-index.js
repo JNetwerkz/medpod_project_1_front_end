@@ -28,20 +28,20 @@ class DoctorIndex extends Component {
     this.setState({ searchLoading: true })
     axios({
       method: 'GET',
-      url: `${process.env.REACT_APP_API_ENDPOINT}/agent`,
+      url: `${process.env.REACT_APP_API_ENDPOINT}/doctor`,
       params: {
         search: value
       }
     })
     .then((res) => {
       const {
-        docs: agentIndex,
+        docs: doctorIndex,
         page,
         pages,
         total
       } = res.data
 
-      this.setState({ agentIndex, page, pages, total, searchLoading: false })
+      this.setState({ doctorIndex, page, pages, total, searchLoading: false })
     })
   }
 

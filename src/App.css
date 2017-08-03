@@ -9,6 +9,16 @@
   /*background-color: lightgrey;*/
 }
 
+#app__leftcolumn {
+  background-color: rgb(27, 28, 29);
+  margin-bottom: 0;
+}
+
+#app__rightcolumn {
+  height: 100vh;
+  overflow-y: auto;
+}
+
 .flex {
   display: flex;
   flex-wrap: wrap;

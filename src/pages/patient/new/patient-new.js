@@ -77,7 +77,7 @@ class PatientNew extends Component {
       referral_agent: this.state.referral_agent
     }
 
-    if (!formData.hospital) return this.setState({ errors: ['Please select Agent from search function provided'] })
+    if (!formData.referral_agent) return this.setState({ errors: ['Please select Agent from search function provided'] })
 
     axios({
       method: 'POST',
