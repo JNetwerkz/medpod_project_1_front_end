@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom'
 
 import axios from 'axios'
 
-import { Form, Header, Container } from 'semantic-ui-react'
+import { Form, Header, Container, Confirm } from 'semantic-ui-react'
 
 import ErrorMessage from 'partial/error'
 
@@ -16,12 +16,15 @@ export default class AddonNew extends Component {
 
       // form input fields
       'name': '',
-      errors: null
+      errors: null,
+      confirmOpen: false
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleSelectChange = this.handleSelectChange.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
+    this.handleOpenCloseConfirm = this.handleOpenCloseConfirm.bind(this)
+    this.handleConfirm = this.handleConfirm.bind(this)
   }
 
   handleInputChange (event) {
@@ -50,11 +53,13 @@ export default class AddonNew extends Component {
   //   })
   // }
 
-  handleSubmit (event) {
-    event.preventDefault()
+  handleSubmit () {
+    // event.preventDefault()
     const formData = this.state
 
-    console.log(formData)
+    console.log('at handlesubmit')
+
+    if (!formData.name) return this.setState({ errors: ['Please specify NAME for Add-on'] })
 
     axios({
       method: 'POST',
@@ -77,23 +82,60 @@ export default class AddonNew extends Component {
     .catch((err) => console.error(err))
   }
 
+  handleConfirm () {
+    this.setState({ confirmOpen: false })
+
+    this.handleSubmit()
+  }
+
+  handleOpenCloseConfirm () {
+    const { confirmOpen } = this.state
+    return this.setState({ confirmOpen: !confirmOpen })
+  }
+
   render () {
     if (this.state.redirectToShow) return <Redirect to={this.state.redirectTo} />
     const {
-      errors
+      errors,
+      confirmOpen,
+      name
     } = this.state
 
+    const {
+      handleSubmit,
+      handleInputChange,
+      handleOpenCloseConfirm,
+      handleConfirm
+    } = this
+
     return (
-      <Container fluid>
+      <Container>
         <ErrorMessage errors={errors} />
-        <Header as='h3' block inverted>
-          Create New Add-on
+        <Header as='h1'>
+          New Add-on
         </Header>
-        <Form id='addon_new-form' onSubmit={(event) => this.handleSubmit(event)}>
+        <Form id='addon_new-form'
+          // onSubmit={(event) => handleSubmit(event)}
+          ref={(input) => {
+            console.log('input', input)
+            this.addonFormRef = input
+          }}
+          >
           <Form.Group widths='equal'>
-            <Form.Input label='Name' placeholder='Name' name='name' onChange={this.handleInputChange} />
+            <Form.Input label='Name' placeholder='Name' name='name' onChange={handleInputChange} />
           </Form.Group>
-          <Form.Button>Submit</Form.Button>
+          <Form.Button
+            type='button'
+            onClick={handleOpenCloseConfirm}>
+            Submit
+          </Form.Button>
+          <Confirm
+            open={confirmOpen}
+            header='Attention! Add-on that is created cannot be deleted / edited'
+            content={`Please ensure your entry Name: ${name || '<empty>'} is correct!`}
+            onCancel={handleOpenCloseConfirm}
+            onConfirm={handleConfirm}
+          />
         </Form>
       </Container>
     )

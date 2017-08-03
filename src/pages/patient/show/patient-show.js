@@ -5,6 +5,7 @@ import axios from 'axios'
 
 import { combineName } from 'custom-function'
 import AgentModal from 'partial/modal/agent-modal'
+import ErrorMessage from 'partial/error'
 
 class PatientShow extends Component {
   constructor (props) {
@@ -21,7 +22,8 @@ class PatientShow extends Component {
       agentModalOpen: false,
       agentSearchResult: [],
       selectedAgent: {},
-      searchFocus: false
+      searchFocus: false,
+      errors: null
     }
     this.handleEditState = this.handleEditState.bind(this)
     this.agentModalMethod = this.agentModalMethod.bind(this)
@@ -61,6 +63,7 @@ class PatientShow extends Component {
     const {
       'first name': firstName,
       'last name': lastName,
+      'ic / passport': icPassport,
       gender,
       referral_agent
     } = this.state
@@ -69,6 +72,7 @@ class PatientShow extends Component {
       'first name': firstName,
       'last name': lastName,
       gender,
+      'ic / passport': icPassport,
       referral_agent: referral_agent._id
     }
 
@@ -78,8 +82,16 @@ class PatientShow extends Component {
       data: formData
     })
     .then((res) => {
-      console.log()
-      this.setState({ patientShow: res.data, notEditing: true, ...res.data })
+      const { errors } = res.data
+
+      errors
+      ? this.setState({ errors })
+      : this.setState({
+        patientShow: res.data,
+        notEditing: true,
+        ...res.data,
+        errors: null
+      })
     })
     .catch((err) => console.error(err))
   }
@@ -142,7 +154,8 @@ class PatientShow extends Component {
       agentModalOpen,
       agentSearchResult,
       selectedAgent,
-      searchFocus
+      searchFocus,
+      errors
     } = this.state
 
     const {
@@ -164,6 +177,7 @@ class PatientShow extends Component {
 
     return (
       <Container>
+        <ErrorMessage errors={errors} />
         <Header as='h1'>
           {firstName} {lastName}
           {editButton}

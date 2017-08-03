@@ -72,9 +72,7 @@ export default class AgentNew extends Component {
 
   render () {
     if (this.state.redirectToShow) return <Redirect to={this.state.redirectTo} />
-    const {
-      errors
-    } = this.state
+    const { errors } = this.state
 
     return (
       <Container>

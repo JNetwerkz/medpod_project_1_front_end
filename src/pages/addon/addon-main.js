@@ -10,7 +10,7 @@ import AddonIndex from './index/addon-index'
 export default class AddonMain extends Component {
   render () {
     return (
-      <Container>
+      <Container fluid>
         <Header as='h1' dividing>
           <Link to={this.props.match.url}>
             <Icon name='add to cart' />

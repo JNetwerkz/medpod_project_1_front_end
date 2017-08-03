@@ -8,6 +8,7 @@ import { Form, Input, Button, Header, Container } from 'semantic-ui-react'
 
 import PatientModal from 'partial/modal/patient-modal'
 import DoctorModal from 'partial/modal/doctor-modal'
+import ErrorMessage from 'partial/error'
 
 class TransactionNew extends Component {
   constructor (props) {
@@ -31,7 +32,8 @@ class TransactionNew extends Component {
       // doctor modal selection
       doctorModalOpen: false,
       doctorSearchResult: [],
-      selectedDoctor: {}
+      selectedDoctor: {},
+      errors: null
     }
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSelectChange = this.handleSelectChange.bind(this)
@@ -77,6 +79,9 @@ class TransactionNew extends Component {
       'transaction amount': this.state['transaction amount']
     }
 
+    if (!formData.patient) return this.setState({ errors: ['Please select Patient from search function provided'] })
+    if (!formData.receiving_doctor) return this.setState({ errors: ['Please select Doctor from search function provided'] })
+
     axios({
       method: 'POST',
       url: `${process.env.REACT_APP_API_ENDPOINT}/transaction`,
@@ -84,9 +89,14 @@ class TransactionNew extends Component {
     })
     .then((res) => {
       console.log('new transaction data', res.data)
-      this.setState({
+      const { errors } = res.data
+
+      errors
+      ? this.setState({ errors })
+      : this.setState({
         redirectToShow: true,
-        redirectTo: res.data._id
+        redirectTo: res.data._id,
+        errors: null
       })
     })
     .catch((err) => console.error(err))
@@ -183,9 +193,13 @@ class TransactionNew extends Component {
       console.log('redirectToShow trans new', this.state.redirectTo)
       return <Redirect to={this.state.redirectTo} />
     }
+
+    const { errors } = this.state
+
     return (
-      <Container fluid>
-        <Header as='h3' block inverted>
+      <Container>
+        <ErrorMessage errors={errors} />
+        <Header as='h1'>
           Create New Transaction / Invoice
         </Header>
         <Form id='transaction_new-form' onSubmit={(event) => this.handleSubmit(event)}>

@@ -5,6 +5,7 @@ import { Input, Button, Container, Header, Segment, Form } from 'semantic-ui-rea
 import axios from 'axios'
 
 import { combineName } from 'custom-function'
+import ErrorMessage from 'partial/error'
 
 export default class HospitalShow extends Component {
   constructor (props) {
@@ -13,7 +14,8 @@ export default class HospitalShow extends Component {
       hospitalShow: {},
       notEditing: true,
       name: '',
-      address: ''
+      address: '',
+      errors: null
     }
     this.handleEditState = this.handleEditState.bind(this)
     this.handleEditChange = this.handleEditChange.bind(this)
@@ -61,18 +63,27 @@ export default class HospitalShow extends Component {
       data: formData
     })
     .then((res) => {
-      this.setState({ hospitalShow: res.data, notEditing: true, ...res.data })
+      const { errors } = res.data
+
+      errors
+      ? this.setState({ errors })
+      : this.setState({
+        doctorShow: res.data,
+        notEditing: true,
+        ...res.data,
+        errors: null
+      })
     })
     .catch((err) => console.error(err))
   }
 
   render () {
-    console.log(this.state)
     const {
       notEditing,
       hospitalShow,
       name,
-      address
+      address,
+      errors
     } = this.state
 
     const {
@@ -87,6 +98,7 @@ export default class HospitalShow extends Component {
 
     return (
       <Container>
+        <ErrorMessage errors={errors} />
         <Header as='h1'>
           {name}
           {editButton }

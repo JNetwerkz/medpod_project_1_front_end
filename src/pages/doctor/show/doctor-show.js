@@ -5,6 +5,7 @@ import { Grid, Segment, Form, Header, Button, Container, Input } from 'semantic-
 import axios from 'axios'
 
 import HospitalModal from 'partial/modal/hospital-modal'
+import ErrorMessage from 'partial/error'
 
 class DoctorShow extends Component {
   constructor (props) {
@@ -20,7 +21,8 @@ class DoctorShow extends Component {
       hospitalModalOpen: false,
       hospitalSearchResult: [],
       searchFocus: false,
-      selectedHospital: {}
+      selectedHospital: {},
+      errors: null
     }
     this.handleEditState = this.handleEditState.bind(this)
     this.hospitalModalMethod = this.hospitalModalMethod.bind(this)
@@ -52,8 +54,6 @@ class DoctorShow extends Component {
     this.setState({
       [name]: value
     })
-
-    console.log(name, value)
   }
 
   handleUpdateSubmit () {
@@ -77,8 +77,17 @@ class DoctorShow extends Component {
       data: formData
     })
     .then((res) => {
-      console.log()
-      this.setState({ doctorShow: res.data, notEditing: true, ...res.data })
+      const { errors } = res.data
+
+      errors
+      ? this.setState({ errors })
+      : this.setState({
+        doctorShow: res.data,
+        notEditing: true,
+        ...res.data,
+        errors: null
+      })
+      // this.setState({ doctorShow: res.data, notEditing: true, ...res.data })
     })
     .catch((err) => console.error(err))
   }
@@ -125,7 +134,6 @@ class DoctorShow extends Component {
   }
 
   render () {
-    console.log(this.state)
     const {
       notEditing,
       doctorShow,
@@ -137,7 +145,8 @@ class DoctorShow extends Component {
       hospitalModalOpen,
       hospitalSearchResult,
       selectedHospital,
-      searchFocus
+      searchFocus,
+      errors
     } = this.state
 
     const {
@@ -159,6 +168,7 @@ class DoctorShow extends Component {
     console.log(this.props)
     return (
       <Container>
+        <ErrorMessage errors={errors} />
         <Header as='h1'>
           Dr. {firstName} {lastName}
           {editButton}

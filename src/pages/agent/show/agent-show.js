@@ -6,6 +6,7 @@ import qs from 'qs'
 import moment from 'moment'
 
 import TransactionTable from './_show-table'
+import ErrorMessage from 'partial/error'
 
 export default class AgentShow extends Component {
   constructor (props) {
@@ -21,7 +22,8 @@ export default class AgentShow extends Component {
       pages: '',
       //
       'transaction year': moment().year(),
-      'transaction month': moment().month() + 1
+      'transaction month': moment().month() + 1,
+      errors: null
     }
 
     this.handleEditState = this.handleEditState.bind(this)
@@ -74,7 +76,17 @@ export default class AgentShow extends Component {
       data: formData
     })
     .then((res) => {
-      this.setState({ agentShow: res.data, notEditing: true, ...res.data })
+      const { errors } = res.data
+
+      errors
+      ? this.setState({ errors })
+      : this.setState({
+        agentShow: res.data,
+        notEditing: true,
+        ...res.data,
+        errors: null
+      })
+      // this.setState({ agentShow: res.data, notEditing: true, ...res.data })
     })
     .catch((err) => console.error(err))
   }
@@ -173,7 +185,8 @@ export default class AgentShow extends Component {
       'transaction month': transactionMonth,
       page,
       pages,
-      agentTransactions
+      agentTransactions,
+      errors
     } = this.state
 
     const {
@@ -192,6 +205,7 @@ export default class AgentShow extends Component {
 
     return (
       <Container>
+        <ErrorMessage errors={errors} />
         <Header as='h1'>
           {firstName} {lastName}
           {editButton}
@@ -199,9 +213,9 @@ export default class AgentShow extends Component {
         <Form>
           <Segment>
             <Form.Group widths='equal'>
-                <Form.Field>
-                  <label>First Name</label>
-                  {
+              <Form.Field>
+                <label>First Name</label>
+                {
                 notEditing
                 ? <p>{firstName}</p>
                 : <Input
@@ -213,10 +227,10 @@ export default class AgentShow extends Component {
                   disabled={notEditing}
                    />
               }
-                </Form.Field>
-                <Form.Field>
-                  <label>Last Name</label>
-                  {
+              </Form.Field>
+              <Form.Field>
+                <label>Last Name</label>
+                {
                 notEditing
                 ? <p>{lastName}</p>
                 : <Input
@@ -228,10 +242,10 @@ export default class AgentShow extends Component {
                   disabled={notEditing}
                    />
               }
-                </Form.Field>
-                <Form.Field>
-                  <label>Gender</label>
-                  {
+              </Form.Field>
+              <Form.Field>
+                <label>Gender</label>
+                {
                 notEditing
                 ? <p>{gender}</p>
                 : <Input
@@ -243,7 +257,7 @@ export default class AgentShow extends Component {
                   disabled={notEditing}
                    />
               }
-                </Form.Field>
+              </Form.Field>
             </Form.Group>
           </Segment>
           <Button onClick={handleUpdateSubmit} positive>
