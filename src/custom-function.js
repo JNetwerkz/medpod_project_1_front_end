@@ -42,4 +42,12 @@ const genderOption = [
   { key: 'o', text: 'Others', value: 'others' }
 ]
 
-export { AuthHeader, M6117, combineName, monthsSelectOption, genderOption }
+const uploadFileOption = [
+        { key: 'medicalReport', text: 'Medical Report', value: 'medical_report' },
+        { key: 'invoice', text: 'Invoice', value: 'invoice' },
+        { key: 'receipt', text: 'Receipt', value: 'receipt' },
+        { key: 'identification', text: 'Identification Document', value: 'identification' },
+        { key: 'others', text: 'Others', value: 'other' }
+      ]
+
+export { AuthHeader, M6117, combineName, monthsSelectOption, genderOption, uploadFileOption }

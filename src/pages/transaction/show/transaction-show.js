@@ -9,11 +9,11 @@ import * as currencyFormatter from 'currency-formatter'
 import * as fileExtension from 'file-extension'
 import * as FileSaver from 'file-saver'
 
-import { AuthHeader, M6117, combineName } from 'custom-function'
+import { AuthHeader, M6117, combineName, uploadFileOption } from 'custom-function'
 import { s3, s3Bucket as Bucket } from 'aws'
 
-import FileInputRow from './_fileInputRow'
-import FileRow from './_fileRow'
+import FileInputRow from 'partial/_fileInputRow'
+import FileRow from 'partial/_fileRow'
 
 class TransactionShow extends Component {
   constructor (props) {
@@ -53,8 +53,13 @@ class TransactionShow extends Component {
 
     return downloadPromise
     .then((res) => {
+      console.log('file download respond', res)
       const file = new Blob([ res.Body ])
+      console.log('blob', file)
       return FileSaver.saveAs(file, Key)
+    })
+    .catch((err) => {
+      console.error('file download error', err)
     })
   }
 
@@ -76,6 +81,9 @@ class TransactionShow extends Component {
         uploadedFiles.splice(index, 1)
         this.setState({ uploadedFiles })
       }
+    })
+    .catch((err) => {
+      console.error('file delete error', err)
     })
   }
 
@@ -115,7 +123,7 @@ class TransactionShow extends Component {
     const stamp = moment().format('DDMMYYHHmmssSS')
     const {
       _id: transactionId,
-      patient: { _id: patientId },
+      patient: { _id: patientId, 'first name': firstName, 'last name': lastName },
       'receiving_doctor': { _id: doctorId }
     } = transactionShow
 
@@ -126,7 +134,7 @@ class TransactionShow extends Component {
       file: { name: fileName }
     } = filesToUpload[index]
 
-    const Key = `${patientId}_${fileType || ''}_${stamp}.${fileExtension(fileName)}`
+    const Key = `${firstName} ${lastName}_${fileType || ''}_${stamp}.${fileExtension(fileName)}`
 
     const params = {
       Body: file,
@@ -154,6 +162,9 @@ class TransactionShow extends Component {
 
             this.setState({ uploadedFiles, filesToUpload })
           }
+        })
+        .catch((err) => {
+          console.error('AWS fileupload error', err)
         })
     )
   }
@@ -222,7 +233,6 @@ class TransactionShow extends Component {
     const {
       filesToUpload,
       uploadedFiles,
-      fileTypeSelection,
       transactionShow
     } = this.state
 
@@ -257,7 +267,7 @@ class TransactionShow extends Component {
         handleChange={handleFileInputChange}
         handleDeleteInput={handleDeleteInput}
         handleFileUpload={handleFileUpload}
-        fileTypeSelection={fileTypeSelection}
+        fileTypeSelection={uploadFileOption}
       />
     })
     const UploadedFiles = uploadedFiles.map((file, index) => {
@@ -279,11 +289,11 @@ class TransactionShow extends Component {
             <Form.Group widths='equal'>
               <Form.Field>
                 <label>Patient</label>
-                <p><Link to={`/patient/${patient._id}`} />{patientName}</p>
+                <Link to={`/patient/${patient._id}`}><p>{patientName}</p></Link>
               </Form.Field>
               <Form.Field>
                 <label>Doctor</label>
-                <p><Link to={`/doctor/${receiving_doctor._id}`} />Dr. {doctorName}</p>
+                <Link to={`/doctor/${receiving_doctor._id}`}><p>Dr. {doctorName}</p></Link>
               </Form.Field>
               <Form.Field>
                 <label>Invoice Number</label>
