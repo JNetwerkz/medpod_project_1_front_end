@@ -14,6 +14,8 @@ import AgentModal from 'partial/modal/agent-modal'
 import ErrorMessage from 'partial/error'
 import FileInputRow from 'partial/_fileInputRow'
 import FileRow from 'partial/_fileRow'
+import EditButton from 'partial/_editButton'
+import SaveButton from 'partial/_saveButton'
 
 class PatientShow extends Component {
   constructor (props) {
@@ -246,7 +248,7 @@ class PatientShow extends Component {
       file: { name: fileName }
     } = filesToUpload[index]
 
-    const Key = `${firstName} ${lastName}_${fileType || ''}_${stamp}.${fileExtension(fileName)}`
+    const Key = `${firstName} ${lastName} ${fileType || ''} ${stamp}.${fileExtension(fileName)}`
 
     const params = {
       Body: file,
@@ -352,10 +354,6 @@ class PatientShow extends Component {
       handleFileInputChange
     } = this
 
-    const editButton = notEditing
-    ? <Button type='button' primary floated='right' onClick={handleEditState}>Edit</Button>
-    : <Button type='button' primary floated='right' onClick={handleEditState}>Cancel</Button>
-
     const UploadedFiles = uploadedFiles.map((file, index) => {
       return <FileRow
         data={file}
@@ -381,7 +379,8 @@ class PatientShow extends Component {
         <ErrorMessage errors={errors} />
         <Header as='h1'>
           {firstName} {lastName}
-          {editButton}
+          <EditButton handleEditState={handleEditState} notEditing={notEditing} />
+          <SaveButton handleUpdateSubmit={handleUpdateSubmit} notEditing={notEditing} />
         </Header>
         <Form>
           <Segment>
@@ -486,12 +485,10 @@ class PatientShow extends Component {
               </Form.Field>
             </Form.Group>
           </Segment>
-          <Button onClick={handleUpdateSubmit} positive>
-            Confirm
-          </Button>
         </Form>
         <Header as='h2'>
           Files
+          <Button floated='right' compact primary onClick={handleAddInput}>Add Upload</Button>
         </Header>
         <Segment>
           <Grid divided>
@@ -502,7 +499,6 @@ class PatientShow extends Component {
                 </Item.Group>
               </Grid.Column>
               <Grid.Column>
-                <Button floated='right' compact primary onClick={handleAddInput}>Add Upload</Button>
                 <Item.Group divided relaxed>
                   {FileUpload}
                 </Item.Group>

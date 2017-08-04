@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
-import { Sidebar, Menu } from 'semantic-ui-react'
+import { Menu, Divider } from 'semantic-ui-react'
+
+import { userType, auth, isAuthenticated } from 'firebase-settings'
 
 export default class NavMain extends Component {
   constructor (props) {
@@ -10,6 +12,13 @@ export default class NavMain extends Component {
       activeItem: ''
     }
     this.handleNavItemClick = this.handleNavItemClick.bind(this)
+    this.handleSignOut = this.handleSignOut.bind(this)
+  }
+
+  handleSignOut () {
+    auth.signOut().then(() => {
+      window.location = '/login'
+    })
   }
 
   handleNavItemClick (e, { name }) {
@@ -22,35 +31,47 @@ export default class NavMain extends Component {
     this.setState({ activeItem: this.props.pathname })
   }
 
+
   render () {
+    if (!isAuthenticated()) return null
+    const currentUserType = window.localStorage.getItem(userType)
+    console.log('currentusertype', currentUserType)
     const { activeItem } = this.state
+    const { handleSignOut, handleNavItemClick } = this
     return (
-        <div>
-          <Menu.Item as={Link} to='/patient' name='patient' active={activeItem === '/patient'} onClick={this.handleNavItemClick}>
-              Patients
-            </Menu.Item>
-          <Menu.Item as={Link} to='/transaction' name='transaction' active={activeItem === '/transaction'} onClick={this.handleNavItemClick}>
-              Transactions
-            </Menu.Item>
-          <Menu.Item as={Link} to='/doctor' name='doctor' active={activeItem === '/doctor'} onClick={this.handleNavItemClick}>
-              Doctors
-            </Menu.Item>
-          <Menu.Item as={Link} to='/hospital' name='hospital' active={activeItem === '/hospital'} onClick={this.handleNavItemClick}>
-              Hospitals
-            </Menu.Item>
-          <Menu.Item as={Link} to='/addon' name='addon' active={activeItem === '/addon'} onClick={this.handleNavItemClick}>
-              Addons
-            </Menu.Item>
-          <Menu.Item as={Link} to='/agent' name='agent' active={activeItem === '/agent'} onClick={this.handleNavItemClick}>
-              Agents
-            </Menu.Item>
-          <Menu.Item as={Link} to='/invoice' name='invoice' active={activeItem === '/invoice'} onClick={this.handleNavItemClick}>
-              Invoices
-            </Menu.Item>
-          <Menu.Item as={Link} to='/login' name='login' active={activeItem === '/login'} onClick={this.handleNavItemClick}>
-              Login
-            </Menu.Item>
-        </div>
+      <Menu stackable inverted secondary vertical size='large' color='black' id='app__nav'>
+        <Menu.Item as={Link} to='/patient' name='patient' active={activeItem === '/patient'} onClick={handleNavItemClick}>
+          Patients
+        </Menu.Item>
+        <Menu.Item as={Link} to='/doctor' name='doctor' active={activeItem === '/doctor'} onClick={handleNavItemClick}>
+          Doctors
+        </Menu.Item>
+        <Menu.Item as={Link} to='/transaction' name='transaction' active={activeItem === '/transaction'} onClick={handleNavItemClick}>
+          Transactions
+        </Menu.Item>
+        <Menu.Item as={Link} to='/hospital' name='hospital' active={activeItem === '/hospital'} onClick={handleNavItemClick}>
+          Hospitals
+        </Menu.Item>
+        <Menu.Item as={Link} to='/addon' name='addon' active={activeItem === '/addon'} onClick={handleNavItemClick}>
+          Addons
+        </Menu.Item>
+        <Menu.Item as={Link} to='/agent' name='agent' active={activeItem === '/agent'} onClick={handleNavItemClick}>
+          Agents
+        </Menu.Item>
+        <Divider section />
+        <Menu.Item
+          as={Link} to='/invoice' name='invoice' active={activeItem === '/invoice'} onClick={handleNavItemClick}>
+          Invoices
+        </Menu.Item>
+        <Menu.Item as={Link} to='/login' name='login' active={activeItem === '/login'} onClick={handleNavItemClick}>
+          Login
+        </Menu.Item>
+        <Divider section />
+        <Menu.Item>
+          <Menu.Header>Access Level: {currentUserType}</Menu.Header>
+        </Menu.Item>
+        <Menu.Item as='a' name='enterprise' onClick={handleSignOut}>Log out</Menu.Item>
+      </Menu>
     )
   }
 }

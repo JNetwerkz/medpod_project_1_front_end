@@ -1,4 +1,4 @@
-import { firebaseIdToken } from './firebase'
+import { firebaseIdToken } from './firebase-settings'
 import moment from 'moment'
 
 const AuthHeader = () => {
@@ -43,11 +43,11 @@ const genderOption = [
 ]
 
 const uploadFileOption = [
-        { key: 'medicalReport', text: 'Medical Report', value: 'medical_report' },
+        { key: 'medicalReport', text: 'Medical Report', value: 'medical report' },
         { key: 'invoice', text: 'Invoice', value: 'invoice' },
         { key: 'receipt', text: 'Receipt', value: 'receipt' },
         { key: 'identification', text: 'Identification Document', value: 'identification' },
         { key: 'others', text: 'Others', value: 'other' }
-      ]
+]
 
 export { AuthHeader, M6117, combineName, monthsSelectOption, genderOption, uploadFileOption }

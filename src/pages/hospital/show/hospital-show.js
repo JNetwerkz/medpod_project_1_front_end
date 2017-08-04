@@ -6,6 +6,8 @@ import axios from 'axios'
 
 import { combineName } from 'custom-function'
 import ErrorMessage from 'partial/error'
+import EditButton from 'partial/_editButton'
+import SaveButton from 'partial/_saveButton'
 
 export default class HospitalShow extends Component {
   constructor (props) {
@@ -92,16 +94,13 @@ export default class HospitalShow extends Component {
       handleUpdateSubmit
     } = this
 
-    const editButton = notEditing
-    ? <Button type='button' primary floated='right' onClick={handleEditState}>Edit</Button>
-    : <Button type='button' primary floated='right' onClick={handleEditState}>Cancel</Button>
-
     return (
       <Container>
         <ErrorMessage errors={errors} />
         <Header as='h1'>
           {name}
-          {editButton }
+          <EditButton handleEditState={handleEditState} notEditing={notEditing} />
+          <SaveButton handleUpdateSubmit={handleUpdateSubmit} notEditing={notEditing} />
         </Header>
         <Form>
           <Segment>
@@ -138,9 +137,6 @@ export default class HospitalShow extends Component {
                 </Form.Field>
             </Form.Group>
           </Segment>
-          <Button onClick={handleUpdateSubmit} positive>
-            Confirm
-          </Button>
         </Form>
       </Container>
     )

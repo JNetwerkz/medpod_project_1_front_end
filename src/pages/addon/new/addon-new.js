@@ -76,7 +76,7 @@ export default class AddonNew extends Component {
       ? this.setState({ errors })
       : this.setState({
         redirectToShow: true,
-        redirectTo: res.data._id
+        redirectTo: '/addon'
       })
     })
     .catch((err) => console.error(err))

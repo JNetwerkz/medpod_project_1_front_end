@@ -7,6 +7,8 @@ import moment from 'moment'
 
 import TransactionTable from './_show-table'
 import ErrorMessage from 'partial/error'
+import EditButton from 'partial/_editButton'
+import SaveButton from 'partial/_saveButton'
 
 export default class AgentShow extends Component {
   constructor (props) {
@@ -199,16 +201,13 @@ export default class AgentShow extends Component {
       handlePaginate
     } = this
 
-    const editButton = notEditing
-    ? <Button type='button' primary floated='right' onClick={handleEditState}>Edit</Button>
-    : <Button type='button' primary floated='right' onClick={handleEditState}>Cancel</Button>
-
     return (
       <Container>
         <ErrorMessage errors={errors} />
         <Header as='h1'>
           {firstName} {lastName}
-          {editButton}
+          <EditButton handleEditState={handleEditState} notEditing={notEditing} />
+          <SaveButton handleUpdateSubmit={handleUpdateSubmit} notEditing={notEditing} />
         </Header>
         <Form>
           <Segment>
@@ -260,9 +259,6 @@ export default class AgentShow extends Component {
               </Form.Field>
             </Form.Group>
           </Segment>
-          <Button onClick={handleUpdateSubmit} positive>
-            Confirm
-          </Button>
         </Form>
         <Header as='h2'>
           Agent's Transaction

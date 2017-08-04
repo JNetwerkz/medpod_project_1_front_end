@@ -6,6 +6,8 @@ import axios from 'axios'
 
 import HospitalModal from 'partial/modal/hospital-modal'
 import ErrorMessage from 'partial/error'
+import EditButton from 'partial/_editButton'
+import SaveButton from 'partial/_saveButton'
 
 class DoctorShow extends Component {
   constructor (props) {
@@ -161,19 +163,16 @@ class DoctorShow extends Component {
       hospitalModalMethod
     } = this
 
-    const editButton = notEditing
-    ? <Button type='button' primary floated='right' onClick={handleEditState}>Edit</Button>
-    : <Button type='button' primary floated='right' onClick={handleEditState}>Cancel</Button>
-
     console.log(this.props)
     return (
       <Container>
         <ErrorMessage errors={errors} />
         <Header as='h1'>
           Dr. {firstName} {lastName}
-          {editButton}
+          <EditButton handleEditState={handleEditState} notEditing={notEditing} />
+          <SaveButton handleUpdateSubmit={handleUpdateSubmit} notEditing={notEditing} />
         </Header>
-        <Form>
+        <Form onSubmit={handleUpdateSubmit}>
           <Segment>
             <Form.Group widths='equal'>
               <Form.Field>
@@ -261,9 +260,6 @@ class DoctorShow extends Component {
               </Form.Field>
             </Form.Group>
           </Segment>
-          <Button onClick={handleUpdateSubmit} positive>
-            Confirm
-          </Button>
         </Form>
         <HospitalModal
           hospitalModalOpen={hospitalModalOpen}

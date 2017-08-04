@@ -134,7 +134,7 @@ class TransactionShow extends Component {
       file: { name: fileName }
     } = filesToUpload[index]
 
-    const Key = `${firstName} ${lastName}_${fileType || ''}_${stamp}.${fileExtension(fileName)}`
+    const Key = `${firstName} ${lastName} ${fileType || ''} ${stamp}.${fileExtension(fileName)}`
 
     const params = {
       Body: file,
