@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
-import { BrowserRouter, Route, Switch, Link } from 'react-router-dom'
-import { auth, db, storageKey, firebaseIdToken, userType } from './firebase-settings'
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
+import { auth, storageKey, firebaseIdToken, userType } from './firebase-settings'
 
 import './App.css'
 
 import axios from 'axios'
-import { Sidebar, Segment, Menu, Button, Loader, Dimmer, Header, Dropdown, Container } from 'semantic-ui-react'
+import { Segment, Loader, Dimmer } from 'semantic-ui-react'
 
 // import components
 import AuthMain from './pages/auth/auth-main'
 import UnauthorisedMain from './pages/auth/unauthorised-main'
-import HomeMain from './pages/home/home-main'
 import NavMain from 'nav/nav-main'
 import PatientMain from './pages/patient/patient-main'
 import TransactionMain from './pages/transaction/transaction-main'
@@ -19,9 +18,9 @@ import HospitalMain from './pages/hospital/hospital-main'
 import AddonMain from './pages/addon/addon-main'
 import AgentMain from './pages/agent/agent-main'
 import InvoiceMain from './pages/invoice/invoice-main'
-import PrivateRoute from './private-route'
+import UserMain from './pages/user/user-main'
 
-import TestMain from './pages/test/test-main'
+import PrivateRoute from './private-route'
 
 class App extends Component {
   constructor (props) {
@@ -136,9 +135,7 @@ class App extends Component {
             {/* </Segment> */}
             <Segment basic id='app__main' className='flex--grow'>
                 <Switch>
-                  <Route exact path='/test'
-                  render={(props) => <TestMain {...props} />} />
-                  <PrivateRoute exact path='/' component={HomeMain} />
+                  <Route exact path='/' component={() => <Redirect to='/patient' />} />
                   <PrivateRoute path='/patient' component={PatientMain} />
                   <PrivateRoute path='/transaction' component={TransactionMain} />
                   <PrivateRoute path='/doctor' component={DoctorMain} />
@@ -146,6 +143,7 @@ class App extends Component {
                   <PrivateRoute path='/addon' component={AddonMain} />
                   <PrivateRoute path='/agent' component={AgentMain} />
                   <PrivateRoute path='/invoice' component={InvoiceMain} />
+                  <PrivateRoute path='/user' component={UserMain} />
                   <Route exact path='/login'
                   render={(props) => <AuthMain {...props} />} />
                   <Route exact path='/unauthorised'

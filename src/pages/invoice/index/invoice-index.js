@@ -70,6 +70,8 @@ export default class InvoiceIndex extends Component {
       yearCreated,
       invoicing_doctor
     }
+    console.log(formData)
+    
     const queryString = qs.stringify(formData)
 
     axios({

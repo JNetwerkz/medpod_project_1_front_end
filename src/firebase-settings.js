@@ -1,12 +1,12 @@
 import firebase from 'firebase'
 
 const config = {
-  apiKey: 'AIzaSyAi0FdlofJwC8Od_e1VwWiDVvMDF8VV_fw',
-  authDomain: 'medpod-project-1.firebaseapp.com',
-  databaseURL: 'https://medpod-project-1.firebaseio.com',
-  projectId: 'medpod-project-1',
-  storageBucket: '',
-  messagingSenderId: '539826674073'
+  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTHDOMAIN,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASEURL,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECTID
+  // storageBucket: '',
+  // messagingSenderId: '539826674073'
 }
 
 const firebaseApp = firebase.initializeApp(config)
@@ -25,7 +25,8 @@ const userAccess = {
     '/hospital': true,
     '/addon': true,
     '/agent': true,
-    '/invoice': true
+    '/invoice': true,
+    '/user': true
   },
   finance: {
     '/patient': true,
@@ -34,7 +35,8 @@ const userAccess = {
     '/hospital': true,
     '/addon': true,
     '/agent': true,
-    '/invoice': true
+    '/invoice': true,
+    '/user': false
   },
   admin: {
     '/patient': true,
@@ -43,7 +45,8 @@ const userAccess = {
     '/hospital': true,
     '/addon': true,
     '/agent': true,
-    '/invoice': false
+    '/invoice': false,
+    '/user': false
   }
 }
 

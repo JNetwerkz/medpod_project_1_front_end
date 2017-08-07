@@ -50,4 +50,10 @@ const uploadFileOption = [
         { key: 'others', text: 'Others', value: 'other' }
 ]
 
-export { AuthHeader, M6117, combineName, monthsSelectOption, genderOption, uploadFileOption }
+const accessType = [
+  { key: 'master', text: 'Master', value: 'master' },
+  { key: 'admin', text: 'Admin Staff', value: 'admin' },
+  { key: 'finance', text: 'Finance Staff', value: 'finance' }
+]
+
+export { AuthHeader, M6117, combineName, monthsSelectOption, genderOption, uploadFileOption, accessType }

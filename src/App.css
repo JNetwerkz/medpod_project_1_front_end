@@ -17,6 +17,7 @@
 }
 
 #app__main {
+  height: 100vh;
   padding: 1rem 3rem;
 }
 /*
@@ -56,6 +57,16 @@
 
 .flex--jc-end {
   justify-content: flex-end;
+}
+
+.container__login {
+  height: 100%;
+}
+
+.login__form {
+  width: 500px;
+  height: 50vh;
+  margin: 0 auto;
 }
 
 .grid {

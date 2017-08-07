@@ -74,7 +74,8 @@ export default class InvoiceNew extends Component {
       'transaction year': this.state['transaction year'],
       'receiving_doctor': this.state.doctorId
     }
-
+    console.log(formData)
+    
     axios({
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/transaction/search`,

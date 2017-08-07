@@ -63,8 +63,9 @@ export default class NavMain extends Component {
           as={Link} to='/invoice' name='invoice' active={activeItem === '/invoice'} onClick={handleNavItemClick}>
           Invoices
         </Menu.Item>
-        <Menu.Item as={Link} to='/login' name='login' active={activeItem === '/login'} onClick={handleNavItemClick}>
-          Login
+        <Menu.Item
+          as={Link} to='/user' name='user' active={activeItem === '/user'} onClick={handleNavItemClick}>
+          Users
         </Menu.Item>
         <Divider section />
         <Menu.Item>

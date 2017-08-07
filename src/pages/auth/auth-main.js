@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { Container } from 'semantic-ui-react'
+import { Container, Image, Header, Segment, Divider } from 'semantic-ui-react'
+
 
 import axios from 'axios'
 
 import { auth } from 'firebase-settings'
 import ErrorMessage from 'partial/error'
-
 
 // import components
 import LoginForm from './components/login-form'
@@ -54,7 +54,6 @@ class AuthMain extends Component {
       .then((user) => {
         user.getIdToken(true).then((token) => {
           window.location = (fromState) ? fromState.from.pathname : '/patient'
-
         })
       })
       .catch((err) => {
@@ -74,16 +73,23 @@ class AuthMain extends Component {
     console.log('loginmain props', this)
     const { errors } = this.state
     return (
-      <Container fluid>
+      <div className='container__login'>
+        <Image src='https://s3-ap-southeast-1.amazonaws.com/medipod.1/Medipod+Logo.jpg' size='small' verticalAlign='middle' /> <span>Customer Management System</span>
+        <Divider hidden />
         <ErrorMessage errors={errors} />
-        <LoginForm
-          email={this.state.email}
-          password={this.state.password}
-          handleChange={this.handleChange}
-          handleSubmit={this.handleSubmit} />
-
-        <button onClick={this.handleSignOut}>Sign Out</button>
-      </Container>
+        <section className='login__form'>
+          <Segment>
+            <Header size='huge' textAlign='center'>
+              Welcome Back!
+            </Header>
+            <LoginForm className='flex--grow2'
+              email={this.state.email}
+              password={this.state.password}
+              handleChange={this.handleChange}
+              handleSubmit={this.handleSubmit} />
+          </Segment>
+        </section>
+      </div>
     )
   }
 
