@@ -9,12 +9,27 @@ const AuthHeader = () => {
 }
 
 const M6117 = (data) => {
-  let cusCode = `M${data['transaction month'].toString()}.${data['entry number']}.${moment(data['invoice date']).format('YY')}`
+  const {
+    'transaction month': transactionMonth,
+    'entry number': entryNumber,
+    'invoice date': invoiceDate
+  } = data
+
+  let _transactionMonth = transactionMonth
+  ? transactionMonth.toString()
+  : ''
+  let _entryNumber = entryNumber || ''
+  let _invoiceDate = invoiceDate
+  ? moment(invoiceDate).format('YY')
+  : ''
+
+  let cusCode = `M${_transactionMonth}.${_entryNumber}.${_invoiceDate}`
 
   return cusCode
 }
 
 const combineName = (obj) => {
+  if (!obj) return ''
   let firstName = obj['first name'] ? obj['first name'] : ''
   let lastName = obj['last name'] ? obj['last name'] : ''
   return `${firstName} ${lastName}`

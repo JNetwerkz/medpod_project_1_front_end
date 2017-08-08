@@ -21,7 +21,7 @@ class TransactionShow extends Component {
     this.state = {
       transactionShow: {},
       uploadedFiles: [],
-      mounted: false,
+      segmentLoading: true,
       //
       fileTypeSelection: [
         { key: 'medicalReport', text: 'Medical Report', value: 'medical_report' },
@@ -229,11 +229,11 @@ class TransactionShow extends Component {
   }
 
   render () {
-    if (!this.state.mounted) return <div>Loading</div>
     const {
       filesToUpload,
       uploadedFiles,
-      transactionShow
+      transactionShow,
+      segmentLoading
     } = this.state
 
     const {
@@ -255,7 +255,6 @@ class TransactionShow extends Component {
 
     const momentInvoiceDate = moment(invoiceDate).format('DD MMM YYYY')
     const formattedTransactionAmount = currencyFormatter.format(transactionAmount, { code: 'SGD' })
-
     const patientName = combineName(patient)
     const doctorName = combineName(receiving_doctor)
 
@@ -279,59 +278,70 @@ class TransactionShow extends Component {
         handleFileDelete={handleFileDelete}
       />
     })
+
+    const filesSegmentLoading = (!UploadedFiles.length && !FileUpload.length)
+    ? ''
+    : <Segment>
+      <Grid divided>
+        <Grid.Row columns={2} >
+          <Grid.Column>
+            <Item.Group divided relaxed>
+              {UploadedFiles}
+            </Item.Group>
+          </Grid.Column>
+          <Grid.Column>
+            <Button floated='right' compact primary onClick={handleAddInput}>Add Upload</Button>
+            <Item.Group divided relaxed>
+              {FileUpload}
+            </Item.Group>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </Segment>
+
     return (
       <Container>
         <Header as='h1'>
           {M6117(transactionShow)} | {patientName} | Dr. {doctorName}
         </Header>
-        <Segment>
-          <Form>
-            <Form.Group widths='equal'>
-              <Form.Field>
-                <label>Patient</label>
-                <Link to={`/patient/${patient._id}`}><p>{patientName}</p></Link>
-              </Form.Field>
-              <Form.Field>
-                <label>Doctor</label>
-                <Link to={`/doctor/${receiving_doctor._id}`}><p>Dr. {doctorName}</p></Link>
-              </Form.Field>
-              <Form.Field>
-                <label>Invoice Number</label>
-                <p>{invoiceNumber}</p>
-              </Form.Field>
-              <Form.Field>
-                <label>Invoice Date</label>
-                <p>{momentInvoiceDate}</p>
-              </Form.Field>
-            </Form.Group>
-            <Form.Group widths='equal'>
-              <Form.Field>
-                <label>Transaction Amount</label>
-                <p>{formattedTransactionAmount}</p>
-              </Form.Field>
-            </Form.Group>
-          </Form>
-        </Segment>
+        {
+          segmentLoading
+          ? <Segment loading />
+          // : ''
+          : <Segment>
+            <Form>
+              <Form.Group widths='equal'>
+                <Form.Field>
+                  <label>Patient</label>
+                  <Link to={`/patient/${patient._id}`}><p>{patientName}</p></Link>
+                </Form.Field>
+                <Form.Field>
+                  <label>Doctor</label>
+                  <Link to={`/doctor/${receiving_doctor._id}`}><p>Dr. {doctorName}</p></Link>
+                </Form.Field>
+                <Form.Field>
+                  <label>Invoice Number</label>
+                  <p>{invoiceNumber}</p>
+                </Form.Field>
+                <Form.Field>
+                  <label>Invoice Date</label>
+                  <p>{momentInvoiceDate}</p>
+                </Form.Field>
+              </Form.Group>
+              <Form.Group widths='equal'>
+                <Form.Field>
+                  <label>Transaction Amount</label>
+                  <p>{formattedTransactionAmount}</p>
+                </Form.Field>
+              </Form.Group>
+            </Form>
+          </Segment>
+        }
+
         <Header as='h2'>
           Files
         </Header>
-        <Segment>
-          <Grid divided>
-            <Grid.Row columns={2} >
-              <Grid.Column>
-                <Item.Group divided relaxed>
-                  {UploadedFiles}
-                </Item.Group>
-              </Grid.Column>
-              <Grid.Column>
-                <Button floated='right' compact primary onClick={handleAddInput}>Add Upload</Button>
-                <Item.Group divided relaxed>
-                  {FileUpload}
-                </Item.Group>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Segment>
+        {filesSegmentLoading}
       </Container>
     )
   }
@@ -348,7 +358,7 @@ class TransactionShow extends Component {
     })
     .then((res) => {
       console.log(res)
-      this.setState({ uploadedFiles: res.data })
+      this.setState({ uploadedFiles: res.data, segmentLoading: false })
     })
     .catch((err) => console.error(err))
   }

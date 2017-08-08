@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
-import { Container, Header, Table, Menu, Icon, Search, Form } from 'semantic-ui-react'
+import { Container, Header, Table, Menu, Icon, Search, Form, Divider } from 'semantic-ui-react'
 
 import axios from 'axios'
 import qs from 'qs'
@@ -11,6 +11,7 @@ import { AuthHeader, M6117, combineName, monthsSelectOption } from 'custom-funct
 
 import IndexRow from './_index-row'
 import DoctorModal from 'partial/modal/doctor-modal'
+import LoadingSmall from 'partial/loading-small'
 
 // import TransactionIndexSearch from './_index-search'
 
@@ -23,7 +24,7 @@ export default class TransactionIndex extends Component {
       page: '',
       pages: '',
       total: '',
-      searchLoading: false,
+      tableLoading: true,
       //
       doctorModalOpen: false,
       'transaction year': moment().year(),
@@ -56,7 +57,7 @@ export default class TransactionIndex extends Component {
   }
 
   handleSearchChange () {
-    this.setState({ searchLoading: true })
+    this.setState({ tableLoading: true })
     const {
       'transaction year': transactionYear,
       'transaction month': transactionMonth,
@@ -86,7 +87,7 @@ export default class TransactionIndex extends Component {
         total
       } = res.data
 
-      this.setState({ transactionIndex, page, pages, total, searchLoading: false })
+      this.setState({ transactionIndex, page, pages, total, tableLoading: false })
     })
   }
 
@@ -131,6 +132,7 @@ export default class TransactionIndex extends Component {
   }
 
   handlePaginate (event) {
+    this.setState({ tableLoading: true })
     const {
       'transaction year': transactionYear,
       'transaction month': transactionMonth,
@@ -160,7 +162,7 @@ export default class TransactionIndex extends Component {
         total
       } = res.data
 
-      this.setState({ transactionIndex, page, pages, total })
+      this.setState({ transactionIndex, page, pages, total, tableLoading: false })
     })
   }
 
@@ -176,7 +178,7 @@ export default class TransactionIndex extends Component {
       pages,
       transactionIndex,
       page,
-      searchLoading
+      tableLoading
     } = this.state
 
     const nextPage = page === pages ? pages : page + 1
@@ -207,6 +209,25 @@ export default class TransactionIndex extends Component {
         </Menu.Item>
       )
     })
+    const transactionTable = !tableLoading
+    ? <Table celled basic selectable definition>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Transaction Record</Table.HeaderCell>
+          <Table.HeaderCell>Invoice Number</Table.HeaderCell>
+          <Table.HeaderCell>Invoice Date</Table.HeaderCell>
+          <Table.HeaderCell>Patient</Table.HeaderCell>
+          <Table.HeaderCell>Doctor</Table.HeaderCell>
+          <Table.HeaderCell>Agent</Table.HeaderCell>
+          <Table.HeaderCell>Transaction Amount</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+
+      <Table.Body>
+        {IndexRows}
+      </Table.Body>
+    </Table>
+    : <LoadingSmall />
 
     return (
       <Container>
@@ -251,28 +272,11 @@ export default class TransactionIndex extends Component {
             <Form.Field>
               <label>&nbsp;</label>
               <Form.Button type='submit' fluid>
-                Search
-              </Form.Button>
+                  Search
+                </Form.Button>
             </Form.Field>
           </Form.Group>
         </Form>
-        <Table celled basic selectable definition>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Transaction Record</Table.HeaderCell>
-              <Table.HeaderCell>Invoice Number</Table.HeaderCell>
-              <Table.HeaderCell>Invoice Date</Table.HeaderCell>
-              <Table.HeaderCell>Patient</Table.HeaderCell>
-              <Table.HeaderCell>Doctor</Table.HeaderCell>
-              <Table.HeaderCell>Agent</Table.HeaderCell>
-              <Table.HeaderCell>Transaction Amount</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-
-          <Table.Body>
-            {IndexRows}
-          </Table.Body>
-        </Table>
         <Menu floated='right' pagination>
           <Menu.Item as='a' data-page={prevPage} icon onClick={handlePaginate}>
             <Icon name='left chevron' />
@@ -282,6 +286,8 @@ export default class TransactionIndex extends Component {
             <Icon name='right chevron' />
           </Menu.Item>
         </Menu>
+        <Divider hidden clearing />
+        {transactionTable}
         <DoctorModal
           doctorModalOpen={doctorModalOpen}
           modalMethod={doctorModalMethod}
@@ -318,7 +324,7 @@ export default class TransactionIndex extends Component {
         total
       } = res.data
 
-      this.setState({ transactionIndex, page, pages, total })
+      this.setState({ transactionIndex, page, pages, total, tableLoading: false })
     })
   }
 }
