@@ -28,12 +28,14 @@ class PatientShow extends Component {
       'ic / passport': '',
       gender: '',
       referral_agent: {},
+      errors: null,
+      segmentLoading: true,
       // modal
       agentModalOpen: false,
       agentSearchResult: [],
       selectedAgent: {},
       searchFocus: false,
-      errors: null,
+      // files
       uploadedFiles: [],
       filesToUpload: [],
       filesStatus: []
@@ -325,6 +327,7 @@ class PatientShow extends Component {
       'ic / passport': icPassport,
       gender,
       referral_agent,
+      segmentLoading,
       // modal
       agentModalOpen,
       agentSearchResult,
@@ -374,6 +377,26 @@ class PatientShow extends Component {
         fileTypeSelection={uploadFileOption}
       />
     })
+
+    const filesSegmentLoading = (!UploadedFiles.length && !FileUpload.length)
+    ? ''
+    : <Segment>
+      <Grid divided>
+        <Grid.Row columns={2} >
+          <Grid.Column>
+            <Item.Group divided relaxed>
+              {UploadedFiles}
+            </Item.Group>
+          </Grid.Column>
+          <Grid.Column>
+            <Item.Group divided relaxed>
+              {FileUpload}
+            </Item.Group>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </Segment>
+
     return (
       <Container>
         <ErrorMessage errors={errors} />
@@ -383,7 +406,7 @@ class PatientShow extends Component {
           <SaveButton handleUpdateSubmit={handleUpdateSubmit} notEditing={notEditing} />
         </Header>
         <Form>
-          <Segment>
+          <Segment loading={segmentLoading}>
             <Form.Group widths='equal'>
               <Form.Field>
                 <label>First Name</label>
@@ -490,22 +513,7 @@ class PatientShow extends Component {
           Files
           <Button floated='right' compact primary onClick={handleAddInput}>Add Upload</Button>
         </Header>
-        <Segment>
-          <Grid divided>
-            <Grid.Row columns={2} >
-              <Grid.Column>
-                <Item.Group divided relaxed>
-                  {UploadedFiles}
-                </Item.Group>
-              </Grid.Column>
-              <Grid.Column>
-                <Item.Group divided relaxed>
-                  {FileUpload}
-                </Item.Group>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Segment>
+        {filesSegmentLoading}
         <AgentModal
           agentModalOpen={agentModalOpen}
           modalMethod={agentModalMethod}
@@ -524,7 +532,7 @@ class PatientShow extends Component {
     })
     .then((res) => {
       console.log('PatientShow res', res.data)
-      this.setState({ patientShow: res.data, ...res.data })
+      this.setState({ patientShow: res.data, ...res.data, segmentLoading: false })
 
       return axios
       .get(`${process.env.REACT_APP_API_ENDPOINT}/file`, { params: { patient: res.data._id } })

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Input, Button, Container, Header, Segment, Form } from 'semantic-ui-react'
+import { Input, Button, Container, Header, Segment, Form, Divider } from 'semantic-ui-react'
 import axios from 'axios'
 import qs from 'qs'
 import moment from 'moment'
@@ -22,6 +22,8 @@ export default class AgentShow extends Component {
       gender: '',
       page: '',
       pages: '',
+      segmentLoading: true,
+      transactionTableLoading: true,
       //
       'transaction year': moment().year(),
       'transaction month': moment().month() + 1,
@@ -187,6 +189,8 @@ export default class AgentShow extends Component {
       'transaction month': transactionMonth,
       page,
       pages,
+      segmentLoading,
+      transactionTableLoading,
       agentTransactions,
       errors
     } = this.state
@@ -210,7 +214,7 @@ export default class AgentShow extends Component {
           <SaveButton handleUpdateSubmit={handleUpdateSubmit} notEditing={notEditing} />
         </Header>
         <Form>
-          <Segment>
+          <Segment loading={segmentLoading}>
             <Form.Group widths='equal'>
               <Form.Field>
                 <label>First Name</label>
@@ -274,6 +278,7 @@ export default class AgentShow extends Component {
           pages={pages}
           agentTransactions={agentTransactions}
           match={this.props.match}
+          transactionTableLoading={transactionTableLoading}
         />
       </Container>
     )
@@ -289,7 +294,7 @@ export default class AgentShow extends Component {
       const {
         _id
       } = res.data
-      this.setState({ agentShow: res.data, ...res.data })
+      this.setState({ agentShow: res.data, ...res.data, segmentLoading: false })
       return _id
     })
     .then((id) => {
@@ -304,7 +309,7 @@ export default class AgentShow extends Component {
         total,
         ...rest
       } = res.data
-      this.setState({ agentTransactions, ...rest })
+      this.setState({ agentTransactions, ...rest, transactionTableLoading: false })
     })
     .catch((err) => console.error(err))
   }

@@ -1,10 +1,11 @@
 import React from 'react'
 
-import { Table, Form, Menu, Icon, Container } from 'semantic-ui-react'
+import { Table, Form, Menu, Icon, Container, Divider } from 'semantic-ui-react'
 
 import { M6117, combineName, monthsSelectOption } from 'custom-function'
 
 import IndexRow from './_index-row'
+import LoadingSmall from 'partial/loading-small'
 
 const TransactionTable = (props) => {
   const {
@@ -16,7 +17,8 @@ const TransactionTable = (props) => {
     handlePaginate,
     page,
     pages,
-    agentTransactions
+    agentTransactions,
+    transactionTableLoading
   } = props
 
   const nextPage = page === pages ? pages : page + 1
@@ -39,6 +41,26 @@ const TransactionTable = (props) => {
       </Menu.Item>
     )
   })
+
+  const table = !transactionTableLoading
+  ? <Table celled basic selectable definition>
+    <Table.Header>
+      <Table.Row>
+        <Table.HeaderCell>Transaction Record</Table.HeaderCell>
+        <Table.HeaderCell>Invoice Number</Table.HeaderCell>
+        <Table.HeaderCell>Invoice Date</Table.HeaderCell>
+        <Table.HeaderCell>Patient</Table.HeaderCell>
+        <Table.HeaderCell>Doctor</Table.HeaderCell>
+        <Table.HeaderCell>Agent</Table.HeaderCell>
+        <Table.HeaderCell>Transaction Amount</Table.HeaderCell>
+      </Table.Row>
+    </Table.Header>
+
+    <Table.Body>
+      {IndexRows}
+    </Table.Body>
+  </Table>
+  : <LoadingSmall />
   return (
     <Container fluid>
       <Form onSubmit={handleSearchChange}>
@@ -63,23 +85,7 @@ const TransactionTable = (props) => {
           </Form.Field>
         </Form.Group>
       </Form>
-      <Table celled basic selectable definition>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Transaction Record</Table.HeaderCell>
-            <Table.HeaderCell>Invoice Number</Table.HeaderCell>
-            <Table.HeaderCell>Invoice Date</Table.HeaderCell>
-            <Table.HeaderCell>Patient</Table.HeaderCell>
-            <Table.HeaderCell>Doctor</Table.HeaderCell>
-            <Table.HeaderCell>Agent</Table.HeaderCell>
-            <Table.HeaderCell>Transaction Amount</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
 
-        <Table.Body>
-          {IndexRows}
-        </Table.Body>
-      </Table>
       <Menu floated='right' pagination>
         <Menu.Item as='a' data-page={prevPage} icon onClick={handlePaginate}>
           <Icon name='left chevron' />
@@ -89,6 +95,8 @@ const TransactionTable = (props) => {
           <Icon name='right chevron' />
         </Menu.Item>
       </Menu>
+      <Divider clearing hidden />
+      {table}
     </Container>
 
   )

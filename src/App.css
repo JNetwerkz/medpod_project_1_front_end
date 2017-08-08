@@ -55,6 +55,10 @@
   flex-grow: 2;
 }
 
+.flex--jc-spacebetween {
+  justify-content: space-between;
+}
+
 .flex--jc-end {
   justify-content: flex-end;
 }

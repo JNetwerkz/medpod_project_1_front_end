@@ -22,6 +22,8 @@ export default class UserMain extends Component {
     }
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSelectChange = this.handleSelectChange.bind(this)
+    this.handleUserDelete = this.handleUserDelete.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   handleInputChange (event, { value }) {
@@ -50,14 +52,29 @@ export default class UserMain extends Component {
   handleSubmit (event) {
     event.preventDefault()
 
-    const { email, password, displayName } = this.state
+    console.log('handlesubmit event', event.target)
 
-    const formData = {
-      email, password, displayName
+    const customErrorMsg = {
+      email: 'Please specify a EMAIL for user',
+      password: 'Please specify a PASSWORD for user',
+      displayName: 'Please specify a NAME for user',
+      userType: 'Please specify a USER TYPE for user'
     }
 
-    // if (!formData.email)
-    // if (!formData.referral_agent) return this.setState({ errors: ['Please select Agent from search function provided'] })
+    const { email, password, displayName, userType } = this.state
+
+    const formData = {
+      email, password, displayName, userType
+    }
+
+    const objEntries = Object.entries(formData)
+
+    let errors = []
+    objEntries.forEach((arr) => {
+      if (!arr[1]) errors.push(customErrorMsg[arr[0]])
+    })
+
+    if (errors.length) return this.setState({ errors })
 
     axios({
       method: 'POST',
@@ -66,13 +83,57 @@ export default class UserMain extends Component {
     })
     .then((res) => {
       console.log(res)
-      // const { errors } = res.data
-      // errors
-      // ? this.setState({ errors })
-      // : this.setState({
-      //   redirectToShow: true,
-      //   redirectTo: res.data._id
-      // })
+      const { errors, uid, email, lastSignInTime, displayName } = res.data
+      if (errors) return this.setState({ errors: [errors.message] })
+      return new Promise((resolve, reject) => {
+        let updateUserType = db.ref('users').update({
+          [uid]: userType
+        })
+        console.log('updateusertype', updateUserType)
+        updateUserType
+        ? resolve({
+          uid, email, lastSignInTime, displayName, userType
+        })
+        : reject('USERTYPE UPDATE FAILED')
+      })
+    })
+    .then((res) => {
+      const { userIndex } = this.state
+      userIndex.push(res)
+
+      return this.setState({ userIndex, email, password, displayName, userType })
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+  }
+
+  handleUserDelete (event) {
+    const target = event.target
+    const targetId = target.dataset.uid
+
+    axios({
+      method: 'DELETE',
+      url: `${process.env.REACT_APP_API_ENDPOINT}/user/${targetId}`
+    })
+    .then((res) => {
+      console.log('delete response', res)
+      return db.ref(`users/${targetId}`).remove()
+    })
+    .then(() => {
+      const token = window.localStorage.getItem(firebaseIdToken)
+      axios
+      .get(`${process.env.REACT_APP_FIREBASE_DATABASE_URL}/users.json?auth=${token}`)
+      .then((res) => {
+        return axios({
+          method: 'POST',
+          url: `${process.env.REACT_APP_API_ENDPOINT}/user`,
+          data: res.data
+        })
+      })
+      .then((res) => {
+        return this.setState({ userIndex: res.data })
+      })
     })
     .catch((err) => console.error(err))
   }
@@ -106,11 +167,12 @@ export default class UserMain extends Component {
     const {
        handleSubmit,
        handleInputChange,
-       handleSelectChange
+       handleSelectChange,
+       handleUserDelete
      } = this
 
     const IndexRows = userIndex.map((user) => {
-      return <IndexRow userData={user} key={user.uid} />
+      if (user.userType !== 'master') return <IndexRow userData={user} key={user.uid} handleUserDelete={handleUserDelete} />
     })
 
     return (
@@ -131,6 +193,7 @@ export default class UserMain extends Component {
           <Table celled basic selectable definition>
             <Table.Header>
               <Table.Row>
+                <Table.HeaderCell>Username</Table.HeaderCell>
                 <Table.HeaderCell>Email</Table.HeaderCell>
                 <Table.HeaderCell>Last Logged In</Table.HeaderCell>
                 <Table.HeaderCell>User Access Type</Table.HeaderCell>

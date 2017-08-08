@@ -51,7 +51,7 @@ const uploadFileOption = [
 ]
 
 const accessType = [
-  { key: 'master', text: 'Master', value: 'master' },
+  // { key: 'master', text: 'Master', value: 'master' },
   { key: 'admin', text: 'Admin Staff', value: 'admin' },
   { key: 'finance', text: 'Finance Staff', value: 'finance' }
 ]

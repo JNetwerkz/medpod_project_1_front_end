@@ -34,7 +34,7 @@ const FileInputRow = (props) => {
               (event, {value}) =>
               props.handleChange(event, value, props.index, 'descripChange')
             } />
-            <Button compact negative onClick={() => props.handleDeleteInput(props.index)}>Remove</Button>
+            <Button type='button' compact negative onClick={() => props.handleDeleteInput(props.index)}>Remove</Button>
             <Button compact positive onClick={() => props.handleFileUpload(props.index)}>Upload</Button>
           </Form>
     </Item>

@@ -4,7 +4,7 @@ import { Switch, Route, Link } from 'react-router-dom'
 import { Container, Header, Icon, Dropdown } from 'semantic-ui-react'
 
 import AddonNew from './new/addon-new'
-import AddonShow from './show/addon-show'
+
 import AddonIndex from './index/addon-index'
 
 export default class AddonMain extends Component {
@@ -34,11 +34,6 @@ export default class AddonMain extends Component {
             path={`${this.props.match.url}/new`}
             render={(props) =>
               <AddonNew {...props} />
-          } />
-          <Route
-            path={`${this.props.match.url}/:id`}
-            render={(props) =>
-              <AddonShow {...props} />
           } />
           <Route
             path={`${this.props.match.url}/`}

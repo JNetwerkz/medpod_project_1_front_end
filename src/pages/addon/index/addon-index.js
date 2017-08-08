@@ -44,7 +44,8 @@ export default class AddonIndex extends Component {
     super(props)
     this.state = {
       addonIndex: [],
-      errors: null
+      errors: null,
+      segmentLoading: true
     }
     this.handleAddOnUpdate = this.handleAddOnUpdate.bind(this)
   }
@@ -70,7 +71,7 @@ export default class AddonIndex extends Component {
   }
 
   render () {
-    const { addonIndex, errors } = this.state
+    const { addonIndex, errors, segmentLoading } = this.state
     const { handleAddOnUpdate } = this
     let AddonRows = addonIndex.map((item) => {
       return <AddonRow key={item._id} addonData={item} match={this.props.match} handleAddOnUpdate={handleAddOnUpdate} />
@@ -81,8 +82,8 @@ export default class AddonIndex extends Component {
         <Header as='h1'>
           All Add-ons
         </Header>
-        <Segment>
-          <List size='big' divided relaxed>
+        <Segment loading={segmentLoading}>
+          <List size='large' divided relaxed>
             {AddonRows}
           </List>
         </Segment>
@@ -97,7 +98,7 @@ export default class AddonIndex extends Component {
     })
     .then((res) => {
       console.log('AddonIndex res', res.data)
-      this.setState({ addonIndex: res.data })
+      this.setState({ addonIndex: res.data, segmentLoading: false })
     })
   }
 }

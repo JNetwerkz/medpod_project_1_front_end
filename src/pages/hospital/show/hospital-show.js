@@ -17,7 +17,8 @@ export default class HospitalShow extends Component {
       notEditing: true,
       name: '',
       address: '',
-      errors: null
+      errors: null,
+      segmentLoading: true
     }
     this.handleEditState = this.handleEditState.bind(this)
     this.handleEditChange = this.handleEditChange.bind(this)
@@ -85,7 +86,8 @@ export default class HospitalShow extends Component {
       hospitalShow,
       name,
       address,
-      errors
+      errors,
+      segmentLoading
     } = this.state
 
     const {
@@ -103,7 +105,7 @@ export default class HospitalShow extends Component {
           <SaveButton handleUpdateSubmit={handleUpdateSubmit} notEditing={notEditing} />
         </Header>
         <Form>
-          <Segment>
+          <Segment loading={segmentLoading}>
             <Form.Group widths='equal'>
                 <Form.Field>
                   <label>Name</label>
@@ -149,7 +151,7 @@ export default class HospitalShow extends Component {
     })
     .then((res) => {
       console.log('HospitalShow res', res.data)
-      this.setState({ hospitalShow: res.data, ...res.data })
+      this.setState({ hospitalShow: res.data, ...res.data, segmentLoading: false })
     })
     .catch((err) => console.error(err))
   }

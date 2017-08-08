@@ -6,6 +6,7 @@ import { Container, Header, Table, Menu, Icon, Search } from 'semantic-ui-react'
 import axios from 'axios'
 
 import IndexRow from './_index-row'
+import LoadingSmall from 'partial/loading-small'
 
 export default class AgentIndex extends Component {
   constructor (props) {
@@ -16,7 +17,7 @@ export default class AgentIndex extends Component {
       page: '',
       pages: '',
       total: '',
-      searchLoading: false
+      tableLoading: true
     }
 
     this.handlePaginate = this.handlePaginate.bind(this)
@@ -24,8 +25,7 @@ export default class AgentIndex extends Component {
   }
 
   handleSearchChange (event, value) {
-    console.log(value)
-    this.setState({ searchLoading: true })
+    this.setState({ tableLoading: true })
     axios({
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/agent`,
@@ -41,11 +41,12 @@ export default class AgentIndex extends Component {
         total
       } = res.data
 
-      this.setState({ agentIndex, page, pages, total, searchLoading: false })
+      this.setState({ agentIndex, page, pages, total, tableLoading: false })
     })
   }
 
   handlePaginate (event) {
+    this.setState({ tableLoading: true })
     axios({
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/agent`,
@@ -61,7 +62,7 @@ export default class AgentIndex extends Component {
         total
       } = res.data
 
-      this.setState({ agentIndex, page, pages, total })
+      this.setState({ agentIndex, page, pages, total, tableLoading: false })
     })
   }
 
@@ -70,7 +71,7 @@ export default class AgentIndex extends Component {
       pages,
       agentIndex,
       page,
-      searchLoading
+      tableLoading
     } = this.state
 
     const nextPage = page === pages ? pages : page + 1
@@ -98,40 +99,45 @@ export default class AgentIndex extends Component {
         </Menu.Item>
       )
     })
+    const agentTable = !tableLoading
+    ? <Table celled basic selectable definition>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Name</Table.HeaderCell>
+          <Table.HeaderCell>First Name</Table.HeaderCell>
+          <Table.HeaderCell>Last Name</Table.HeaderCell>
+          <Table.HeaderCell>Gender</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+
+      <Table.Body>
+        {IndexRows}
+      </Table.Body>
+    </Table>
+    : <LoadingSmall />
+
     return (
       <Container>
-        <Search
-          showNoResults={false}
-          loading={searchLoading}
-          // onResultSelect={this.handleResultSelect}
-          onSearchChange={handleSearchChange}
-          // results={results}
-          // value={value}
-          // {...this.props}
-        />
-        <Table celled basic selectable definition>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Name</Table.HeaderCell>
-              <Table.HeaderCell>First Name</Table.HeaderCell>
-              <Table.HeaderCell>Last Name</Table.HeaderCell>
-              <Table.HeaderCell>Gender</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-
-          <Table.Body>
-            {IndexRows}
-          </Table.Body>
-        </Table>
-        <Menu floated='right' pagination>
-          <Menu.Item as='a' data-page={prevPage} icon onClick={handlePaginate}>
-            <Icon name='left chevron' />
-          </Menu.Item>
-          {MenuItems}
-          <Menu.Item as='a' data-page={nextPage} icon>
-            <Icon name='right chevron' />
-          </Menu.Item>
-        </Menu>
+        <div className='flex flex--row flex--jc-spacebetween'>
+          <Search
+            showNoResults={false}
+            // onResultSelect={this.handleResultSelect}
+            onSearchChange={handleSearchChange}
+            // results={results}
+            // value={value}
+            // {...this.props}
+          />
+          <Menu floated='right' pagination>
+            <Menu.Item as='a' data-page={prevPage} icon onClick={handlePaginate}>
+              <Icon name='left chevron' />
+            </Menu.Item>
+            {MenuItems}
+            <Menu.Item as='a' data-page={nextPage} icon>
+              <Icon name='right chevron' />
+            </Menu.Item>
+          </Menu>
+        </div>
+        {agentTable}
       </Container>
     )
   }
@@ -151,7 +157,7 @@ export default class AgentIndex extends Component {
         total
       } = res.data
 
-      this.setState({ agentIndex, page, pages, total })
+      this.setState({ agentIndex, page, pages, total, tableLoading: false })
     })
   }
 }

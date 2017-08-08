@@ -19,6 +19,7 @@ class DoctorShow extends Component {
       'last name': '',
       gender: '',
       hospital: {},
+      segmentLoading: true,
       // modal
       hospitalModalOpen: false,
       hospitalSearchResult: [],
@@ -143,6 +144,7 @@ class DoctorShow extends Component {
       'last name': lastName,
       gender,
       hospital,
+      segmentLoading,
       // modal
       hospitalModalOpen,
       hospitalSearchResult,
@@ -173,7 +175,7 @@ class DoctorShow extends Component {
           <SaveButton handleUpdateSubmit={handleUpdateSubmit} notEditing={notEditing} />
         </Header>
         <Form onSubmit={handleUpdateSubmit}>
-          <Segment>
+          <Segment loading={segmentLoading  }>
             <Form.Group widths='equal'>
               <Form.Field>
                 <label>First Name</label>
@@ -279,7 +281,7 @@ class DoctorShow extends Component {
     })
     .then((res) => {
       console.log('DoctorShow res', res.data)
-      this.setState({ doctorShow: res.data, ...res.data })
+      this.setState({ doctorShow: res.data, ...res.data, segmentLoading: false })
     })
     .catch((err) => console.error(err))
   }

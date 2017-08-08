@@ -6,6 +6,7 @@ import { Container, Header, Table, Menu, Icon, Search } from 'semantic-ui-react'
 import axios from 'axios'
 
 import IndexRow from './_index-row'
+import LoadingSmall from 'partial/loading-small'
 
 export default class HospitalIndex extends Component {
   constructor (props) {
@@ -16,15 +17,14 @@ export default class HospitalIndex extends Component {
       page: '',
       pages: '',
       total: '',
-      searchLoading: false
+      tableLoading: true
     }
     this.handlePaginate = this.handlePaginate.bind(this)
     this.handleSearchChange = this.handleSearchChange.bind(this)
   }
 
   handleSearchChange (event, value) {
-    console.log(value)
-    this.setState({ searchLoading: true })
+    this.setState({ tableLoading: true })
     axios({
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/hospital`,
@@ -40,11 +40,12 @@ export default class HospitalIndex extends Component {
         total
       } = res.data
 
-      this.setState({ hospitalIndex, page, pages, total, searchLoading: false })
+      this.setState({ hospitalIndex, page, pages, total, tableLoading: false })
     })
   }
 
   handlePaginate (event) {
+    this.setState({ tableLoading: true })
     axios({
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/hospital`,
@@ -60,7 +61,7 @@ export default class HospitalIndex extends Component {
         total
       } = res.data
 
-      this.setState({ hospitalIndex, page, pages, total })
+      this.setState({ hospitalIndex, page, pages, total, tableLoading: false })
     })
   }
 
@@ -69,7 +70,7 @@ export default class HospitalIndex extends Component {
       pages,
       hospitalIndex,
       page,
-      searchLoading
+      tableLoading
     } = this.state
 
     const nextPage = page === pages ? pages : page + 1
@@ -98,38 +99,39 @@ export default class HospitalIndex extends Component {
       )
     })
 
+    const hospitalTable = !tableLoading
+    ? <Table celled basic selectable definition>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Name</Table.HeaderCell>
+          <Table.HeaderCell>Address</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+
+      <Table.Body>
+        {IndexRows}
+      </Table.Body>
+    </Table>
+    : <LoadingSmall />
+
     return (
       <Container>
-        <Search
-          showNoResults={false}
-          loading={searchLoading}
-          // onResultSelect={this.handleResultSelect}
-          onSearchChange={handleSearchChange}
-          // results={results}
-          // value={value}
-          // {...this.props}
-        />
-        <Table celled basic selectable definition>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Name</Table.HeaderCell>
-              <Table.HeaderCell>Address</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-
-          <Table.Body>
-            {IndexRows}
-          </Table.Body>
-        </Table>
-        <Menu floated='right' pagination>
-          <Menu.Item as='a' data-page={prevPage} icon onClick={handlePaginate}>
-            <Icon name='left chevron' />
-          </Menu.Item>
-          {MenuItems}
-          <Menu.Item as='a' data-page={nextPage} icon>
-            <Icon name='right chevron' />
-          </Menu.Item>
-        </Menu>
+        <div className='flex flex--row flex--jc-spacebetween'>
+          <Search
+            showNoResults={false}
+            onSearchChange={handleSearchChange}
+          />
+          <Menu floated='right' pagination>
+            <Menu.Item as='a' data-page={prevPage} icon onClick={handlePaginate}>
+              <Icon name='left chevron' />
+            </Menu.Item>
+            {MenuItems}
+            <Menu.Item as='a' data-page={nextPage} icon>
+              <Icon name='right chevron' />
+            </Menu.Item>
+          </Menu>
+        </div>
+        {hospitalTable}
       </Container>
     )
   }
@@ -148,7 +150,7 @@ export default class HospitalIndex extends Component {
         total
       } = res.data
 
-      this.setState({ hospitalIndex, page, pages, total })
+      this.setState({ hospitalIndex, page, pages, total, tableLoading: false })
     })
   }
 }
