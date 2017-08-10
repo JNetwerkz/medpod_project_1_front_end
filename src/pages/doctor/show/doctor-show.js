@@ -175,7 +175,7 @@ class DoctorShow extends Component {
           <SaveButton handleUpdateSubmit={handleUpdateSubmit} notEditing={notEditing} />
         </Header>
         <Form onSubmit={handleUpdateSubmit}>
-          <Segment loading={segmentLoading  }>
+          <Segment loading={segmentLoading}>
             <Form.Group widths='equal'>
               <Form.Field>
                 <label>First Name</label>

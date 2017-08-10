@@ -7,6 +7,7 @@ import { Form, Header, Container } from 'semantic-ui-react'
 import { genderOption } from 'custom-function'
 import HospitalModal from 'partial/modal/hospital-modal'
 import ErrorMessage from 'partial/error'
+import S3Subheader from 'partial/_subheaders'
 
 class DoctorNew extends Component {
   constructor (props) {
@@ -17,8 +18,15 @@ class DoctorNew extends Component {
       // form input fields
       'first name': '',
       'last name': '',
-      'gender': '',
-      'hospital': '',
+      gender: '',
+      hospital: '',
+      associationName: '',
+      associationAddress_street: '',
+      associationAddress_unit: '',
+      associationAddress_postalcode: '',
+      associationAddress_country: '',
+      associationPhoneNumber: '',
+      associationEmail: '',
       // modal
       hospitalModalOpen: false,
       hospitalSearchResult: [],
@@ -57,6 +65,8 @@ class DoctorNew extends Component {
     const formData = this.state
 
     if (!formData.hospital) return this.setState({ errors: ['Please select Hospital from search function provided'] })
+
+    console.log(formData)
 
     axios({
       method: 'POST',
@@ -120,7 +130,32 @@ class DoctorNew extends Component {
 
   render () {
     if (this.state.redirectToShow) return <Redirect to={this.state.redirectTo} />
-    const { errors } = this.state
+    const {
+      'first name': firstName,
+      'last name': lastName,
+      gender,
+      hospital,
+      associationName,
+      associationAddress_street,
+      associationAddress_unit,
+      associationAddress_postalcode,
+      associationAddress_country,
+      associationPhoneNumber,
+      associationEmail,
+      // modal
+      hospitalModalOpen,
+      hospitalSearchResult,
+      selectedHospital,
+      searchFocus,
+      errors
+     } = this.state
+
+     const {
+       handleInputChange,
+       handleSelectChange,
+       hospitalModalMethod,
+       handleSubmit
+     } = this
 
     return (
       <Container>
@@ -128,14 +163,40 @@ class DoctorNew extends Component {
         <Header as='h1'>
           New Doctor
         </Header>
-        <Form id='doctor_new-form' onSubmit={(event) => this.handleSubmit(event)}>
+        <S3Subheader text='Personal Information' />
+        <Form id='doctor_new-form' onSubmit={(event) => handleSubmit(event)}>
           <Form.Group widths='equal'>
-            <Form.Input label='First name' placeholder='First name' name='first name' onChange={this.handleInputChange} />
+            <Form.Input label='First name' placeholder='First name' name='first name'
+              value={firstName} onChange={handleInputChange} />
 
-            <Form.Input label='Last name' placeholder='Last name' name='last name' onChange={this.handleInputChange} />
+            <Form.Input label='Last name' placeholder='Last name' name='last name'
+              value={lastName} onChange={handleInputChange} />
 
-            <Form.Select label='Gender' options={genderOption} placeholder='Gender' onChange={(e, {value}) => this.handleSelectChange(e, value, 'gender')} />
+            <Form.Select label='Gender' options={genderOption} placeholder='Gender' onChange={(e, {value}) => handleSelectChange(e, value, 'gender')} />
           </Form.Group>
+
+          <S3Subheader text='Department / Institution / Clinic' />
+          <Form.Group widths='equal'>
+            <Form.Input label='Name' placeholder='IE: Novena Cancer Centre' name='associationName'
+              value={associationName} onChange={handleInputChange} />
+            <Form.Input label='Contact Number' placeholder='8125 XXXX' name='associationPhoneNumber'
+              value={associationPhoneNumber} onChange={handleInputChange} />
+            <Form.Input type='email' label='Email' placeholder='account@novenacc.com' name='associationEmail'
+              value={associationEmail} onChange={handleInputChange} />
+            <Form.Input label='Country' placeholder='Singapore' name='associationAddress_country'
+              value={associationAddress_country} onChange={handleInputChange} />
+          </Form.Group>
+
+          <Form.Group widths='equal'>
+            <Form.Input label='Unit Number' name='associationAddress_unit'
+              value={associationAddress_unit} onChange={handleInputChange} />
+            <Form.Input label='Block & Street' name='associationAddress_street'
+              value={associationAddress_street} onChange={handleInputChange} />
+            <Form.Input label='Postal Code' name='associationAddress_postalcode'
+              value={associationAddress_postalcode} onChange={handleInputChange} />
+          </Form.Group>
+
+          <S3Subheader text='Hospital' />
           <Form.Group widths='equal'>
             <Form.Field>
               <label>Hospital</label>
@@ -146,7 +207,7 @@ class DoctorNew extends Component {
                   console.log('input', input)
                   this.hospitalNameRef = input
                 }}
-                value={`${this.state.selectedHospital.name || ''}`} />
+                value={`${selectedHospital.name || ''}`} />
             </Form.Field>
 
             <Form.Field>
@@ -159,17 +220,17 @@ class DoctorNew extends Component {
                   console.log('input', input)
                   this.hospitalIdRef = input
                 }}
-                value={this.state.hospital} />
+                value={hospital} />
             </Form.Field>
           </Form.Group>
           <Form.Button>Submit</Form.Button>
         </Form>
         <HospitalModal
-          hospitalModalOpen={this.state.hospitalModalOpen}
-          modalMethod={this.hospitalModalMethod}
-          hospitalSearchResult={this.state.hospitalSearchResult}
-          selectedHospital={this.state.selectedHospital}
-          searchFocus={this.state.searchFocus}
+          hospitalModalOpen={hospitalModalOpen}
+          modalMethod={hospitalModalMethod}
+          hospitalSearchResult={hospitalSearchResult}
+          selectedHospital={selectedHospital}
+          searchFocus={searchFocus}
         />
       </Container>
     )
