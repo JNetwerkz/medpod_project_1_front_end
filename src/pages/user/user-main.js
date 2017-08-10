@@ -8,6 +8,8 @@ import IndexRow from './_index-row'
 import { auth, db, firebaseIdToken } from 'firebase-settings'
 import { accessType } from 'custom-function'
 import ErrorMessage from 'partial/error'
+import LoadingSmall from 'partial/loading-small'
+
 
 export default class UserMain extends Component {
   constructor (props) {
@@ -18,7 +20,8 @@ export default class UserMain extends Component {
       password: '',
       displayName: '',
       userType: '',
-      errors: null
+      errors: null,
+      tableLoading: true
     }
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSelectChange = this.handleSelectChange.bind(this)
@@ -150,7 +153,7 @@ export default class UserMain extends Component {
       })
     })
     .then((res) => {
-      return this.setState({ userIndex: res.data })
+      return this.setState({ userIndex: res.data, tableLoading: false })
     })
   }
 
@@ -161,7 +164,8 @@ export default class UserMain extends Component {
       password,
       displayName,
       userType,
-      errors
+      errors,
+      tableLoading
      } = this.state
 
     const {
@@ -174,6 +178,24 @@ export default class UserMain extends Component {
     const IndexRows = userIndex.map((user) => {
       if (user.userType !== 'master') return <IndexRow userData={user} key={user.uid} handleUserDelete={handleUserDelete} />
     })
+
+    const userTable = tableLoading
+    ? <LoadingSmall />
+    : <Table celled basic selectable definition>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Username</Table.HeaderCell>
+          <Table.HeaderCell>Email</Table.HeaderCell>
+          <Table.HeaderCell>Last Logged In</Table.HeaderCell>
+          <Table.HeaderCell>User Access Type</Table.HeaderCell>
+          <Table.HeaderCell />
+        </Table.Row>
+      </Table.Header>
+
+      <Table.Body>
+        {IndexRows}
+      </Table.Body>
+    </Table>
 
     return (
       <Container fluid>
@@ -190,21 +212,7 @@ export default class UserMain extends Component {
           </Header.Subheader>
         </Header>
         <Container>
-          <Table celled basic selectable definition>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Username</Table.HeaderCell>
-                <Table.HeaderCell>Email</Table.HeaderCell>
-                <Table.HeaderCell>Last Logged In</Table.HeaderCell>
-                <Table.HeaderCell>User Access Type</Table.HeaderCell>
-                <Table.HeaderCell />
-              </Table.Row>
-            </Table.Header>
-
-            <Table.Body>
-              {IndexRows}
-            </Table.Body>
-          </Table>
+          {userTable}
           <Header as='h2'>New User</Header>
           <Segment>
             <Form onSubmit={handleSubmit}>

@@ -6,13 +6,15 @@ import { Form, Container, Table, Popup, Button, Segment, Header, Divider } from 
 import SetupRow from './_stageTwo-setupRow'
 import TableRow from './_stageTwo-tableRow'
 import GrandTotal from './_stageTwo-grandTotal'
+import ErrorMessage from 'partial/error'
 
 import { M6117, combineName } from 'custom-function'
 
 const InvoiceStageTwo = (props) => {
   const {
     selectedTransaction,
-    selectedAddon
+    selectedAddon,
+    errors
   } = props
 
   const TableRows = Object.values(selectedTransaction).map((item) => {
@@ -52,6 +54,7 @@ const InvoiceStageTwo = (props) => {
         {TableRows}
         <section>
           <Segment.Group>
+            <ErrorMessage errors={errors} />
             <Segment inverted>
               <Header as='h2' inverted>
                 Grand Total
@@ -59,6 +62,7 @@ const InvoiceStageTwo = (props) => {
             </Segment>
             <Segment>
               <GrandTotal
+                errors={errors}
                 selectedAddon={selectedAddon}
                 selectedTransaction={selectedTransaction}
               />

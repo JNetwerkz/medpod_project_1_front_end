@@ -86,7 +86,7 @@ const TableRow = (props) => {
                 <input
                   placeholder='Percentage'
                   className='table-cell__input'
-                  required
+                  // required
                   type='number'
                   name={transaction}
                   value={percentage}
@@ -97,7 +97,7 @@ const TableRow = (props) => {
                 <input
                   placeholder='Amount'
                   className='table-cell__input'
-                  required
+                  // required
                   type='number'
                   name={transaction}
                   value={transactionChargeableAmt}

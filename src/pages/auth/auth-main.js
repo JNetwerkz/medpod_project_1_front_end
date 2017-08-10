@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Image, Header, Segment, Divider } from 'semantic-ui-react'
-
+import { Form, Container, Image, Header, Segment, Divider, Menu, Input, Button } from 'semantic-ui-react'
 
 import axios from 'axios'
 
@@ -24,23 +23,13 @@ class AuthMain extends Component {
     this.handleSignOut = this.handleSignOut.bind(this)
   }
 
-  handleChange (field, event) {
-    console.log('making changes to form input field')
+  handleChange (event, {value}) {
+    console.log(event, value, event.target.name)
+    const name = event.target.name
 
-    const changes = {}
-    switch (field) {
-      case 'email':
-        changes.email = event.target.value
-        break
-      case 'password':
-        changes.password = event.target.value
-        break
-      default:
-        console.log('error')
-        break
-    }
-    console.log('changes is', changes)
-    this.setState(changes)
+    this.setState({
+      [name]: value
+    })
   }
 
   handleSubmit (event) {
@@ -71,25 +60,77 @@ class AuthMain extends Component {
 
   render () {
     console.log('loginmain props', this)
-    const { errors } = this.state
+    const { errors, password, email } = this.state
+    const { handleChange, handleSubmit } = this
     return (
-      <div className='container__login'>
-        <Image src='https://s3-ap-southeast-1.amazonaws.com/medipod.1/Medipod+Logo.jpg' size='small' verticalAlign='middle' /> <span>Customer Management System</span>
-        <Divider hidden />
+      <div className='flex flex--column'>
         <ErrorMessage errors={errors} />
-        <section className='login__form'>
-          <Segment>
-            <Header size='huge' textAlign='center'>
-              Welcome Back!
-            </Header>
-            <LoginForm className='flex--grow2'
-              email={this.state.email}
-              password={this.state.password}
-              handleChange={this.handleChange}
-              handleSubmit={this.handleSubmit} />
-          </Segment>
+        <section className='flex flex--rowreverse'>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group widths='equal'>
+              <Form.Field>
+                {/* <label>&nbsp;</label> */}
+                <label>Email</label>
+                <Form.Input
+                  value={email}
+                  name='email'
+                  onChange={handleChange}
+                  transparent
+                  type='email'
+                  placeholder='medipod@medipod.co' />
+              </Form.Field>
+              <Form.Field>
+                {/* <label>&nbsp;</label> */}
+                <label>Password</label>
+                <Form.Input
+                  value={password}
+                  name='password'
+                  onChange={handleChange}
+                  transparent
+                  type='password'
+                  placeholder='******' />
+              </Form.Field>
+              <Form.Field>
+                <Form.Button primary>Sign In</Form.Button>
+              </Form.Field>
+            </Form.Group>
+          </Form>
+        </section>
+        <Divider section hidden />
+        <section className='flex flex--row flex--jc-center flex-grow'>
+          <div>
+            <Image src='https://s3-ap-southeast-1.amazonaws.com/medipod.1/Medipod+Logo.jpg' size='big' verticalAlign='middle' />
+            {/* <h1 className='medipod'>
+            Medipod
+          </h1> */}
+          <Header as='h1' textAlign='right'>
+            Customer Management System
+          </Header>
+
+          </div>
         </section>
       </div>
+      // <div className='container__login'>
+      //   <section className='flex flex--row flex--jc-center'>
+      //     <div>
+      //     </div>
+      //     <span>CMS</span>
+      //   </section>
+      //   <Divider hidden />
+      //   <ErrorMessage errors={errors} />
+      //   <section className='login__form'>
+      //     <Segment>
+      //       <Header size='huge' textAlign='center'>
+      //         Welcome Back!
+      //       </Header>
+      //       <LoginForm className='flex--grow2'
+      //         email={this.state.email}
+      //         password={this.state.password}
+      //         handleChange={this.handleChange}
+      //         handleSubmit={this.handleSubmit} />
+      //     </Segment>
+      //   </section>
+      // </div>
     )
   }
 

@@ -200,7 +200,7 @@ class TransactionNew extends Component {
       <Container>
         <ErrorMessage errors={errors} />
         <Header as='h1'>
-          Create New Transaction / Invoice
+          New Transaction / Invoice
         </Header>
         <Form id='transaction_new-form' onSubmit={(event) => this.handleSubmit(event)}>
           <Form.Group widths='equal'>

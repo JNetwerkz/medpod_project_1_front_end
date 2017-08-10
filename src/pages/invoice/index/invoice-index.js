@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
-import { Container, Header, Table, Menu, Icon, Search, Form } from 'semantic-ui-react'
+import { Container, Header, Table, Menu, Icon, Search, Form, Divider } from 'semantic-ui-react'
 
 import axios from 'axios'
 import qs from 'qs'
@@ -11,6 +11,7 @@ import { AuthHeader, M6117, combineName, monthsSelectOption } from 'custom-funct
 
 import IndexRow from './_index-row'
 import DoctorModal from 'partial/modal/doctor-modal'
+import LoadingSmall from 'partial/loading-small'
 
 // import TransactionIndexSearch from './_index-search'
 
@@ -23,7 +24,7 @@ export default class InvoiceIndex extends Component {
       page: '',
       pages: '',
       total: '',
-      searchLoading: false,
+      tableLoading: true,
       //
       doctorModalOpen: false,
       monthCreated: moment().month() + 1,
@@ -58,7 +59,7 @@ export default class InvoiceIndex extends Component {
   }
 
   handleSearchChange () {
-    this.setState({ searchLoading: true })
+    this.setState({ tableLoading: true })
     const {
       monthCreated,
       yearCreated,
@@ -71,7 +72,7 @@ export default class InvoiceIndex extends Component {
       invoicing_doctor
     }
     console.log(formData)
-    
+
     const queryString = qs.stringify(formData)
 
     axios({
@@ -89,7 +90,7 @@ export default class InvoiceIndex extends Component {
         total
       } = res.data
 
-      this.setState({ invoiceIndex, page, pages, total, searchLoading: false })
+      this.setState({ invoiceIndex, page, pages, total, tableLoading: false })
     })
   }
 
@@ -134,6 +135,7 @@ export default class InvoiceIndex extends Component {
   }
 
   handlePaginate (event) {
+    this.setState({ tableLoading: true })
     const {
       monthCreated,
       yearCreated,
@@ -163,7 +165,7 @@ export default class InvoiceIndex extends Component {
         total
       } = res.data
 
-      this.setState({ invoiceIndex, page, pages, total })
+      this.setState({ invoiceIndex, page, pages, total, tableLoading: false })
     })
   }
 
@@ -178,7 +180,7 @@ export default class InvoiceIndex extends Component {
       pages,
       invoiceIndex,
       page,
-      searchLoading
+      tableLoading
     } = this.state
 
     const nextPage = page === pages ? pages : page + 1
@@ -209,6 +211,22 @@ export default class InvoiceIndex extends Component {
         </Menu.Item>
       )
     })
+
+    const invoiceTable = !tableLoading
+    ? <Table celled basic selectable definition>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Invoice Number</Table.HeaderCell>
+          <Table.HeaderCell>Date Created</Table.HeaderCell>
+          <Table.HeaderCell>Invoicing Doctor</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+
+      <Table.Body>
+        {IndexRows}
+      </Table.Body>
+    </Table>
+    : <LoadingSmall />
 
     return (
       <Container>
@@ -257,19 +275,6 @@ export default class InvoiceIndex extends Component {
             </Form.Field>
           </Form.Group>
         </Form>
-        <Table celled basic selectable definition>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Invoice Number</Table.HeaderCell>
-              <Table.HeaderCell>Date Created</Table.HeaderCell>
-              <Table.HeaderCell>Invoicing Doctor</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-
-          <Table.Body>
-            {IndexRows}
-          </Table.Body>
-        </Table>
         <Menu floated='right' pagination>
           <Menu.Item as='a' data-page={prevPage} icon onClick={handlePaginate}>
             <Icon name='left chevron' />
@@ -279,6 +284,8 @@ export default class InvoiceIndex extends Component {
             <Icon name='right chevron' />
           </Menu.Item>
         </Menu>
+        <Divider hidden clearing />
+        {invoiceTable}
         <DoctorModal
           doctorModalOpen={doctorModalOpen}
           modalMethod={doctorModalMethod}
@@ -319,7 +326,7 @@ export default class InvoiceIndex extends Component {
         total
       } = res.data
 
-      this.setState({ invoiceIndex, page, pages, total })
+      this.setState({ invoiceIndex, page, pages, total, tableLoading: false })
     })
   }
 }

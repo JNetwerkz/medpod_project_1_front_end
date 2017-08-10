@@ -21,6 +21,7 @@ import InvoiceMain from './pages/invoice/invoice-main'
 import UserMain from './pages/user/user-main'
 
 import PrivateRoute from './private-route'
+import RedirectFromLoginRoute from './redirectFromLogin-route'
 
 class App extends Component {
   constructor (props) {
@@ -144,8 +145,9 @@ class App extends Component {
                   <PrivateRoute path='/agent' component={AgentMain} />
                   <PrivateRoute path='/invoice' component={InvoiceMain} />
                   <PrivateRoute path='/user' component={UserMain} />
-                  <Route exact path='/login'
-                  render={(props) => <AuthMain {...props} />} />
+                  <RedirectFromLoginRoute exact path='/login' component={AuthMain} />
+                  {/* <Route exact path='/login'
+                  render={(props) => <AuthMain {...props} />} /> */}
                   <Route exact path='/unauthorised'
                   render={(props) => <UnauthorisedMain {...props} />} />
                 </Switch>

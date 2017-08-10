@@ -10,6 +10,8 @@ import InvoiceStageOne from './_stageOne'
 import InvoiceStageTwo from './_stageTwo'
 import InvoiceStageThree from './_stageThree'
 import InvoiceNav from '../invoice-nav'
+import ErrorMessage from 'partial/error'
+
 
 export default class InvoiceNew extends Component {
   constructor (props) {
@@ -19,7 +21,7 @@ export default class InvoiceNew extends Component {
       redirectToShow: false,
       redirectTo: '',
       //
-      'transaction month': '',
+      'transaction month': moment().month() + 1,
       'transaction year': moment().year(),
       // doctor modal
       doctorModalOpen: false,
@@ -32,7 +34,8 @@ export default class InvoiceNew extends Component {
       selectedTransaction: {},
       // addons
       addonSelection: [],
-      selectedAddon: {}
+      selectedAddon: {},
+      errors: null
     }
     this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
     this.handleSelectChange = this.handleSelectChange.bind(this)
@@ -75,7 +78,7 @@ export default class InvoiceNew extends Component {
       'receiving_doctor': this.state.doctorId
     }
     console.log(formData)
-    
+
     axios({
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/transaction/search`,
@@ -292,11 +295,20 @@ export default class InvoiceNew extends Component {
     })
     .then((res) => {
       console.log(res.data)
+      const { errors } = res.data
 
-      this.setState({
+      errors
+      ? window.scrollTo(0, 0)
+      : ''
+
+      errors
+      ? (this.setState({ errors }))
+      : this.setState({
         redirectToShow: true,
-        redirectTo: res.data._id
+        redirectTo: res.data._id,
+        errors: null
       })
+
     })
     .catch((err) => console.log(err))
   }
@@ -320,10 +332,12 @@ export default class InvoiceNew extends Component {
     if (this.state.redirectToShow) {
       return <Redirect to={`/invoice/${this.state.redirectTo}`} />
     }
+    const { errors } = this.state
     return (
-      <Container fluid>
-          <Header as='h3' block inverted>
-            Create New Invoice
+      <Container>
+          <ErrorMessage errors={errors} />
+          <Header as='h1'>
+            New Invoice
           </Header>
           <InvoiceNav {...this.props} transactionSearchResult={this.state.transactionSearchResult} />
         <Divider hidden />
@@ -360,6 +374,7 @@ export default class InvoiceNew extends Component {
             render={(props) =>
               <InvoiceStageTwo
                 {...props}
+                errors={errors}
                 handleStageTwoAmtPercentChange={this.handleStageTwoAmtPercentChange}
                 handleStageTwoSubmit={this.handleStageTwoSubmit}
                 handleStageTwoAddonMethod={this.handleStageTwoAddonMethod}
@@ -369,7 +384,7 @@ export default class InvoiceNew extends Component {
               />}
             path={`${this.props.match.url}/setup_invoice_amount`}
           />
-          <Route
+          {/* <Route
             exact
             render={(props) =>
               <InvoiceStageThree
@@ -382,7 +397,7 @@ export default class InvoiceNew extends Component {
                 selectedAddon={this.state.selectedAddon}
               />}
             path={`${this.props.match.url}/setup_addon_amount`}
-          />
+          /> */}
         </Switch>
         {/* <InvoiceStageOne
           handleSubmit={this.handleSubmit}

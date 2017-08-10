@@ -5,6 +5,7 @@ import { Table } from 'semantic-ui-react'
 import * as currencyFormatter from 'currency-formatter'
 import { M6117, combineName } from 'custom-function'
 
+
 const TableRow = (props) => {
   console.log(props)
   const {
@@ -97,35 +98,35 @@ const GrandTotal = (props) => {
   })
 
   return (
-    <Table basic='very' selectable striped>
-    <Table.Header>
-      <Table.Row>
-        <Table.HeaderCell>
-          Transaction Record
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          Base Chargeable Amount
-        </Table.HeaderCell>
-        <Table.HeaderCell>
-          All Add-ons Amount
-        </Table.HeaderCell>
-        <Table.HeaderCell width='four' >
-          Sub-Total
-        </Table.HeaderCell>
-      </Table.Row>
-    </Table.Header>
-    <Table.Body>
-      {TableRows}
-      <Table.Row>
-        <Table.Cell textAlign='right' colSpan='3'>
-          Grand Total
-        </Table.Cell>
-        <Table.Cell width='four'>
-          {currencyFormatter.format(grandTotalAmount, { code: 'SGD' })}
-        </Table.Cell>
-      </Table.Row>
-    </Table.Body>
-  </Table>
+      <Table basic='very' selectable striped>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>
+              Transaction Record
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              Base Chargeable Amount
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              All Add-ons Amount
+            </Table.HeaderCell>
+            <Table.HeaderCell width='four' >
+              Sub-Total
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {TableRows}
+          <Table.Row>
+            <Table.Cell textAlign='right' colSpan='3'>
+              Grand Total
+            </Table.Cell>
+            <Table.Cell width='four'>
+              {currencyFormatter.format(grandTotalAmount, { code: 'SGD' })}
+            </Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table>
   )
 }
 

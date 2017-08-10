@@ -8,6 +8,7 @@
   /*margin: 0 auto;*/
   /*background-color: lightgrey;*/
 }
+
 #app__nav {
   height: 100vh;
   margin-bottom: 0;
@@ -19,6 +20,7 @@
 #app__main {
   height: 100vh;
   padding: 1rem 3rem;
+  overflow-y: scroll;
 }
 /*
 #app__leftcolumn {
@@ -39,6 +41,10 @@
 .flex--row {
   flex-direction: row;
 }
+.flex--rowreverse {
+  flex-direction: row-reverse;
+}
+
 .flex--column {
   flex-direction: column;
 }
@@ -57,6 +63,10 @@
 
 .flex--jc-spacebetween {
   justify-content: space-between;
+}
+
+.flex--jc-center {
+  justify-content: center;
 }
 
 .flex--jc-end {

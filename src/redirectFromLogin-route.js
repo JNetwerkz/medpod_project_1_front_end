@@ -1,28 +1,19 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 
-import { isAuthenticated, isGrantedAccess } from './firebase-settings'
+import { isAuthenticated } from './firebase-settings'
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
-  console.log('...rest', rest)
-  return isAuthenticated()
-  ? isGrantedAccess(rest.path)
+const RedirectFromLoginRoute = ({ component: Component, ...rest }) => {
+  return !isAuthenticated()
     ? <Route {...rest} render={(props) => <Component {...props} {...rest} />
       } />
     : <Route {...rest}
       render={props => (
         <Redirect to={{
-          pathname: '/unauthorised',
+          pathname: '/patient',
           state: { from: props.location }
         }} />
     )} />
-  : <Route {...rest}
-    render={props => (
-      <Redirect to={{
-        pathname: '/login',
-        state: { from: props.location }
-      }} />
-  )} />
   // if (isAuthenticated()) {
   //   if (isGrantedAccess(rest.path)) {
   //     return <Route {...rest} render={(props) => <Component {...props} {...rest} />
@@ -60,4 +51,4 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 //   )} />
 // )
 
-export default PrivateRoute
+export default RedirectFromLoginRoute

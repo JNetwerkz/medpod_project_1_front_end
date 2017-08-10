@@ -13,7 +13,7 @@ const InvoiceStageOne = (props) => {
       <section className='grid__invoice-new-search'>
         <Form id='invoice_new-form' onSubmit={(event) => props.handleSearchSubmit(event)}>
           <Form.Group widths='equal'>
-            <Form.Select label='Month' options={monthsSelectOption} placeholder='Select Month' onChange={(e, {value}) => props.handleSelectChange(e, value, 'transaction month')} />
+            <Form.Select label='Month' value={props.transactionMonth} options={monthsSelectOption} placeholder='Select Month' onChange={(e, {value}) => props.handleSelectChange(e, value, 'transaction month')} />
             <Form.Input label='Year' placeholder='IE: 2017' name='transaction year' value={props.transactionYear} onChange={props.handleInputChange} />
             <Form.Field>
               <label>Doctor</label>
