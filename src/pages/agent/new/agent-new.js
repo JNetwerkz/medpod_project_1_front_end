@@ -3,9 +3,10 @@ import { Redirect } from 'react-router-dom'
 
 import axios from 'axios'
 
-import { Form, Container, Header } from 'semantic-ui-react'
+import { Form, Container, Header, Button, Divider } from 'semantic-ui-react'
 import { genderOption } from 'custom-function'
 import ErrorMessage from 'partial/error'
+import S3Subheader from 'partial/_subheaders'
 
 export default class AgentNew extends Component {
   constructor (props) {
@@ -18,6 +19,9 @@ export default class AgentNew extends Component {
       'first name': '',
       'last name': '',
       'gender': '',
+      'ic / passport': '',
+      personalPhoneNumber: '',
+      personalEmail: '',
       errors: null
     }
 
@@ -49,8 +53,6 @@ export default class AgentNew extends Component {
     event.preventDefault()
     const formData = this.state
 
-    console.log(formData)
-
     axios({
       method: 'POST',
       url: `${process.env.REACT_APP_API_ENDPOINT}/agent`,
@@ -72,21 +74,42 @@ export default class AgentNew extends Component {
 
   render () {
     if (this.state.redirectToShow) return <Redirect to={this.state.redirectTo} />
-    const { errors } = this.state
+    const {
+      'first name': firstName,
+      'last name': lastName,
+      'ic / passport': icPassport,
+      gender,
+      personalPhoneNumber,
+      personalEmail,
+      errors
+    } = this.state
+
+    const {
+      handleInputChange,
+      handleSubmit,
+      handleSelectChange
+    } = this
 
     return (
       <Container>
         <ErrorMessage errors={errors} />
+        <Form id='agent_new-form' onSubmit={(event) => handleSubmit(event)}>
         <Header as='h1'>
-          NEW AGENT
+          New Agent
+          <Button floated='right'>Submit</Button>
         </Header>
-        <Form id='agent_new-form' onSubmit={(event) => this.handleSubmit(event)}>
+          <S3Subheader text='Personal Information' />
           <Form.Group widths='equal'>
-            <Form.Input label='First name' placeholder='First name' name='first name' onChange={this.handleInputChange} />
-            <Form.Input label='Last name' placeholder='Last name' name='last name' onChange={this.handleInputChange} />
-            <Form.Select label='Gender' options={genderOption} placeholder='Gender' onChange={(e, {value}) => this.handleSelectChange(e, value, 'gender')} />
+            <Form.Input value={firstName} label='First name' placeholder='First name' name='first name' onChange={handleInputChange} />
+            <Form.Input value={lastName} label='Last name' placeholder='Last name' name='last name' onChange={handleInputChange} />
+            <Form.Input value={icPassport} label='IC / Passport' placeholder='IC / Passport' name='ic / passport' onChange={handleInputChange} />
+            <Form.Select value={gender} label='Gender' options={genderOption} placeholder='Gender' onChange={(e, {value}) => handleSelectChange(e, value, 'gender')} />
           </Form.Group>
-          <Form.Button>Submit</Form.Button>
+          <Divider hidden />
+          <Form.Group widths='equal'>
+            <Form.Input value={personalPhoneNumber} label='Contact Number' placeholder='8125 XXXX' name='personalPhoneNumber' onChange={handleInputChange} />
+            <Form.Input value={personalEmail} label='Email' placeholder='agent@mail.com' name='personalEmail' onChange={handleInputChange} />
+          </Form.Group>
         </Form>
       </Container>
     )

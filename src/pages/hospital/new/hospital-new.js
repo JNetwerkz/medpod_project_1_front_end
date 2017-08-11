@@ -3,8 +3,9 @@ import { Redirect } from 'react-router-dom'
 
 import axios from 'axios'
 
-import { Form, Header, Container } from 'semantic-ui-react'
+import { Form, Header, Container, Button, Divider } from 'semantic-ui-react'
 import ErrorMessage from 'partial/error'
+import S3Subheader from 'partial/_subheaders'
 
 export default class HospitalNew extends Component {
   constructor (props) {
@@ -14,8 +15,14 @@ export default class HospitalNew extends Component {
       redirectTo: '',
 
       // form input fields
-      'name': '',
-      'address': '',
+      name: '',
+      nameAbbreviation: '',
+      associationAddress_street: '',
+      associationAddress_unit: '',
+      associationAddress_postalcode: '',
+      associationAddress_country: '',
+      associationPhoneNumber: '',
+      associationEmail: '',
       errors: null
     }
 
@@ -68,19 +75,47 @@ export default class HospitalNew extends Component {
 
   render () {
     if (this.state.redirectToShow) return <Redirect to={this.state.redirectTo} />
-    const { errors } = this.state
+
+    const {
+      name,
+      nameAbbreviation,
+      associationAddress_street,
+      associationAddress_unit,
+      associationAddress_postalcode,
+      associationAddress_country,
+      associationPhoneNumber,
+      associationEmail,
+      errors
+     } = this.state
+
+    const {
+       handleSubmit,
+       handleInputChange
+     } = this
+
     return (
       <Container>
         <ErrorMessage errors={errors} />
-        <Header as='h1'>
+        <Form id='hospital_new-form' onSubmit={(event) => handleSubmit(event)}>
+          <Header as='h1'>
           New Hospital
-        </Header>
-        <Form id='hospital_new-form' onSubmit={(event) => this.handleSubmit(event)}>
+          <Button floated='right'>Submit</Button>
+          </Header>
+          <S3Subheader text='Basic Information' />
           <Form.Group widths='equal'>
-            <Form.Input label='Name' placeholder='Name' name='name' onChange={this.handleInputChange} />
-            <Form.Input label='Address' placeholder='Address' name='address' onChange={this.handleInputChange} />
+            <Form.Input value={name} label='Name' placeholder='Mount Elizabeth Orchard' name='name' onChange={handleInputChange} />
+            <Form.Input value={nameAbbreviation} label='Name Abbreviation' placeholder='MEO' name='nameAbbreviation' onChange={handleInputChange} />
+            <Form.Input value={associationPhoneNumber} label='Contact Number' placeholder='8125 XXXX' name='associationPhoneNumber' onChange={handleInputChange} />
+            <Form.Input value={associationEmail} label='Email' placeholder='accounts@mounte.com' name='associationEmail' onChange={handleInputChange} />
           </Form.Group>
-          <Form.Button>Submit</Form.Button>
+          <S3Subheader text='Address' />
+          <Form.Group widths='equal'>
+              <Form.Input value={associationAddress_unit} label='Unit Number' name='associationAddress_unit' onChange={handleInputChange} />
+              <Form.Input value={associationAddress_street} label='Block & Street' name='associationAddress_street' onChange={handleInputChange} />
+              <Form.Input value={associationAddress_postalcode} label='Postal Code' name='associationAddress_postalcode' onChange={handleInputChange} />
+              <Form.Input label='Country' placeholder='Singapore' name='associationAddress_country'
+                value={associationAddress_country} onChange={handleInputChange} />
+          </Form.Group>
         </Form>
       </Container>
     )

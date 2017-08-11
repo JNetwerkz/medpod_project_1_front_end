@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom'
 
 import axios from 'axios'
 
-import { Form, Header, Container } from 'semantic-ui-react'
+import { Form, Header, Container, Divider, Button } from 'semantic-ui-react'
 import { genderOption } from 'custom-function'
 import HospitalModal from 'partial/modal/hospital-modal'
 import ErrorMessage from 'partial/error'
@@ -150,7 +150,7 @@ class DoctorNew extends Component {
       errors
      } = this.state
 
-     const {
+    const {
        handleInputChange,
        handleSelectChange,
        hospitalModalMethod,
@@ -160,11 +160,12 @@ class DoctorNew extends Component {
     return (
       <Container>
         <ErrorMessage errors={errors} />
-        <Header as='h1'>
-          New Doctor
-        </Header>
-        <S3Subheader text='Personal Information' />
         <Form id='doctor_new-form' onSubmit={(event) => handleSubmit(event)}>
+          <Header as='h1'>
+              New Doctor
+            <Button floated='right'>Submit</Button>
+          </Header>
+          <S3Subheader text='Personal Information' />
           <Form.Group widths='equal'>
             <Form.Input label='First name' placeholder='First name' name='first name'
               value={firstName} onChange={handleInputChange} />
@@ -183,9 +184,9 @@ class DoctorNew extends Component {
               value={associationPhoneNumber} onChange={handleInputChange} />
             <Form.Input type='email' label='Email' placeholder='account@novenacc.com' name='associationEmail'
               value={associationEmail} onChange={handleInputChange} />
-            <Form.Input label='Country' placeholder='Singapore' name='associationAddress_country'
-              value={associationAddress_country} onChange={handleInputChange} />
+
           </Form.Group>
+          <Divider hidden />
 
           <Form.Group widths='equal'>
             <Form.Input label='Unit Number' name='associationAddress_unit'
@@ -194,6 +195,11 @@ class DoctorNew extends Component {
               value={associationAddress_street} onChange={handleInputChange} />
             <Form.Input label='Postal Code' name='associationAddress_postalcode'
               value={associationAddress_postalcode} onChange={handleInputChange} />
+          </Form.Group>
+          <Divider hidden />
+          <Form.Group>
+            <Form.Input label='Country' placeholder='Singapore' name='associationAddress_country'
+              value={associationAddress_country} onChange={handleInputChange} />
           </Form.Group>
 
           <S3Subheader text='Hospital' />
@@ -223,7 +229,6 @@ class DoctorNew extends Component {
                 value={hospital} />
             </Form.Field>
           </Form.Group>
-          <Form.Button>Submit</Form.Button>
         </Form>
         <HospitalModal
           hospitalModalOpen={hospitalModalOpen}

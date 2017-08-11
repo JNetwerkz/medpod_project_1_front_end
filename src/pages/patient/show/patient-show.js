@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 
-import { Container, Header, Form, Segment, Input, Button, Grid, Item } from 'semantic-ui-react'
+import { Container, Header, Form, Segment, Input, Button, Grid, Item, Divider } from 'semantic-ui-react'
 
 import axios from 'axios'
 import moment from 'moment'
 import * as fileExtension from 'file-extension'
 import * as FileSaver from 'file-saver'
 
-import { combineName, uploadFileOption } from 'custom-function'
+import { uploadFileOption } from 'custom-function'
 import { s3, s3Bucket as Bucket } from 'aws'
 
 import AgentModal from 'partial/modal/agent-modal'
@@ -16,6 +16,7 @@ import FileInputRow from 'partial/_fileInputRow'
 import FileRow from 'partial/_fileRow'
 import EditButton from 'partial/_editButton'
 import SaveButton from 'partial/_saveButton'
+import S3Subheader from 'partial/_subheaders'
 
 class PatientShow extends Component {
   constructor (props) {
@@ -28,6 +29,8 @@ class PatientShow extends Component {
       'ic / passport': '',
       gender: '',
       referral_agent: {},
+      personalPhoneNumber: '',
+      personalEmail: '',
       errors: null,
       segmentLoading: true,
       // modal
@@ -86,7 +89,9 @@ class PatientShow extends Component {
       'last name': lastName,
       'ic / passport': icPassport,
       gender,
-      referral_agent
+      referral_agent,
+      personalPhoneNumber,
+      personalEmail
     } = this.state
 
     const formData = {
@@ -94,7 +99,9 @@ class PatientShow extends Component {
       'last name': lastName,
       gender,
       'ic / passport': icPassport,
-      referral_agent: referral_agent._id
+      referral_agent: referral_agent._id,
+      personalPhoneNumber,
+      personalEmail
     }
 
     axios({
@@ -327,6 +334,8 @@ class PatientShow extends Component {
       'ic / passport': icPassport,
       gender,
       referral_agent,
+      personalPhoneNumber,
+      personalEmail,
       segmentLoading,
       // modal
       agentModalOpen,
@@ -378,6 +387,141 @@ class PatientShow extends Component {
       />
     })
 
+    const content = segmentLoading
+    ? <Segment basic loading />
+    : <Form>
+      <S3Subheader text='Personal Information' />
+      <Form.Group widths='equal'>
+        <Form.Field>
+          <label>First Name</label>
+          {
+              notEditing
+              ? <p>{firstName}</p>
+              : <Input
+                value={firstName}
+                onChange={handleEditChange}
+                name='first name'
+                // transparent
+                disabled={notEditing}
+                 />
+            }
+        </Form.Field>
+        <Form.Field>
+          <label>Last Name</label>
+          {
+              notEditing
+              ? <p>{lastName}</p>
+              : <Input
+                value={lastName}
+                onChange={handleEditChange}
+                name='last name'
+                // transparent
+                disabled={notEditing}
+                 />
+            }
+        </Form.Field>
+        <Form.Field>
+          <label>IC / Passport</label>
+          {
+              notEditing
+              ? <p>{icPassport}</p>
+              : <Input
+                value={icPassport}
+                onChange={handleEditChange}
+                name='ic / passport'
+                // transparent
+                disabled={notEditing}
+                 />
+            }
+        </Form.Field>
+        <Form.Field>
+          <label>Gender</label>
+          {
+              notEditing
+              ? <p>{gender}</p>
+              : <Input
+                value={gender}
+                onChange={handleEditChange}
+                name='gender'
+                // transparent
+                disabled={notEditing}
+                 />
+            }
+        </Form.Field>
+      </Form.Group>
+      <Divider hidden />
+      <Form.Group widths='equal'>
+        <Form.Field>
+          <label>Contact Number</label>
+          {
+              notEditing
+              ? <p>{personalPhoneNumber}</p>
+              : <Input
+                value={personalPhoneNumber}
+                onChange={handleEditChange}
+                name='personalPhoneNumber'
+                // transparent
+                disabled={notEditing}
+                 />
+            }
+        </Form.Field>
+        <Form.Field>
+          <label>Email</label>
+          {
+              notEditing
+              ? <p>{personalEmail}</p>
+              : <Input
+                type='email'
+                value={personalEmail}
+                onChange={handleEditChange}
+                name='personalEmail'
+                // transparent
+                disabled={notEditing}
+                 />
+            }
+        </Form.Field>
+      </Form.Group>
+      <S3Subheader text='Referral Agent' />
+      <Form.Group widths='equal'>
+        <Form.Field>
+          <label>Name</label>
+          {
+                notEditing
+                ? <p>{agentFirstName} {agentLastName}</p>
+                : <input onClick={() => this.agentModalMethod('open')} type='text' name='agentName'
+                  readOnly
+                  onChange={() => console.log()}
+                  ref={(input) => {
+                    console.log('input', input)
+                    this.agentNameRef = input
+                  }}
+                  value={`${agentFirstName} ${agentLastName}`} />
+              }
+        </Form.Field>
+        <Form.Field>
+          {
+                notEditing
+                ? ''
+                : <label>Agent ID</label>
+              }
+          {
+                notEditing
+                ? ''
+                : <input readOnly
+                  type='text'
+                  name='referral_agent'
+                  onChange={() => console.log()}
+                  ref={(input) => {
+                    console.log('input', input)
+                    this.agentIdRef = input
+                  }}
+                  value={agentId} />
+              }
+
+        </Form.Field>
+      </Form.Group>
+    </Form>
+
     const filesSegmentLoading = (!UploadedFiles.length && !FileUpload.length)
     ? ''
     : <Segment>
@@ -405,110 +549,8 @@ class PatientShow extends Component {
           <EditButton handleEditState={handleEditState} notEditing={notEditing} />
           <SaveButton handleUpdateSubmit={handleUpdateSubmit} notEditing={notEditing} />
         </Header>
-        <Form>
-          <Segment loading={segmentLoading}>
-            <Form.Group widths='equal'>
-              <Form.Field>
-                <label>First Name</label>
-                {
-                notEditing
-                ? <p>{firstName}</p>
-                : <Input
-                  size='huge'
-                  value={firstName}
-                  onChange={handleEditChange}
-                  name='first name'
-                  // transparent
-                  disabled={notEditing}
-                   />
-              }
-              </Form.Field>
-              <Form.Field>
-                <label>Last Name</label>
-                {
-                notEditing
-                ? <p>{lastName}</p>
-                : <Input
-                  size='huge'
-                  value={lastName}
-                  onChange={handleEditChange}
-                  name='last name'
-                  // transparent
-                  disabled={notEditing}
-                   />
-              }
-              </Form.Field>
-              <Form.Field>
-                <label>IC / Passport</label>
-                {
-                notEditing
-                ? <p>{icPassport}</p>
-                : <Input
-                  size='huge'
-                  value={icPassport}
-                  onChange={handleEditChange}
-                  name='ic / passport'
-                  // transparent
-                  disabled={notEditing}
-                   />
-              }
-              </Form.Field>
-              <Form.Field>
-                <label>Gender</label>
-                {
-                notEditing
-                ? <p>{gender}</p>
-                : <Input
-                  size='huge'
-                  value={gender}
-                  onChange={handleEditChange}
-                  name='gender'
-                  // transparent
-                  disabled={notEditing}
-                   />
-              }
-              </Form.Field>
-            </Form.Group>
-            <Form.Group widths='equal'>
-              <Form.Field>
-                <label>Agent</label>
-                {
-                  notEditing
-                  ? <p>{agentFirstName} {agentLastName}</p>
-                  : <input onClick={() => this.agentModalMethod('open')} type='text' name='agentName'
-                    readOnly
-                    onChange={() => console.log()}
-                    ref={(input) => {
-                      console.log('input', input)
-                      this.agentNameRef = input
-                    }}
-                    value={`${agentFirstName} ${agentLastName}`} />
-                }
-              </Form.Field>
-              <Form.Field>
-                {
-                  notEditing
-                  ? ''
-                  : <label>Agent ID</label>
-                }
-                {
-                  notEditing
-                  ? ''
-                  : <input readOnly
-                    type='text'
-                    name='referral_agent'
-                    onChange={() => console.log()}
-                    ref={(input) => {
-                      console.log('input', input)
-                      this.agentIdRef = input
-                    }}
-                    value={agentId} />
-                }
-
-              </Form.Field>
-            </Form.Group>
-          </Segment>
-        </Form>
+        {content}
+        <Divider section hidden />
         <Header as='h2'>
           Files
           <Button floated='right' compact primary onClick={handleAddInput}>Add Upload</Button>

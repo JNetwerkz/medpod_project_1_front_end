@@ -8,6 +8,7 @@ import { combineName } from 'custom-function'
 import ErrorMessage from 'partial/error'
 import EditButton from 'partial/_editButton'
 import SaveButton from 'partial/_saveButton'
+import S3Subheader from 'partial/_subheaders'
 
 export default class HospitalShow extends Component {
   constructor (props) {
@@ -16,7 +17,13 @@ export default class HospitalShow extends Component {
       hospitalShow: {},
       notEditing: true,
       name: '',
-      address: '',
+      nameAbbreviation: '',
+      associationAddress_street: '',
+      associationAddress_unit: '',
+      associationAddress_postalcode: '',
+      associationAddress_country: '',
+      associationPhoneNumber: '',
+      associationEmail: '',
       errors: null,
       segmentLoading: true
     }
@@ -85,7 +92,13 @@ export default class HospitalShow extends Component {
       notEditing,
       hospitalShow,
       name,
-      address,
+      nameAbbreviation,
+      associationAddress_street,
+      associationAddress_unit,
+      associationAddress_postalcode,
+      associationAddress_country,
+      associationPhoneNumber,
+      associationEmail,
       errors,
       segmentLoading
     } = this.state
@@ -95,6 +108,120 @@ export default class HospitalShow extends Component {
       handleEditChange,
       handleUpdateSubmit
     } = this
+    const content = segmentLoading
+    ? <Segment basic loading />
+    : <Form onSubmit={handleUpdateSubmit}>
+      <S3Subheader text='Basic Information' />
+      <Form.Group widths='equal'>
+        <Form.Field>
+          <label>Name</label>
+          {
+            notEditing
+            ? <p>{name}</p>
+            : <Input
+              value={name}
+              onChange={handleEditChange}
+              name='name'
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+        <Form.Field>
+          <label>Name Abbreviation</label>
+          {
+            notEditing
+            ? <p>{nameAbbreviation}</p>
+            : <Input
+              value={nameAbbreviation}
+              onChange={handleEditChange}
+              name='nameAbbreviation'
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+        <Form.Field>
+          <label>Contact Number</label>
+          {
+            notEditing
+            ? <p>{associationPhoneNumber}</p>
+            : <Input
+              value={associationPhoneNumber}
+              onChange={handleEditChange}
+              name='associationPhoneNumber'
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+        <Form.Field>
+          <label>Email</label>
+          {
+            notEditing
+            ? <p>{associationEmail}</p>
+            : <Input
+              value={associationEmail}
+              onChange={handleEditChange}
+              name='associationEmail'
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+      </Form.Group>
+      <S3Subheader text='Address' />
+      <Form.Group widths='equal'>
+        <Form.Field>
+          <label>Unit Number</label>
+          {
+            notEditing
+            ? <p>{associationAddress_unit}</p>
+            : <Input
+              value={associationAddress_unit}
+              onChange={handleEditChange}
+              name='associationAddress_unit'
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+        <Form.Field>
+          <label>Block & Street</label>
+          {
+            notEditing
+            ? <p>{associationAddress_street}</p>
+            : <Input
+              value={associationAddress_street}
+              onChange={handleEditChange}
+              name='associationAddress_street'
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+        <Form.Field>
+          <label>Postal Code</label>
+          {
+            notEditing
+            ? <p>{associationAddress_postalcode}</p>
+            : <Input
+              value={associationAddress_postalcode}
+              onChange={handleEditChange}
+              name='associationAddress_postalcode'
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+        <Form.Field>
+          <label>Country</label>
+          {
+            notEditing
+            ? <p>{associationAddress_country}</p>
+            : <Input
+              value={associationAddress_country}
+              onChange={handleEditChange}
+              name='associationAddress_country'
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+      </Form.Group>
+    </Form>
 
     return (
       <Container>
@@ -104,42 +231,7 @@ export default class HospitalShow extends Component {
           <EditButton handleEditState={handleEditState} notEditing={notEditing} />
           <SaveButton handleUpdateSubmit={handleUpdateSubmit} notEditing={notEditing} />
         </Header>
-        <Form>
-          <Segment loading={segmentLoading}>
-            <Form.Group widths='equal'>
-                <Form.Field>
-                  <label>Name</label>
-                  {
-                notEditing
-                ? <p>{name}</p>
-                : <Input
-                  size='huge'
-                  value={name}
-                  onChange={handleEditChange}
-                  name='name'
-                  // transparent
-                  disabled={notEditing}
-                   />
-              }
-                </Form.Field>
-                <Form.Field>
-                  <label>Address</label>
-                  {
-                notEditing
-                ? <p>{address}</p>
-                : <Input
-                  size='huge'
-                  value={address}
-                  onChange={handleEditChange}
-                  name='address'
-                  // transparent
-                  disabled={notEditing}
-                   />
-              }
-                </Form.Field>
-            </Form.Group>
-          </Segment>
-        </Form>
+        {content}
       </Container>
     )
   }

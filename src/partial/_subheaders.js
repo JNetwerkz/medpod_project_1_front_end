@@ -1,11 +1,15 @@
 import React from 'react'
-import { Header } from 'semantic-ui-react'
+import { Header, Divider } from 'semantic-ui-react'
 
 const S3Subheader = ({ text }) => {
   return (
-    <Header as='h3' dividing color='blue'>
-      {text}
-    </Header>
+    <div>
+      <Divider section hidden />
+      <Header as='h3' dividing color='blue'>
+        {text}
+      </Header>
+      <Divider hidden />
+    </div>
   )
 }
 

@@ -9,6 +9,7 @@ import TransactionTable from './_show-table'
 import ErrorMessage from 'partial/error'
 import EditButton from 'partial/_editButton'
 import SaveButton from 'partial/_saveButton'
+import S3Subheader from 'partial/_subheaders'
 
 export default class AgentShow extends Component {
   constructor (props) {
@@ -20,6 +21,9 @@ export default class AgentShow extends Component {
       'first name': '',
       'last name': '',
       gender: '',
+      'ic / passport': '',
+      personalPhoneNumber: '',
+      personalEmail: '',
       page: '',
       pages: '',
       segmentLoading: true,
@@ -185,6 +189,9 @@ export default class AgentShow extends Component {
       'first name': firstName,
       'last name': lastName,
       gender,
+      'ic / passport': icPassport,
+      personalPhoneNumber,
+      personalEmail,
       'transaction year': transactionYear,
       'transaction month': transactionMonth,
       page,
@@ -205,6 +212,101 @@ export default class AgentShow extends Component {
       handlePaginate
     } = this
 
+    const content = segmentLoading
+    ? <Segment basic loading />
+    : <Form>
+      <S3Subheader text='Personal Information' />
+      <Form.Group widths='equal'>
+        <Form.Field>
+          <label>First Name</label>
+          {
+            notEditing
+            ? <p>{firstName}</p>
+            : <Input
+              value={firstName}
+              onChange={handleEditChange}
+              name='first name'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+        <Form.Field>
+          <label>Last Name</label>
+          {
+            notEditing
+            ? <p>{lastName}</p>
+            : <Input
+              value={lastName}
+              onChange={handleEditChange}
+              name='last name'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+        <Form.Field>
+          <label>IC / Passport</label>
+          {
+            notEditing
+            ? <p>{icPassport}</p>
+            : <Input
+              value={icPassport}
+              onChange={handleEditChange}
+              name='ic / passport'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+        <Form.Field>
+          <label>Gender</label>
+          {
+            notEditing
+            ? <p>{gender}</p>
+            : <Input
+              value={gender}
+              onChange={handleEditChange}
+              name='gender'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+      </Form.Group>
+      <Divider hidden />
+      <Form.Group widths='equal'>
+        <Form.Field>
+          <label>Contact Number</label>
+          {
+            notEditing
+            ? <p>{personalPhoneNumber}</p>
+            : <Input
+              value={personalPhoneNumber}
+              onChange={handleEditChange}
+              name='personalPhoneNumber'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+        <Form.Field>
+          <label>Email</label>
+          {
+            notEditing
+            ? <p>{personalEmail}</p>
+            : <Input
+              value={personalEmail}
+              onChange={handleEditChange}
+              name='personalEmail'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+      </Form.Group>
+    </Form>
+
     return (
       <Container>
         <ErrorMessage errors={errors} />
@@ -213,57 +315,8 @@ export default class AgentShow extends Component {
           <EditButton handleEditState={handleEditState} notEditing={notEditing} />
           <SaveButton handleUpdateSubmit={handleUpdateSubmit} notEditing={notEditing} />
         </Header>
-        <Form>
-          <Segment loading={segmentLoading}>
-            <Form.Group widths='equal'>
-              <Form.Field>
-                <label>First Name</label>
-                {
-                notEditing
-                ? <p>{firstName}</p>
-                : <Input
-                  size='huge'
-                  value={firstName}
-                  onChange={handleEditChange}
-                  name='first name'
-                  // transparent
-                  disabled={notEditing}
-                   />
-              }
-              </Form.Field>
-              <Form.Field>
-                <label>Last Name</label>
-                {
-                notEditing
-                ? <p>{lastName}</p>
-                : <Input
-                  size='huge'
-                  value={lastName}
-                  onChange={handleEditChange}
-                  name='last name'
-                  // transparent
-                  disabled={notEditing}
-                   />
-              }
-              </Form.Field>
-              <Form.Field>
-                <label>Gender</label>
-                {
-                notEditing
-                ? <p>{gender}</p>
-                : <Input
-                  size='huge'
-                  value={gender}
-                  onChange={handleEditChange}
-                  name='gender'
-                  // transparent
-                  disabled={notEditing}
-                   />
-              }
-              </Form.Field>
-            </Form.Group>
-          </Segment>
-        </Form>
+        {content}
+        <Divider hidden section />
         <Header as='h2'>
           Agent's Transaction
         </Header>

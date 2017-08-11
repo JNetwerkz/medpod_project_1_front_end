@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Grid, Segment, Form, Header, Button, Container, Input } from 'semantic-ui-react'
+import { Segment, Form, Header, Container, Input, Divider } from 'semantic-ui-react'
 
 import axios from 'axios'
 
@@ -8,6 +8,7 @@ import HospitalModal from 'partial/modal/hospital-modal'
 import ErrorMessage from 'partial/error'
 import EditButton from 'partial/_editButton'
 import SaveButton from 'partial/_saveButton'
+import S3Subheader from 'partial/_subheaders'
 
 class DoctorShow extends Component {
   constructor (props) {
@@ -19,6 +20,13 @@ class DoctorShow extends Component {
       'last name': '',
       gender: '',
       hospital: {},
+      associationName: '',
+      associationAddress_street: '',
+      associationAddress_unit: '',
+      associationAddress_postalcode: '',
+      associationAddress_country: '',
+      associationPhoneNumber: '',
+      associationEmail: '',
       segmentLoading: true,
       // modal
       hospitalModalOpen: false,
@@ -64,14 +72,28 @@ class DoctorShow extends Component {
       'first name': firstName,
       'last name': lastName,
       gender,
-      hospital
+      hospital,
+      associationName,
+      associationAddress_street,
+      associationAddress_unit,
+      associationAddress_postalcode,
+      associationAddress_country,
+      associationPhoneNumber,
+      associationEmail
     } = this.state
 
     const formData = {
       'first name': firstName,
       'last name': lastName,
       gender,
-      hospital: hospital._id
+      hospital: hospital._id,
+      associationName,
+      associationAddress_street,
+      associationAddress_unit,
+      associationAddress_postalcode,
+      associationAddress_country,
+      associationPhoneNumber,
+      associationEmail
     }
 
     axios({
@@ -145,6 +167,13 @@ class DoctorShow extends Component {
       gender,
       hospital,
       segmentLoading,
+      associationName,
+      associationAddress_street,
+      associationAddress_unit,
+      associationAddress_postalcode,
+      associationAddress_country,
+      associationPhoneNumber,
+      associationEmail,
       // modal
       hospitalModalOpen,
       hospitalSearchResult,
@@ -165,7 +194,204 @@ class DoctorShow extends Component {
       hospitalModalMethod
     } = this
 
-    console.log(this.props)
+    const content = segmentLoading
+    ? <Segment basic loading />
+    : <Form onSubmit={handleUpdateSubmit}>
+      <S3Subheader text='Personal Information' />
+      <Form.Group widths='equal'>
+        <Form.Field>
+          <label>First Name</label>
+          {
+            notEditing
+            ? <p>{firstName}</p>
+            : <Input
+              value={firstName}
+              onChange={handleEditChange}
+              name='first name'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+        <Form.Field>
+          <label>Last Name</label>
+          {
+            notEditing
+            ? <p>{lastName}</p>
+            : <Input
+              value={lastName}
+              onChange={handleEditChange}
+              name='last name'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+        <Form.Field>
+          <label>Gender</label>
+          {
+            notEditing
+            ? <p>{gender}</p>
+            : <Input
+              value={gender}
+              onChange={handleEditChange}
+              name='gender'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+      </Form.Group>
+
+      <S3Subheader text='Department / Institution / Clinic' />
+      <Form.Group widths='equal'>
+        <Form.Field>
+          <label>Name</label>
+          {
+            notEditing
+            ? <p>{associationName}</p>
+            : <Input
+              value={associationName}
+              onChange={handleEditChange}
+              name='associationName'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+        <Form.Field>
+          <label>Contact Number</label>
+          {
+            notEditing
+            ? <p>{associationPhoneNumber}</p>
+            : <Input
+              value={associationPhoneNumber}
+              onChange={handleEditChange}
+              name='associationPhoneNumber'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+        <Form.Field>
+          <label>Email</label>
+          {
+            notEditing
+            ? <p>{associationEmail}</p>
+            : <Input
+              value={associationEmail}
+              onChange={handleEditChange}
+              name='associationEmail'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+      </Form.Group>
+      <Divider hidden />
+      <Form.Group widths='equal'>
+        <Form.Field>
+          <label>Unit Number</label>
+          {
+            notEditing
+            ? <p>{associationAddress_unit}</p>
+            : <Input
+              value={associationAddress_unit}
+              onChange={handleEditChange}
+              name='associationAddress_unit'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+        <Form.Field>
+          <label>Block & Street</label>
+          {
+            notEditing
+            ? <p>{associationAddress_street}</p>
+            : <Input
+              value={associationAddress_street}
+              onChange={handleEditChange}
+              name='associationAddress_street'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+        <Form.Field>
+          <label>Postal Code</label>
+          {
+            notEditing
+            ? <p>{associationAddress_postalcode}</p>
+            : <Input
+              value={associationAddress_postalcode}
+              onChange={handleEditChange}
+              name='associationAddress_postalcode'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+      </Form.Group>
+      <Divider hidden />
+      <Form.Group>
+        <Form.Field>
+          <label>Country</label>
+          {
+            notEditing
+            ? <p>{associationAddress_country}</p>
+            : <Input
+              value={associationAddress_country}
+              onChange={handleEditChange}
+              name='associationAddress_country'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+      </Form.Group>
+      <Divider hidden />
+      <S3Subheader text='Hospital' />
+      <Form.Group widths='equal'>
+        <Form.Field>
+          <label>Hospital</label>
+          {
+              notEditing
+              ? <p>{hospitalName}</p>
+              : <input onClick={() => this.hospitalModalMethod('open')} type='text' name='hospitalName'
+                readOnly
+                onChange={() => console.log()}
+                ref={(input) => {
+                  console.log('input', input)
+                  this.hospitalNameRef = input
+                }}
+                value={hospitalName} />
+            }
+        </Form.Field>
+        <Form.Field>
+          {
+              notEditing
+              ? ''
+              : <label>Hospital ID</label>
+            }
+          {
+              notEditing
+              ? ''
+              : <input readOnly
+                type='text'
+                name='hospital'
+                onChange={() => console.log()}
+                ref={(input) => {
+                  console.log('input', input)
+                  this.hospitalIdRef = input
+                }}
+                value={hospitalId} />
+            }
+
+        </Form.Field>
+      </Form.Group>
+    </Form>
+
     return (
       <Container>
         <ErrorMessage errors={errors} />
@@ -174,95 +400,7 @@ class DoctorShow extends Component {
           <EditButton handleEditState={handleEditState} notEditing={notEditing} />
           <SaveButton handleUpdateSubmit={handleUpdateSubmit} notEditing={notEditing} />
         </Header>
-        <Form onSubmit={handleUpdateSubmit}>
-          <Segment loading={segmentLoading}>
-            <Form.Group widths='equal'>
-              <Form.Field>
-                <label>First Name</label>
-                {
-                notEditing
-                ? <p>{firstName}</p>
-                : <Input
-                  size='huge'
-                  value={firstName}
-                  onChange={handleEditChange}
-                  name='first name'
-                  // transparent
-                  disabled={notEditing}
-                   />
-              }
-              </Form.Field>
-              <Form.Field>
-                <label>Last Name</label>
-                {
-                notEditing
-                ? <p>{lastName}</p>
-                : <Input
-                  size='huge'
-                  value={lastName}
-                  onChange={handleEditChange}
-                  name='last name'
-                  // transparent
-                  disabled={notEditing}
-                   />
-              }
-              </Form.Field>
-              <Form.Field>
-                <label>Gender</label>
-                {
-                notEditing
-                ? <p>{gender}</p>
-                : <Input
-                  size='huge'
-                  value={gender}
-                  onChange={handleEditChange}
-                  name='gender'
-                  // transparent
-                  disabled={notEditing}
-                   />
-              }
-              </Form.Field>
-            </Form.Group>
-            <Form.Group widths='equal'>
-              <Form.Field>
-                <label>Hospital</label>
-                {
-                  notEditing
-                  ? <p>{hospitalName}</p>
-                  : <input onClick={() => this.hospitalModalMethod('open')} type='text' name='hospitalName'
-                    readOnly
-                    onChange={() => console.log()}
-                    ref={(input) => {
-                      console.log('input', input)
-                      this.hospitalNameRef = input
-                    }}
-                    value={hospitalName} />
-                }
-              </Form.Field>
-              <Form.Field>
-                {
-                  notEditing
-                  ? ''
-                  : <label>Hospital ID</label>
-                }
-                {
-                  notEditing
-                  ? ''
-                  : <input readOnly
-                    type='text'
-                    name='hospital'
-                    onChange={() => console.log()}
-                    ref={(input) => {
-                      console.log('input', input)
-                      this.hospitalIdRef = input
-                    }}
-                    value={hospitalId} />
-                }
-
-              </Form.Field>
-            </Form.Group>
-          </Segment>
-        </Form>
+        {content}
         <HospitalModal
           hospitalModalOpen={hospitalModalOpen}
           modalMethod={hospitalModalMethod}

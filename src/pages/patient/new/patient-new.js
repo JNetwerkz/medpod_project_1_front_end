@@ -4,10 +4,11 @@ import { Redirect } from 'react-router-dom'
 import * as $ from 'jquery'
 import axios from 'axios'
 
-import { Form, Header, Input, Select, Container } from 'semantic-ui-react'
+import { Form, Header, Input, Select, Container, Button, Divider } from 'semantic-ui-react'
 
 import AgentModal from 'partial/modal/agent-modal'
 import ErrorMessage from 'partial/error'
+import S3Subheader from 'partial/_subheaders'
 
 const options = [
   { key: 'm', text: 'Male', value: 'male' },
@@ -27,6 +28,8 @@ class PatientNew extends Component {
       'gender': '',
       'ic / passport': '',
       'referral_agent': '',
+      personalPhoneNumber: '',
+      personalEmail: '',
       //
       agentModalOpen: false,
       agentSearchResult: [],
@@ -74,7 +77,9 @@ class PatientNew extends Component {
       'last name': this.state['last name'],
       gender: this.state.gender,
       'ic / passport': this.state['ic / passport'],
-      referral_agent: this.state.referral_agent
+      referral_agent: this.state.referral_agent,
+      personalPhoneNumber: this.state.personalPhoneNumber,
+      personalEmail: this.state.personalEmail
     }
 
     if (!formData.referral_agent) return this.setState({ errors: ['Please select Agent from search function provided'] })
@@ -147,31 +152,53 @@ class PatientNew extends Component {
       gender,
       'ic / passport': icPassport,
       referral_agent: referralAgent,
-      errors
+      personalPhoneNumber,
+      personalEmail,
+      errors,
+      agentModalOpen,
+      agentSearchResult,
+      selectedAgent,
+      searchFocus
     } = this.state
 
+    const {
+      handleInputChange,
+      handleSubmit,
+      handleSelectChange,
+      agentModalMethod
+    } = this
 
     return (
       <Container>
         <ErrorMessage errors={errors} />
-        <Header as='h1'>
+        <Form id='patient_new-form' onSubmit={(event) => handleSubmit(event)}>
+          <Header as='h1'>
           New Patient
-        </Header>
-        <Form id='patient_new-form' onSubmit={(event) => this.handleSubmit(event)}>
+          <Button floated='right'>Submit</Button>
+          </Header>
+
+          <S3Subheader text='Personal Information' />
           <Form.Group widths='equal'>
-            <Form.Field control={Input} label='First name' name='first name' placeholder='First name' value={firstName} onChange={this.handleInputChange} />
+            <Form.Field control={Input} label='First name' name='first name' placeholder='First name' value={firstName} onChange={handleInputChange} />
 
-            <Form.Field control={Input} label='Last name' name='last name' placeholder='Last name' value={lastName} onChange={this.handleInputChange} />
+            <Form.Field control={Input} label='Last name' name='last name' placeholder='Last name' value={lastName} onChange={handleInputChange} />
 
-            <Form.Field control={Input} label='IC / Passport' name='ic / passport' placeholder='IC / Passport' value={icPassport} onChange={this.handleInputChange} />
+            <Form.Field control={Input} label='IC / Passport' name='ic / passport' placeholder='IC / Passport' value={icPassport} onChange={handleInputChange} />
 
-            <Form.Field control={Select} label='Gender' options={options} placeholder='Gender' value={gender} onChange={(e, {value}) => this.handleSelectChange(e, value, 'gender')} />
+            <Form.Field control={Select} label='Gender' options={options} placeholder='Gender' value={gender} onChange={(e, {value}) => handleSelectChange(e, value, 'gender')} />
+          </Form.Group>
+          <Divider hidden />
+          <Form.Group widths='equal'>
+            <Form.Field control={Input} label='Contact Number' name='personalPhoneNumber' placeholder='8125 XXXX' value={personalPhoneNumber} onChange={handleInputChange} />
+
+            <Form.Field control={Input} label='Email' name='personalEmail' placeholder='client@mail.com' value={personalEmail} onChange={handleInputChange} />
           </Form.Group>
 
+          <S3Subheader text='Referral Agent' />
           <Form.Group widths='equal'>
             <Form.Field>
-              <label>Referral Agent</label>
-              <input onClick={() => this.agentModalMethod('open')} type='text' name='agentName'
+              <label>Name</label>
+              <input onClick={() => agentModalMethod('open')} type='text' name='agentName'
                 placeholder='Click here to search for agent'
                 readOnly
                 onChange={() => console.log()}
@@ -179,7 +206,7 @@ class PatientNew extends Component {
                   console.log('input', input)
                   this.agentNameRef = input
                 }}
-                value={`${this.state.selectedAgent['first name'] || ''} ${this.state.selectedAgent['last name'] || ''}`} />
+                value={`${selectedAgent['first name'] || ''} ${selectedAgent['last name'] || ''}`} />
             </Form.Field>
 
             <Form.Field>
@@ -195,14 +222,13 @@ class PatientNew extends Component {
               />
             </Form.Field>
           </Form.Group>
-          <Form.Button type='submit'>Submit</Form.Button>
         </Form>
         <AgentModal
-          agentModalOpen={this.state.agentModalOpen}
-          modalMethod={this.agentModalMethod}
-          agentSearchResult={this.state.agentSearchResult}
-          selectedAgent={this.state.selectedAgent}
-          searchFocus={this.state.searchFocus}
+          agentModalOpen={agentModalOpen}
+          modalMethod={agentModalMethod}
+          agentSearchResult={agentSearchResult}
+          selectedAgent={selectedAgent}
+          searchFocus={searchFocus}
          />
       </Container>
     )
