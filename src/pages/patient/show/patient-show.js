@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Container, Header, Form, Segment, Input, Button, Grid, Item, Divider } from 'semantic-ui-react'
+import { Container, Header, Form, Segment, Input, Button, Grid, Item, Divider, TextArea } from 'semantic-ui-react'
 
 import axios from 'axios'
 import moment from 'moment'
@@ -31,6 +31,7 @@ class PatientShow extends Component {
       referral_agent: {},
       personalPhoneNumber: '',
       personalEmail: '',
+      additionalInfo: '',
       errors: null,
       segmentLoading: true,
       // modal
@@ -91,7 +92,8 @@ class PatientShow extends Component {
       gender,
       referral_agent,
       personalPhoneNumber,
-      personalEmail
+      personalEmail,
+      additionalInfo
     } = this.state
 
     const formData = {
@@ -101,7 +103,8 @@ class PatientShow extends Component {
       'ic / passport': icPassport,
       referral_agent: referral_agent._id,
       personalPhoneNumber,
-      personalEmail
+      personalEmail,
+      additionalInfo
     }
 
     axios({
@@ -336,6 +339,7 @@ class PatientShow extends Component {
       referral_agent,
       personalPhoneNumber,
       personalEmail,
+      additionalInfo,
       segmentLoading,
       // modal
       agentModalOpen,
@@ -520,6 +524,17 @@ class PatientShow extends Component {
 
         </Form.Field>
       </Form.Group>
+      <S3Subheader text='Additional Information' />
+      {
+        notEditing
+        ? <p>{additionalInfo}</p>
+        : <Form.Field control={TextArea}
+          value={additionalInfo}
+          onChange={handleEditChange}
+          name='additionalInfo' />
+
+      }
+
     </Form>
 
     const filesSegmentLoading = (!UploadedFiles.length && !FileUpload.length)

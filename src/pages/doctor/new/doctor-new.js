@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom'
 
 import axios from 'axios'
 
-import { Form, Header, Container, Divider, Button } from 'semantic-ui-react'
+import { Form, Header, Container, Divider, Button, TextArea } from 'semantic-ui-react'
 import { genderOption } from 'custom-function'
 import HospitalModal from 'partial/modal/hospital-modal'
 import ErrorMessage from 'partial/error'
@@ -27,6 +27,7 @@ class DoctorNew extends Component {
       associationAddress_country: '',
       associationPhoneNumber: '',
       associationEmail: '',
+      additionalInfo: '',
       // modal
       hospitalModalOpen: false,
       hospitalSearchResult: [],
@@ -142,6 +143,7 @@ class DoctorNew extends Component {
       associationAddress_country,
       associationPhoneNumber,
       associationEmail,
+      additionalInfo,
       // modal
       hospitalModalOpen,
       hospitalSearchResult,
@@ -229,6 +231,11 @@ class DoctorNew extends Component {
                 value={hospital} />
             </Form.Field>
           </Form.Group>
+          <S3Subheader text='Additional Information' />
+          <Form.Field control={TextArea}
+            value={additionalInfo}
+            onChange={handleInputChange}
+            name='additionalInfo' />
         </Form>
         <HospitalModal
           hospitalModalOpen={hospitalModalOpen}

@@ -33,7 +33,7 @@ export default class NavMain extends Component {
 
 
   render () {
-    if (!isAuthenticated()) return null
+    if (!isAuthenticated()) return null 
     const currentUserType = window.localStorage.getItem(userType)
     console.log('currentusertype', currentUserType)
     const { activeItem } = this.state

@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 import * as $ from 'jquery'
 import axios from 'axios'
 
-import { Form, Header, Input, Select, Container, Button, Divider } from 'semantic-ui-react'
+import { Form, Header, Input, Select, Container, Button, Divider, TextArea } from 'semantic-ui-react'
 
 import AgentModal from 'partial/modal/agent-modal'
 import ErrorMessage from 'partial/error'
@@ -30,6 +30,7 @@ class PatientNew extends Component {
       'referral_agent': '',
       personalPhoneNumber: '',
       personalEmail: '',
+      additionalInfo: '',
       //
       agentModalOpen: false,
       agentSearchResult: [],
@@ -79,7 +80,8 @@ class PatientNew extends Component {
       'ic / passport': this.state['ic / passport'],
       referral_agent: this.state.referral_agent,
       personalPhoneNumber: this.state.personalPhoneNumber,
-      personalEmail: this.state.personalEmail
+      personalEmail: this.state.personalEmail,
+      additionalInfo: this.state.additionalInfo
     }
 
     if (!formData.referral_agent) return this.setState({ errors: ['Please select Agent from search function provided'] })
@@ -154,6 +156,7 @@ class PatientNew extends Component {
       referral_agent: referralAgent,
       personalPhoneNumber,
       personalEmail,
+      additionalInfo,
       errors,
       agentModalOpen,
       agentSearchResult,
@@ -222,6 +225,12 @@ class PatientNew extends Component {
               />
             </Form.Field>
           </Form.Group>
+          <S3Subheader text='Additional Information' />
+          <Form.Field control={TextArea}
+            value={additionalInfo}
+            onChange={handleInputChange}
+            name='additionalInfo' />
+
         </Form>
         <AgentModal
           agentModalOpen={agentModalOpen}

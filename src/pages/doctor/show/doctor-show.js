@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Segment, Form, Header, Container, Input, Divider } from 'semantic-ui-react'
+import { Segment, Form, Header, Container, Input, Divider, TextArea } from 'semantic-ui-react'
 
 import axios from 'axios'
 
@@ -27,6 +27,7 @@ class DoctorShow extends Component {
       associationAddress_country: '',
       associationPhoneNumber: '',
       associationEmail: '',
+      additionalInfo: '',
       segmentLoading: true,
       // modal
       hospitalModalOpen: false,
@@ -62,6 +63,8 @@ class DoctorShow extends Component {
       name
     } = event.target
 
+    console.log(name, value)
+
     this.setState({
       [name]: value
     })
@@ -79,7 +82,8 @@ class DoctorShow extends Component {
       associationAddress_postalcode,
       associationAddress_country,
       associationPhoneNumber,
-      associationEmail
+      associationEmail,
+      additionalInfo
     } = this.state
 
     const formData = {
@@ -93,7 +97,8 @@ class DoctorShow extends Component {
       associationAddress_postalcode,
       associationAddress_country,
       associationPhoneNumber,
-      associationEmail
+      associationEmail,
+      additionalInfo
     }
 
     axios({
@@ -174,6 +179,7 @@ class DoctorShow extends Component {
       associationAddress_country,
       associationPhoneNumber,
       associationEmail,
+      additionalInfo,
       // modal
       hospitalModalOpen,
       hospitalSearchResult,
@@ -390,7 +396,17 @@ class DoctorShow extends Component {
 
         </Form.Field>
       </Form.Group>
-    </Form>
+      <S3Subheader text='Additional Information' />
+      {
+        notEditing
+        ? <p>{additionalInfo}</p>
+        : <Form.Field control={TextArea}
+          value={additionalInfo}
+          onChange={handleEditChange}
+          name='additionalInfo' />
+
+      }
+      </Form>
 
     return (
       <Container>

@@ -65,6 +65,10 @@
   justify-content: space-between;
 }
 
+.flex--jc-spacearound {
+  justify-content: space-around;
+}
+
 .flex--jc-center {
   justify-content: center;
 }

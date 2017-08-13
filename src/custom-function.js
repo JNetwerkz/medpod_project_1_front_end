@@ -71,4 +71,16 @@ const accessType = [
   { key: 'finance', text: 'Finance Staff', value: 'finance' }
 ]
 
-export { AuthHeader, M6117, combineName, monthsSelectOption, genderOption, uploadFileOption, accessType }
+const invoiceStatusType = [
+  // { key: 'master', text: 'Master', value: 'master' },
+  { key: 'Interim Bill', text: 'Interim Bill', value: 'Interim Bill' },
+  { key: 'Final Tax Invoice (FIT)', text: 'Final Tax Invoice (FIT)', value: 'Final Tax Invoice (FIT)' },
+  { key: 'Bill Collection (BillC)', text: 'Bill Collection (BillC)', value: 'Bill Collection (BillC)' },
+  { key: 'Distributor Fee (DF)', text: 'Distributor Fee (DF)', value: 'Distributor Fee (DF)' },
+  { key: 'Query Bill / Email Bill (QB / EB)', text: 'Query Bill / Email Bill (QB / EB)', value: 'Query Bill / Email Bill (QB / EB)' },
+  { key: 'Proforma (PF)', text: 'Proforma (PF)', value: 'Proforma (PF)' },
+  { key: 'Invoiced (INV)', text: 'Invoiced (INV)', value: 'Invoiced (INV)' },
+  { key: 'Paid and Archive', text: 'Paid and Archive', value: 'Paid and Archive' }
+]
+
+export { AuthHeader, M6117, combineName, monthsSelectOption, genderOption, uploadFileOption, accessType, invoiceStatusType }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Input, Button, Container, Header, Segment, Form, Divider } from 'semantic-ui-react'
+import { Input, Button, Container, Header, Segment, Form, Divider, TextArea } from 'semantic-ui-react'
 import axios from 'axios'
 import qs from 'qs'
 import moment from 'moment'
@@ -24,6 +24,7 @@ export default class AgentShow extends Component {
       'ic / passport': '',
       personalPhoneNumber: '',
       personalEmail: '',
+      additionalInfo: '',
       page: '',
       pages: '',
       segmentLoading: true,
@@ -192,6 +193,7 @@ export default class AgentShow extends Component {
       'ic / passport': icPassport,
       personalPhoneNumber,
       personalEmail,
+      additionalInfo,
       'transaction year': transactionYear,
       'transaction month': transactionMonth,
       page,
@@ -305,6 +307,16 @@ export default class AgentShow extends Component {
           }
         </Form.Field>
       </Form.Group>
+      <S3Subheader text='Additional Information' />
+      {
+        notEditing
+        ? <p>{additionalInfo}</p>
+        : <Form.Field control={TextArea}
+          value={additionalInfo}
+          onChange={handleEditChange}
+          name='additionalInfo' />
+
+      }
     </Form>
 
     return (

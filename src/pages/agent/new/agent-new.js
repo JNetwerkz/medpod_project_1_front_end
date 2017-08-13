@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom'
 
 import axios from 'axios'
 
-import { Form, Container, Header, Button, Divider } from 'semantic-ui-react'
+import { Form, Container, Header, Button, Divider, TextArea } from 'semantic-ui-react'
 import { genderOption } from 'custom-function'
 import ErrorMessage from 'partial/error'
 import S3Subheader from 'partial/_subheaders'
@@ -22,6 +22,7 @@ export default class AgentNew extends Component {
       'ic / passport': '',
       personalPhoneNumber: '',
       personalEmail: '',
+      additionalInfo: '',
       errors: null
     }
 
@@ -81,6 +82,7 @@ export default class AgentNew extends Component {
       gender,
       personalPhoneNumber,
       personalEmail,
+      additionalInfo,
       errors
     } = this.state
 
@@ -110,6 +112,11 @@ export default class AgentNew extends Component {
             <Form.Input value={personalPhoneNumber} label='Contact Number' placeholder='8125 XXXX' name='personalPhoneNumber' onChange={handleInputChange} />
             <Form.Input value={personalEmail} label='Email' placeholder='agent@mail.com' name='personalEmail' onChange={handleInputChange} />
           </Form.Group>
+          <S3Subheader text='Additional Information' />
+          <Form.Field control={TextArea}
+            value={additionalInfo}
+            onChange={handleInputChange}
+            name='additionalInfo' />
         </Form>
       </Container>
     )
