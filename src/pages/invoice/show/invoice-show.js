@@ -106,8 +106,10 @@ export default class InvoiceShow extends Component {
       statuses
     } = invoiceShow
 
+
+
     const lastIndexOfStatus = statuses.length - 1
-    let lastStatus
+    let lastStatus, lastStatusName
 
     const statusList = statuses.map((status, index) => {
       index === lastIndexOfStatus
@@ -115,7 +117,7 @@ export default class InvoiceShow extends Component {
       : ''
 
       const momentUpdatedAt = moment(status.createdAt).format('DD MMM YYYY')
-      return <List.Item>
+      return <List.Item key={`${status.name}-${index}`}>
         <List.Content>
           <List.Header as='a'>{status.name}</List.Header>
           <List.Description as='a'>status updated at {momentUpdatedAt}</List.Description>
@@ -123,16 +125,22 @@ export default class InvoiceShow extends Component {
       </List.Item>
     })
 
-    const {
-      name: lastStatusName
-    } = lastStatus
+    if (statuses.length > 0) {
+      lastStatusName = lastStatus.name
+    } else {
+      lastStatusName = ''
+    }
 
     return (
       <Container fluid>
         <ErrorMessage errors={errors} />
         <Divider hidden section />
         <div className='flex flex--row flex--jc-spacearound'>
-          <section className='flex--grow'>
+
+          <section>
+            <ViewTemplate {...invoiceShow} />
+          </section>
+          <section>
             <Header as='h3' dividing color='red'>
               <Header.Subheader>
                 Current Status
@@ -161,10 +169,6 @@ export default class InvoiceShow extends Component {
               </Accordion.Content>
             </Accordion>
           </section>
-          <section className='flex--grow'>
-            <ViewTemplate {...invoiceShow} />
-          </section>
-
         </div>
       </Container>
     )

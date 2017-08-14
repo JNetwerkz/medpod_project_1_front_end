@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 
-import * as $ from 'jquery'
 import axios from 'axios'
 
 import { Form, Header, Input, Select, Container, Button, Divider, TextArea } from 'semantic-ui-react'
@@ -26,6 +25,7 @@ class PatientNew extends Component {
       'first name': '',
       'last name': '',
       'gender': '',
+      dob: '',
       'ic / passport': '',
       'referral_agent': '',
       personalPhoneNumber: '',
@@ -64,12 +64,6 @@ class PatientNew extends Component {
     })
   }
 
-  handleChange () {
-    this.setState({
-      patientNewForm: $('#patient_new-form').serializeArray()
-    })
-  }
-
   handleSubmit (event) {
     event.preventDefault()
 
@@ -81,7 +75,8 @@ class PatientNew extends Component {
       referral_agent: this.state.referral_agent,
       personalPhoneNumber: this.state.personalPhoneNumber,
       personalEmail: this.state.personalEmail,
-      additionalInfo: this.state.additionalInfo
+      additionalInfo: this.state.additionalInfo,
+      dob: this.state.dob
     }
 
     if (!formData.referral_agent) return this.setState({ errors: ['Please select Agent from search function provided'] })
@@ -152,6 +147,7 @@ class PatientNew extends Component {
       'first name': firstName,
       'last name': lastName,
       gender,
+      dob,
       'ic / passport': icPassport,
       referral_agent: referralAgent,
       personalPhoneNumber,
@@ -192,6 +188,8 @@ class PatientNew extends Component {
           </Form.Group>
           <Divider hidden />
           <Form.Group widths='equal'>
+            <Form.Field control={Input} type='date' label='D.O.B' name='dob' value={dob} onChange={handleInputChange} />
+
             <Form.Field control={Input} label='Contact Number' name='personalPhoneNumber' placeholder='8125 XXXX' value={personalPhoneNumber} onChange={handleInputChange} />
 
             <Form.Field control={Input} label='Email' name='personalEmail' placeholder='client@mail.com' value={personalEmail} onChange={handleInputChange} />

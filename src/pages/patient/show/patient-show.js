@@ -28,6 +28,7 @@ class PatientShow extends Component {
       'last name': '',
       'ic / passport': '',
       gender: '',
+      dob: '',
       referral_agent: {},
       personalPhoneNumber: '',
       personalEmail: '',
@@ -90,6 +91,7 @@ class PatientShow extends Component {
       'last name': lastName,
       'ic / passport': icPassport,
       gender,
+      dob,
       referral_agent,
       personalPhoneNumber,
       personalEmail,
@@ -336,6 +338,7 @@ class PatientShow extends Component {
       'last name': lastName,
       'ic / passport': icPassport,
       gender,
+      dob,
       referral_agent,
       personalPhoneNumber,
       personalEmail,
@@ -350,6 +353,8 @@ class PatientShow extends Component {
       filesToUpload,
       errors
     } = this.state
+
+    const momentDob = moment(dob).format('DD MMM YYYY')
 
     const {
       'first name': agentFirstName,
@@ -455,6 +460,21 @@ class PatientShow extends Component {
       </Form.Group>
       <Divider hidden />
       <Form.Group widths='equal'>
+        <Form.Field>
+          <label>D.O.B</label>
+          {
+              notEditing
+              ? <p>{momentDob}</p>
+              : <Input
+                type='date'
+                value={momentDob}
+                onChange={handleEditChange}
+                name='dob'
+                // transparent
+                disabled={notEditing}
+                 />
+            }
+        </Form.Field>
         <Form.Field>
           <label>Contact Number</label>
           {

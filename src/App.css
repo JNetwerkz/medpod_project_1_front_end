@@ -10,7 +10,24 @@
 }
 
 #app__nav {
-  height: 100vh;
+  /*height: 100vh;*/
+  /*margin-bottom: 0;
+  padding-top: 1.5rem;
+  background-color: rgb(55, 55, 55);
+  width: 15rem;*/
+}
+
+#app__main {
+  /*height: 100vh;
+  padding: 1rem 3rem;*/
+  /*overflow-y: auto;*/
+}
+
+#app__nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
   margin-bottom: 0;
   padding-top: 1.5rem;
   background-color: rgb(55, 55, 55);
@@ -18,10 +35,11 @@
 }
 
 #app__main {
-  height: 100vh;
+  /*height: 100vh;*/
   padding: 1rem 3rem;
-  overflow-y: scroll;
+  margin-left: 15rem;
 }
+
 /*
 #app__leftcolumn {
   background-color: rgb(27, 28, 29);

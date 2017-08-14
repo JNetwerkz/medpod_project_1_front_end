@@ -126,14 +126,8 @@ class App extends Component {
     return (
       <div className='App' id='react-no-print'>
         <BrowserRouter>
-          <div className='flex flex--row'>
-            {/* <Segment inverted color='black' basic id='app__nav'> */}
-              {/* <Menu inverted vertical color='black' id='app__nav'> */}
-                {/* <Menu.Item name='account' onClick={this.handleItemClick} />
-                <Menu.Item name='settings' onClick={this.handleItemClick} /> */}
-                <Route path='/' render={({ location }) => <NavMain {...location} />} />
-              {/* </Menu> */}
-            {/* </Segment> */}
+          <div>
+            <Route path='/' render={({ location }) => <NavMain {...location} />} />
             <Segment basic id='app__main' className='flex--grow'>
                 <Switch>
                   <Route exact path='/' component={() => <Redirect to='/patient' />} />
@@ -152,8 +146,29 @@ class App extends Component {
                   render={(props) => <UnauthorisedMain {...props} />} />
                 </Switch>
             </Segment>
-
           </div>
+          {/* <div className='flex flex--row'>
+                <Route path='/' render={({ location }) => <NavMain {...location} />} />c
+            <Segment basic id='app__main' className='flex--grow'>
+                <Switch>
+                  <Route exact path='/' component={() => <Redirect to='/patient' />} />
+                  <PrivateRoute path='/patient' component={PatientMain} />
+                  <PrivateRoute path='/transaction' component={TransactionMain} />
+                  <PrivateRoute path='/doctor' component={DoctorMain} />
+                  <PrivateRoute path='/hospital' component={HospitalMain} />
+                  <PrivateRoute path='/addon' component={AddonMain} />
+                  <PrivateRoute path='/agent' component={AgentMain} />
+                  <PrivateRoute path='/invoice' component={InvoiceMain} />
+                  <PrivateRoute path='/user' component={UserMain} />
+                  <RedirectFromLoginRoute exact path='/login' component={AuthMain} />
+                  <Route exact path='/unauthorised'
+                  render={(props) => <UnauthorisedMain {...props} />} />
+                </Switch>
+            </Segment>
+
+          </div> */}
+
+
           {/* <Sidebar.Pushable as={Segment}>
             <Sidebar as={Menu} animation='uncover' width='thin' visible={sideBarShow} vertical inverted>
               <Route path='/' render={({ location }) => <NavMain {...location} />} />

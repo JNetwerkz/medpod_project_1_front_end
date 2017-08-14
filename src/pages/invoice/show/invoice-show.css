@@ -1,35 +1,44 @@
+@import url('https://fonts.googleapis.com/css?family=Inconsolata');
+
 body {
   background: rgb(204,204,204);
 }
 
 .A4 {
-  padding: 2em;
-  background: white;
+  font-family: 'Inconsolata', monospace;
+  position: relative;
+  padding: 1cm;
+  /*background-color: green;*/
   width: 21cm;
-  min-height: 29cm;
+  min-height: 29.7cm;
+  /*height: 29.7cm;*/
   display: block;
-  /*margin: 0 auto;*/
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
+  /*margin-left: auto;
+  margin-right: auto;*/
   box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
 }
 
 .grid__invoice {
   position: relative;
   grid-template-columns: 50% 50%;
-  grid-template-rows: auto auto auto 1fr;
-  grid-row-gap: 2em;
+  grid-template-rows: auto auto auto;
+  grid-row-gap: 1cm;
   align-items: stretch;
+  align-content: stretch;
   grid-template-areas:
     "grid__invoice-header grid__invoice-header"
     "grid__invoice-topleft grid__invoice-topright"
-    "grid__invoice-mid grid__invoice-mid"
-    "grid__invoice-bottom grid__invoice-bottom";
+    "grid__invoice-mid grid__invoice-mid";
 }
 
 .grid__invoice-header {
   text-align: center;
   grid-area: grid__invoice-header;
+}
+
+.grid__invoice-header > h4 {
+  margin-top: 0;
 }
 
 .grid__invoice-topleft {
@@ -53,7 +62,10 @@ body {
   grid-area: grid__invoice-bottom;
 }
 
-
+.fixed__invoice-bottom {
+  position: absolute;
+  bottom: 0;
+}
 
 @media print {
   .A4 {
@@ -66,8 +78,12 @@ body {
   }
   @page
   {
-      size:  auto;   /* auto is the initial value */
-      margin: 2em;  /* this affects the margin in the printer settings */
+      size: auto;   /* auto is the initial value */
+      /* this affects the margin in the printer settings */
+      margin-left: 1cm;
+      margin-right: 1cm;
+      margin-top: 1cm;
+      margin-bottom: 0;
   }
 
   html

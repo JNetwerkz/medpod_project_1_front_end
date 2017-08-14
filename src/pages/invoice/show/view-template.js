@@ -1,18 +1,43 @@
 import React from 'react'
 
-import { Table } from 'semantic-ui-react'
+import { Table, Image } from 'semantic-ui-react'
 
 import * as currencyFormatter from 'currency-formatter'
+import moment from 'moment'
 
 import { combineName } from 'custom-function'
 import InvoiceItem from './invoice-print/invoice-item'
 
-const ViewTemplate = ({ invoicing_doctor, transactions, _id }) => {
+const ViewTemplate = ({ invoicing_doctor, transactions, _id, createdAt }) => {
   // const {
   //   invoicing_doctor,
   //   transactions,
   //   _id
   // } = props.invoiceShow
+//   "associationAddress_country" : "Singapore",
+// "associationAddress_postalcode" : "560560",
+// "associationAddress_street" : "Novena Street 10",
+// "associationAddress_unit" : "10",
+// "associationEmail" : "admin@novenacancercentre.com",
+// "associationName" : "Novena Cancer Centre",
+// "associationPhoneNumber" : "1234 5678"
+  const {
+    associationAddress_country,
+    associationAddress_postalcode,
+    associationAddress_street,
+    associationAddress_unit,
+    associationEmail,
+    associationName,
+    associationPhoneNumber
+  } = invoicing_doctor
+
+  const momentCreatedAt = moment(createdAt).format('DD MMM YYYY')
+
+  const _associationName = associationName ? `${associationName + ' '}` : ''
+  const _associationAddress_unit = associationAddress_unit ? `${associationAddress_unit + ' '}` : ''
+  const _associationAddress_street = associationAddress_street ? `${associationAddress_street + ' '}` : ''
+  const _associationAddress_postalcode = associationAddress_postalcode ? `${associationAddress_postalcode + ' '}` : ''
+  const _associationAddress_country = associationAddress_country ? `${associationAddress_country + ' '}` : ''
 
   let grandTotalAmount = 0
 
@@ -46,31 +71,40 @@ const ViewTemplate = ({ invoicing_doctor, transactions, _id }) => {
     <page className='A4'>
       <div className='grid grid__invoice'>
         <section className='grid__invoice-header'>
+          <Image src='https://s3-ap-southeast-1.amazonaws.com/medipod.1/Medipod+Logo.jpg' size='small' verticalAlign='right' />
           <h4>
             TAX INVOICE
           </h4>
         </section>
+
         <section className='grid__invoice-topleft flex flex--column'>
           <p>
             {`Dr. ${combineName(invoicing_doctor)}`}
           </p>
-          <p>
+          <div>
             {`Dr. ${combineName(invoicing_doctor)}`}
-            <br />
-            476 Ang Mo Kio Ave 10 <br />
-            #07-816 Singapore S(560476)
-          </p>
+          </div>
+          <div>
+            {_associationName}
+          </div>
+          <div>
+            {_associationAddress_unit}{_associationAddress_street}
+          </div>
+          <div>
+            {_associationAddress_country}{_associationAddress_postalcode}
+          </div>
         </section>
+
         <section className='grid__invoice-topright flex flex--column'>
-          <p>
+          <div>
             Invoice Number: {`${_id}`}
-          </p>
-          <p>
-            Date:
-          </p>
+          </div>
+          <div>
+              Date: {momentCreatedAt}
+          </div>
         </section>
         <section className='grid__invoice-mid'>
-          <h4>Service Description</h4>
+          <h4>SERVICE DESCRIPTION</h4>
           <Table striped compact size='small' basic='very'>
             <Table.Header>
               <Table.Row>
@@ -92,11 +126,13 @@ const ViewTemplate = ({ invoicing_doctor, transactions, _id }) => {
             </Table.Body>
           </Table>
         </section>
-        <section className='grid__invoice-bottom'>
+        {/* <section className='grid__invoice-bottom'>
           <p>Medipod</p>
-        </section>
-
+        </section> */}
       </div>
+      <section className='fixed__invoice-bottom'>
+        <p>Medipod Private Limited | address 1 | address 2 | address 3 | phone number | fax </p>
+      </section>
     </page>
   )
 }
