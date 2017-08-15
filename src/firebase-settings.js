@@ -3,7 +3,7 @@ import firebase from 'firebase'
 const config = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTHDOMAIN,
-  databaseURL: process.env.REACT_APP_FIREBASE_DATABASEURL,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
   projectId: process.env.REACT_APP_FIREBASE_PROJECTID
   // storageBucket: '',
   // messagingSenderId: '539826674073'
