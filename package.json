@@ -1,6 +1,6 @@
 {
   "name": "medpod_project_1_front_end",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "dependencies": {
     "aws-sdk": "^2.86.0",
