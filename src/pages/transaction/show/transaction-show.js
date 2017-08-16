@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
-import { Container, Segment, Button, Header, Form, Input, Grid, Item } from 'semantic-ui-react'
+import { Container, Segment, Button, Header, Form, Input, Grid, Item, Divider } from 'semantic-ui-react'
 
 import axios from 'axios'
 import moment from 'moment'
@@ -14,6 +14,7 @@ import { s3, s3Bucket as Bucket } from 'aws'
 
 import FileInputRow from 'partial/_fileInputRow'
 import FileRow from 'partial/_fileRow'
+import S3Subheader from 'partial/_subheaders'
 
 class TransactionShow extends Component {
   constructor (props) {
@@ -279,6 +280,36 @@ class TransactionShow extends Component {
       />
     })
 
+    const content = segmentLoading
+    ? <Segment basic loading />
+    : <Form>
+      <S3Subheader text='Transaction Details' />
+      <Form.Group widths='equal'>
+        <Form.Field>
+          <label>Patient</label>
+          <Link to={`/patient/${patient._id}`}><p>{patientName}</p></Link>
+        </Form.Field>
+        <Form.Field>
+          <label>Doctor</label>
+          <Link to={`/doctor/${receiving_doctor._id}`}><p>Dr. {doctorName}</p></Link>
+        </Form.Field>
+        <Form.Field>
+          <label>Invoice Number</label>
+          <p>{invoiceNumber}</p>
+        </Form.Field>
+        <Form.Field>
+          <label>Invoice Date</label>
+          <p>{momentInvoiceDate}</p>
+        </Form.Field>
+      </Form.Group>
+      <Form.Group widths='equal'>
+        <Form.Field>
+          <label>Transaction Amount</label>
+          <p>{formattedTransactionAmount}</p>
+        </Form.Field>
+      </Form.Group>
+    </Form>
+
     const filesSegmentLoading = (!UploadedFiles.length && !FileUpload.length)
     ? ''
     : <Segment>
@@ -290,7 +321,6 @@ class TransactionShow extends Component {
             </Item.Group>
           </Grid.Column>
           <Grid.Column>
-            <Button floated='right' compact primary onClick={handleAddInput}>Add Upload</Button>
             <Item.Group divided relaxed>
               {FileUpload}
             </Item.Group>
@@ -304,42 +334,11 @@ class TransactionShow extends Component {
         <Header as='h1'>
           {M6117(transactionShow)} | {patientName} | Dr. {doctorName}
         </Header>
-        {
-          segmentLoading
-          ? <Segment loading />
-          // : ''
-          : <Segment>
-            <Form>
-              <Form.Group widths='equal'>
-                <Form.Field>
-                  <label>Patient</label>
-                  <Link to={`/patient/${patient._id}`}><p>{patientName}</p></Link>
-                </Form.Field>
-                <Form.Field>
-                  <label>Doctor</label>
-                  <Link to={`/doctor/${receiving_doctor._id}`}><p>Dr. {doctorName}</p></Link>
-                </Form.Field>
-                <Form.Field>
-                  <label>Invoice Number</label>
-                  <p>{invoiceNumber}</p>
-                </Form.Field>
-                <Form.Field>
-                  <label>Invoice Date</label>
-                  <p>{momentInvoiceDate}</p>
-                </Form.Field>
-              </Form.Group>
-              <Form.Group widths='equal'>
-                <Form.Field>
-                  <label>Transaction Amount</label>
-                  <p>{formattedTransactionAmount}</p>
-                </Form.Field>
-              </Form.Group>
-            </Form>
-          </Segment>
-        }
-
+        {content}
+        <Divider section hidden />
         <Header as='h2'>
           Files
+          <Button floated='right' compact primary onClick={handleAddInput}>Add Upload</Button>
         </Header>
         {filesSegmentLoading}
       </Container>

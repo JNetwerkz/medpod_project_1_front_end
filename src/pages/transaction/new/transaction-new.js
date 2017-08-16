@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 
-import * as $ from 'jquery'
 import axios from 'axios'
 
-import { Form, Input, Button, Header, Container } from 'semantic-ui-react'
+import { Form, Input, Button, Header, Container, Divider, Checkbox, TextArea } from 'semantic-ui-react'
+
+import { combineName } from 'custom-function'
 
 import PatientModal from 'partial/modal/patient-modal'
 import DoctorModal from 'partial/modal/doctor-modal'
 import ErrorMessage from 'partial/error'
+import S3Subheader from 'partial/_subheaders'
 
 class TransactionNew extends Component {
   constructor (props) {
@@ -24,11 +26,14 @@ class TransactionNew extends Component {
       'receiving_doctor': '',
       'invoice number': '',
       'transaction amount': '',
+      additionalInfo: '',
       // patient modal selection
       patientModalOpen: false,
       patientSearchResult: [],
       selectedPatient: {},
       searchFocus: false,
+      referralAgent: {},
+      referralAgentId: '',
       // doctor modal selection
       doctorModalOpen: false,
       doctorSearchResult: [],
@@ -36,22 +41,33 @@ class TransactionNew extends Component {
       errors: null
     }
     this.handleInputChange = this.handleInputChange.bind(this)
+    this.handleCheckboxChange = this.handleCheckboxChange.bind(this)
     this.handleSelectChange = this.handleSelectChange.bind(this)
-    this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.patientModalMethod = this.patientModalMethod.bind(this)
     this.doctorModalMethod = this.doctorModalMethod.bind(this)
   }
 
-  handleInputChange (event) {
+  handleInputChange (event, data) {
+    console.log(event, data, event.target.type)
+
     const target = event.target
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
 
-    console.log(name, value)
-
     this.setState({
       [name]: value
+    })
+  }
+
+  handleCheckboxChange (event, data) {
+    console.log(event, data)
+    const {
+      referralAgentId,
+      referralAgent } = this.state
+
+    this.setState({
+      referralAgentId: data.checked ? referralAgent._id : ''
     })
   }
 
@@ -62,21 +78,18 @@ class TransactionNew extends Component {
     })
   }
 
-  handleChange (event) {
-    this.setState({
-      transactionNewForm: $('#transaction_new-form').serializeArray()
-    })
-  }
-
   handleSubmit (event) {
     event.preventDefault()
+
+    console.log(this.state.referralAgentId)
 
     const formData = {
       patient: this.state.patient,
       receiving_doctor: this.state.receiving_doctor,
       'invoice date': this.state['invoice date'],
       'invoice number': this.state['invoice number'],
-      'transaction amount': this.state['transaction amount']
+      'transaction amount': this.state['transaction amount'],
+      additionalInfo: this.state.additionalInfo
     }
 
     if (!formData.patient) return this.setState({ errors: ['Please select Patient from search function provided'] })
@@ -87,15 +100,30 @@ class TransactionNew extends Component {
       url: `${process.env.REACT_APP_API_ENDPOINT}/transaction`,
       data: formData
     })
-    .then((res) => {
-      console.log('new transaction data', res.data)
-      const { errors } = res.data
+    .then((transactionNewRes) => {
+      console.log('new transaction data', transactionNewRes.data)
+      const { errors, _id } = transactionNewRes.data
 
-      errors
-      ? this.setState({ errors })
-      : this.setState({
+      if (errors) return this.setState({ errors })
+      if (this.state.referralAgentId) return axios({
+        method: 'POST',
+        url: `${process.env.REACT_APP_API_ENDPOINT}/commission`,
+        data: {
+          referralAgentId: this.state.referralAgentId || '',
+          transactionId: _id
+        }
+      })
+
+      this.setState({
         redirectToShow: true,
-        redirectTo: res.data._id,
+        redirectTo: transactionNewRes.data._id,
+        errors: null
+      })
+    })
+    .then((commissionNewRes) => {
+      this.setState({
+        redirectToShow: true,
+        redirectTo: commissionNewRes.data.transactionId,
         errors: null
       })
     })
@@ -130,8 +158,9 @@ class TransactionNew extends Component {
         console.log(data)
         this.setState({
           selectedPatient: data,
-          patient: data._id
-          // patientModalOpen: false
+          patient: data._id,
+          referralAgent: data.referral_agent,
+          referralAgentId: data.referral_agent._id
         })
 
         const eventBubbleName = new Event('input', { bubbles: true })
@@ -194,26 +223,52 @@ class TransactionNew extends Component {
       return <Redirect to={this.state.redirectTo} />
     }
 
-    const { errors } = this.state
+    const {
+      errors,
+      selectedPatient,
+      patient,
+      selectedDoctor,
+      receiving_doctor,
+      patientModalOpen,
+      patientSearchResult,
+      searchFocus,
+      doctorModalOpen,
+      doctorSearchResult,
+      agentChecked,
+      referralAgent,
+      referralAgentId
+    } = this.state
+
+    const {
+      handleSubmit,
+      patientModalMethod,
+      doctorModalMethod,
+      handleInputChange,
+      handleCheckboxChange
+    } = this
+
+    const checkboxDisabled = !referralAgentId
 
     return (
       <Container>
         <ErrorMessage errors={errors} />
-        <Header as='h1'>
-          New Transaction / Invoice
-        </Header>
-        <Form id='transaction_new-form' onSubmit={(event) => this.handleSubmit(event)}>
+        <Form id='transaction_new-form' onSubmit={(event) => handleSubmit(event)}>
+          <Header as='h1'>
+          New Transaction / Invoice from Hospital
+          <Button floated='right'>Submit</Button>
+          </Header>
+          <S3Subheader text='Select Patient Invoiced by Hospital' />
           <Form.Group widths='equal'>
             <Form.Field>
-              <label>Patient</label>
-              <input onClick={() => this.patientModalMethod('open')} type='text' name='patientName'
+              <label>Name</label>
+              <input onClick={() => patientModalMethod('open')} type='text' name='patientName'
                 readOnly
                 onChange={() => console.log()}
                 ref={(input) => {
                   console.log('input', input)
                   this.patientNameRef = input
                 }}
-                value={`${this.state.selectedPatient['first name'] || ''} ${this.state.selectedPatient['last name'] || ''}`} />
+                value={`${selectedPatient['first name'] || ''} ${selectedPatient['last name'] || ''}`} />
             </Form.Field>
             <Form.Field>
               <label>Patient ID</label>
@@ -225,20 +280,27 @@ class TransactionNew extends Component {
                   console.log('input', input)
                   this.patientIdRef = input
                 }}
-                value={this.state.patient} />
+                value={patient} />
             </Form.Field>
           </Form.Group>
+          <Checkbox
+            defaultChecked
+            disabled={checkboxDisabled}
+            name='agentCommission'
+            label={<label>Agent <Link to={`/agent/${referralAgentId}`}>{combineName(referralAgent)}</Link> qualify for Commission?</label>}
+            onChange={handleCheckboxChange} />
+          <S3Subheader text='Select Doctor Invoicing' />
           <Form.Group widths='equal'>
             <Form.Field>
-              <label>Doctor</label>
-              <input onClick={() => this.doctorModalMethod('open')} type='text' name='doctorName'
+              <label>Name</label>
+              <input onClick={() => doctorModalMethod('open')} type='text' name='doctorName'
                 readOnly
                 onChange={() => console.log()}
                 ref={(input) => {
                   console.log('input', input)
                   this.doctorNameRef = input
                 }}
-                value={`${this.state.selectedDoctor['first name'] || ''} ${this.state.selectedDoctor['last name'] || ''}`} />
+                value={`${selectedDoctor['first name'] || ''} ${selectedDoctor['last name'] || ''}`} />
             </Form.Field>
             <Form.Field>
               <label>Doctor ID</label>
@@ -250,27 +312,31 @@ class TransactionNew extends Component {
                   console.log('input', input)
                   this.doctorIdRef = input
                 }}
-                value={this.state['receiving_doctor']} />
+                value={receiving_doctor} />
             </Form.Field>
           </Form.Group>
+          <S3Subheader text='Transaction Details' />
           <Form.Group widths='equal'>
-            <Form.Field type='date' control={Input} label='Date of Transaction / Invoice' name='invoice date' placeholder='Date' onChange={this.handleInputChange} />
-            <Form.Field type='text' control={Input} label='Transaction / Invoice Number' name='invoice number' placeholder='Transaction / Invoice Number' onChange={this.handleInputChange} />
-            <Form.Field type='number' control={Input} label='Transaction / Invoice Amount' name='transaction amount' placeholder='Transaction / Invoice Amount' onChange={this.handleInputChange} />
+            <Form.Field type='date' control={Input} label='Date of Transaction / Invoice' name='invoice date' placeholder='Date' onChange={handleInputChange} />
+            <Form.Field type='text' control={Input} label='Transaction / Invoice Number' name='invoice number' placeholder='Transaction / Invoice Number' onChange={handleInputChange} />
+            <Form.Field type='number' control={Input} label='Transaction / Invoice Amount' name='transaction amount' placeholder='Transaction / Invoice Amount' onChange={handleInputChange} />
           </Form.Group>
-          <Button type='submit'>Submit</Button>
+          <S3Subheader text='Additional Information' />
+          <Form.Field control={TextArea}
+            onChange={handleInputChange}
+            name='additionalInfo' />
         </Form>
         <PatientModal
-          patientModalOpen={this.state.patientModalOpen}
-          modalMethod={this.patientModalMethod}
-          patientSearchResult={this.state.patientSearchResult}
-          selectedPatient={this.state.selectedPatient}
-          searchFocus={this.state.searchFocus} />
+          patientModalOpen={patientModalOpen}
+          modalMethod={patientModalMethod}
+          patientSearchResult={patientSearchResult}
+          selectedPatient={selectedPatient}
+          searchFocus={searchFocus} />
         <DoctorModal
-          doctorModalOpen={this.state.doctorModalOpen}
-          modalMethod={this.doctorModalMethod}
-          doctorSearchResult={this.state.doctorSearchResult}
-          selectedDoctor={this.state.selectedDoctor} />
+          doctorModalOpen={doctorModalOpen}
+          modalMethod={doctorModalMethod}
+          doctorSearchResult={doctorSearchResult}
+          selectedDoctor={selectedDoctor} />
       </Container>
     )
   }
