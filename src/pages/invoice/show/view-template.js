@@ -71,7 +71,7 @@ const ViewTemplate = ({ invoicing_doctor, transactions, _id, createdAt }) => {
     <page className='A4'>
       <div className='grid grid__invoice'>
         <section className='grid__invoice-header'>
-          <Image src='https://s3-ap-southeast-1.amazonaws.com/medipod.1/Medipod+Logo.jpg' size='small' verticalAlign='right' />
+          <Image src='https://s3-ap-southeast-1.amazonaws.com/medipod.1/Medipod+Logo.jpg' size='small' />
           <h4>
             TAX INVOICE
           </h4>

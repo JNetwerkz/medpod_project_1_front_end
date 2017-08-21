@@ -80,7 +80,8 @@ const invoiceStatusType = [
   { key: 'Query Bill / Email Bill (QB / EB)', text: 'Query Bill / Email Bill (QB / EB)', value: 'Query Bill / Email Bill (QB / EB)' },
   { key: 'Proforma (PF)', text: 'Proforma (PF)', value: 'Proforma (PF)' },
   { key: 'Invoiced (INV)', text: 'Invoiced (INV)', value: 'Invoiced (INV)' },
-  { key: 'Paid and Archive', text: 'Paid and Archive', value: 'Paid and Archive' }
+  { key: 'Paid and Archive', text: 'Paid and Archive', value: 'Paid and Archive' },
+  { key: 'VOID', text: 'VOID', value: 'VOID' }
 ]
 
 export { AuthHeader, M6117, combineName, monthsSelectOption, genderOption, uploadFileOption, accessType, invoiceStatusType }

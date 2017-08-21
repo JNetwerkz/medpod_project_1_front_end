@@ -16,7 +16,6 @@ export default class AgentShow extends Component {
     super(props)
     this.state = {
       agentShow: {},
-      agentTransactions: [],
       notEditing: true,
       'first name': '',
       'last name': '',
@@ -25,23 +24,14 @@ export default class AgentShow extends Component {
       personalPhoneNumber: '',
       personalEmail: '',
       additionalInfo: '',
-      page: '',
-      pages: '',
       segmentLoading: true,
-      transactionTableLoading: true,
       //
-      'transaction year': moment().year(),
-      'transaction month': moment().month() + 1,
       errors: null
     }
 
     this.handleEditState = this.handleEditState.bind(this)
     this.handleEditChange = this.handleEditChange.bind(this)
     this.handleUpdateSubmit = this.handleUpdateSubmit.bind(this)
-    this.handleSelectChange = this.handleSelectChange.bind(this)
-    this.handleInputChange = this.handleInputChange.bind(this)
-    this.handleSearchChange = this.handleSearchChange.bind(this)
-    this.handlePaginate = this.handlePaginate.bind(this)
   }
 
   handleEditState (event) {
@@ -100,88 +90,6 @@ export default class AgentShow extends Component {
     .catch((err) => console.error(err))
   }
 
-  handleSelectChange (event, value, name) {
-    this.setState({
-      [name]: value
-    })
-  }
-
-  handleInputChange (event) {
-    const target = event.target
-    const value = target.type === 'checkbox' ? target.checked : target.value
-    const name = target.name
-
-    console.log(name, value)
-
-    this.setState({
-      [name]: value
-    })
-  }
-
-  handleSearchChange () {
-    this.setState({ searchLoading: true })
-    const {
-      'transaction year': transactionYear,
-      'transaction month': transactionMonth
-    } = this.state
-
-    const formData = {
-      'transaction year': transactionYear,
-      'transaction month': transactionMonth
-    }
-    const queryString = qs.stringify(formData)
-
-    console.log(queryString)
-
-    axios({
-      method: 'GET',
-      url: `${process.env.REACT_APP_API_ENDPOINT}/agent/${this.props.match.params.id}/transaction`,
-      params: {
-        search: queryString
-      }
-    })
-    .then((res) => {
-      const {
-        docs: agentTransactions,
-        page,
-        pages
-      } = res.data
-
-      this.setState({ agentTransactions, page, pages, searchLoading: false })
-    })
-  }
-
-  handlePaginate (event) {
-    const {
-      'transaction year': transactionYear,
-      'transaction month': transactionMonth
-    } = this.state
-
-    const formData = {
-      'transaction year': transactionYear,
-      'transaction month': transactionMonth
-    }
-    const queryString = qs.stringify(formData)
-
-    axios({
-      method: 'GET',
-      url: `${process.env.REACT_APP_API_ENDPOINT}/agent/${this.props.match.params.id}/transaction`,
-      params: {
-        page: parseInt(event.target.dataset.page),
-        search: queryString
-      }
-    })
-    .then((res) => {
-      const {
-        docs: agentTransactions,
-        page,
-        pages
-      } = res.data
-
-      this.setState({ agentTransactions, page, pages })
-    })
-  }
-
   render () {
     console.log(this.state)
     const {
@@ -199,8 +107,8 @@ export default class AgentShow extends Component {
       page,
       pages,
       segmentLoading,
-      transactionTableLoading,
-      agentTransactions,
+      commissionTableLoading,
+      agentCommissions,
       errors
     } = this.state
 
@@ -330,51 +238,39 @@ export default class AgentShow extends Component {
         {content}
         <Divider hidden section />
         <Header as='h2'>
-          Agent's Transaction
+          Agent's Commission
         </Header>
         <TransactionTable
-          handleSelectChange={handleSelectChange}
-          handleInputChange={handleInputChange}
-          handleSearchChange={handleSearchChange}
-          transactionYear={transactionYear}
-          transactionMonth={transactionMonth}
-          handlePaginate={handlePaginate}
-          page={page}
-          pages={pages}
-          agentTransactions={agentTransactions}
+          // handleSelectChange={handleSelectChange}
+          // handleInputChange={handleInputChange}
+          // handleSearchChange={handleSearchChange}
+          // transactionYear={transactionYear}
+          // transactionMonth={transactionMonth}
+          // handlePaginate={handlePaginate}
+          // page={page}
+          // pages={pages}
+          // agentCommissions={agentCommissions}
           match={this.props.match}
-          transactionTableLoading={transactionTableLoading}
+          // commissionTableLoading={commissionTableLoading}
         />
       </Container>
     )
   }
 
   componentDidMount () {
+    const referralAgentId = this.props.match.params.id
     axios({
       method: 'GET',
-      url: `${process.env.REACT_APP_API_ENDPOINT}/agent/${this.props.match.params.id}`
+      url: `${process.env.REACT_APP_API_ENDPOINT}/agent/${referralAgentId}`
     })
     .then((res) => {
       console.log('AgentShow res', res.data)
       const {
         _id
       } = res.data
+
       this.setState({ agentShow: res.data, ...res.data, segmentLoading: false })
       return _id
-    })
-    .then((id) => {
-      return axios({
-        method: 'GET',
-        url: `${process.env.REACT_APP_API_ENDPOINT}/agent/${this.props.match.params.id}/transaction`
-      })
-    })
-    .then((res) => {
-      const {
-        docs: agentTransactions,
-        total,
-        ...rest
-      } = res.data
-      this.setState({ agentTransactions, ...rest, transactionTableLoading: false })
     })
     .catch((err) => console.error(err))
   }
