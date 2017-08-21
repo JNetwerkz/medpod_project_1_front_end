@@ -319,10 +319,15 @@ export default class InvoiceNew extends Component {
     .then((res) => {
       console.log(res.data)
       //  { key: 'Chinese', text: 'Chinese', value: 'Chinese' },
-      const addonSelection = res.data.map((item) => {
-        let { _id: key, name: text, _id: value } = item
-        return { key, text, value }
+      const addonSelection = []
+
+      res.data.forEach((item) => {
+        let { _id: key, name: text, _id: value, status } = item
+        console.log(item)
+        // if (status === 'active') return { key, text, value }
+        return status === 'active' ? addonSelection.push({ key, text, value }) : ''
       })
+      console.log(addonSelection)
       this.setState({ addonSelection })
     })
     .catch((err) => console.log(err))

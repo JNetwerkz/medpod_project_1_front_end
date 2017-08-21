@@ -17,7 +17,11 @@ const IndexRow = ({ updating, commissionData, commissionInput, handleInputChange
     transactionId: { patient, receiving_doctor, _id: _transactionId }
   } = commissionData
 
-  const latestInvoiceStatus = invoiceStatuses[invoiceStatuses.length - 1] || '< NEW >'
+  console.log('invoiceStatuses', invoiceStatuses)
+
+  const latestInvoiceStatus = !invoiceStatuses.length
+  ? '< N E W >'
+  : invoiceStatuses[invoiceStatuses.length - 1].name
 
   const {
     _id: patientId
@@ -35,51 +39,51 @@ const IndexRow = ({ updating, commissionData, commissionInput, handleInputChange
 
   return (
     <Table.Row>
-        <Table.Cell collapsing textAlign='right'>
-          <Link to={`/transaction/${_transactionId}`}>
+      <Table.Cell collapsing textAlign='right'>
+        <Link to={`/transaction/${_transactionId}`}>
           {transactionRecord}
-          </Link>
-        </Table.Cell>
-        <Table.Cell>Invoice Number Here</Table.Cell>
-        <Table.Cell>{momentInvoiceDate}</Table.Cell>
-        <Table.Cell>{latestInvoiceStatus}</Table.Cell>
-        <Table.Cell>
-          <Link to={`/patient/${patientId}`}>
+        </Link>
+      </Table.Cell>
+      <Table.Cell>Invoice Number Here</Table.Cell>
+      <Table.Cell>{momentInvoiceDate}</Table.Cell>
+      <Table.Cell>{latestInvoiceStatus}</Table.Cell>
+      <Table.Cell>
+        <Link to={`/patient/${patientId}`}>
           {receivingPatient}
-          </Link>
-        </Table.Cell>
-        <Table.Cell>
-          <Link to={`/doctor/${doctorId}`}>
+        </Link>
+      </Table.Cell>
+      <Table.Cell>
+        <Link to={`/doctor/${doctorId}`}>
           {receivingDoctor}
-          </Link>
-        </Table.Cell>
-        <Table.Cell>{formattedInvoiceAmount}</Table.Cell>
-        <Table.Cell className='table-cell--rel'>
-          <input
-            placeholder='Amount'
-            className='table-cell__input'
-            type='number'
-            name={_id}
-            value={commissionInput}
-            onChange={handleInputChange}
+        </Link>
+      </Table.Cell>
+      <Table.Cell>{formattedInvoiceAmount}</Table.Cell>
+      <Table.Cell className='table-cell--rel'>
+        <input
+          placeholder='Amount'
+          className='table-cell__input'
+          type='number'
+          name={_id}
+          value={commissionInput}
+          onChange={handleInputChange}
           />
-        </Table.Cell>
-        <Table.Cell>
-          {/* <Button onClick={(event) => props.addonHandler(event, 'remove', props.transaction, props.index)}>Delete</Button> */}
-          {/* <Button
+      </Table.Cell>
+      <Table.Cell>
+        {/* <Button onClick={(event) => props.addonHandler(event, 'remove', props.transaction, props.index)}>Delete</Button> */}
+        {/* <Button
             fluid
             negative
             icon='delete'
             onClick={(event) => props.addonHandler(event, 'remove', props.transaction, props.index)} /> */}
-          <Button
-            loading={updating}
-            fluid
-            positive
-            type='button'
-            name={_id}
-            onClick={handleCommissionSubmit}
+        <Button
+          loading={updating}
+          fluid
+          positive
+          type='button'
+          name={_id}
+          onClick={handleCommissionSubmit}
             >Save</Button>
-        </Table.Cell>
+      </Table.Cell>
     </Table.Row>
   )
 }
