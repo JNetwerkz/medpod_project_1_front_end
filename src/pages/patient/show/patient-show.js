@@ -38,7 +38,7 @@ class PatientShow extends Component {
       // modal
       agentModalOpen: false,
       agentSearchResult: [],
-      selectedAgent: {},
+      selectedAgent: '',
       searchFocus: false,
       // files
       uploadedFiles: [],

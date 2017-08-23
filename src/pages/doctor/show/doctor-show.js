@@ -33,7 +33,7 @@ class DoctorShow extends Component {
       hospitalModalOpen: false,
       hospitalSearchResult: [],
       searchFocus: false,
-      selectedHospital: {},
+      selectedHospital: '',
       errors: null
     }
     this.handleEditState = this.handleEditState.bind(this)
