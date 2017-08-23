@@ -34,7 +34,8 @@ class PatientNew extends Component {
       //
       agentModalOpen: false,
       agentSearchResult: [],
-      selectedAgent: {},
+      selectedAgent: '',
+      // selectedAgent: {},
       searchFocus: false,
       errors: null
     }

@@ -5,22 +5,11 @@ import { Table, Image } from 'semantic-ui-react'
 import * as currencyFormatter from 'currency-formatter'
 import moment from 'moment'
 
-import { combineName } from 'custom-function'
+import { combineName, invoiceNumberGetter } from 'custom-function'
 import InvoiceItem from './invoice-print/invoice-item'
 
-const ViewTemplate = ({ invoicing_doctor, transactions, _id, createdAt }) => {
-  // const {
-  //   invoicing_doctor,
-  //   transactions,
-  //   _id
-  // } = props.invoiceShow
-//   "associationAddress_country" : "Singapore",
-// "associationAddress_postalcode" : "560560",
-// "associationAddress_street" : "Novena Street 10",
-// "associationAddress_unit" : "10",
-// "associationEmail" : "admin@novenacancercentre.com",
-// "associationName" : "Novena Cancer Centre",
-// "associationPhoneNumber" : "1234 5678"
+const ViewTemplate = (invoiceData) => {
+  const { invoicing_doctor, transactions, _id, createdAt, grandTotal } = invoiceData
   const {
     associationAddress_country,
     associationAddress_postalcode,
@@ -32,14 +21,16 @@ const ViewTemplate = ({ invoicing_doctor, transactions, _id, createdAt }) => {
   } = invoicing_doctor
 
   const momentCreatedAt = moment(createdAt).format('DD MMM YYYY')
+  const momentPrintDate = moment().format('DD MMM YYYY')
 
+  const _invoiceNumber = invoiceNumberGetter(invoiceData)
   const _associationName = associationName ? `${associationName + ' '}` : ''
   const _associationAddress_unit = associationAddress_unit ? `${associationAddress_unit + ' '}` : ''
   const _associationAddress_street = associationAddress_street ? `${associationAddress_street + ' '}` : ''
   const _associationAddress_postalcode = associationAddress_postalcode ? `${associationAddress_postalcode + ' '}` : ''
   const _associationAddress_country = associationAddress_country ? `${associationAddress_country + ' '}` : ''
 
-  let grandTotalAmount = 0
+  // let grandTotalAmount = 0
 
   const InvoiceItems = transactions.map((item, index) => {
     const {
@@ -47,16 +38,16 @@ const ViewTemplate = ({ invoicing_doctor, transactions, _id, createdAt }) => {
       addons
     } = item
 
-    const receivableTotal = parseFloat(receivable.amount)
-    console.log(receivableTotal)
-    const addOnTotal = addons.reduce((acc, val) => {
-      if (val.amount === '') return acc
-      acc = acc + parseFloat(val.amount)
-      return acc
-    }, 0)
-    console.log(addOnTotal)
+    // const receivableTotal = parseFloat(receivable.amount)
+    // console.log(receivableTotal)
+    // const addOnTotal = addons.reduce((acc, val) => {
+    //   if (val.amount === '') return acc
+    //   acc = acc + parseFloat(val.amount)
+    //   return acc
+    // }, 0)
+    // console.log(addOnTotal)
 
-    grandTotalAmount = grandTotalAmount + receivableTotal + addOnTotal
+    // grandTotalAmount = grandTotalAmount + receivableTotal + addOnTotal
 
     return (
       <InvoiceItem
@@ -66,7 +57,8 @@ const ViewTemplate = ({ invoicing_doctor, transactions, _id, createdAt }) => {
     )
   })
 
-  grandTotalAmount = currencyFormatter.format(grandTotalAmount, { code: 'SGD' })
+  const parsedGrandTotal = currencyFormatter.format(grandTotal, { code: 'SGD' })
+
   return (
     <page className='A4'>
       <div className='grid grid__invoice'>
@@ -78,9 +70,6 @@ const ViewTemplate = ({ invoicing_doctor, transactions, _id, createdAt }) => {
         </section>
 
         <section className='grid__invoice-topleft flex flex--column'>
-          <p>
-            {`Dr. ${combineName(invoicing_doctor)}`}
-          </p>
           <div>
             {`Dr. ${combineName(invoicing_doctor)}`}
           </div>
@@ -97,10 +86,13 @@ const ViewTemplate = ({ invoicing_doctor, transactions, _id, createdAt }) => {
 
         <section className='grid__invoice-topright flex flex--column'>
           <div>
-            Invoice Number: {`${_id}`}
+            Invoice Number: {`${_invoiceNumber}`}
           </div>
           <div>
-              Date: {momentCreatedAt}
+            Invoice Generated Date: {momentCreatedAt}
+          </div>
+          <div>
+            Invoice Print Date: {momentPrintDate}
           </div>
         </section>
         <section className='grid__invoice-mid'>
@@ -121,7 +113,7 @@ const ViewTemplate = ({ invoicing_doctor, transactions, _id, createdAt }) => {
                 textAlign='right'>
                 <Table.Cell
                   colSpan='4'>Grand Total</Table.Cell>
-                <Table.Cell>{grandTotalAmount}</Table.Cell>
+                <Table.Cell>{parsedGrandTotal}</Table.Cell>
               </Table.Row>
             </Table.Body>
           </Table>
@@ -131,7 +123,7 @@ const ViewTemplate = ({ invoicing_doctor, transactions, _id, createdAt }) => {
         </section> */}
       </div>
       <section className='fixed__invoice-bottom'>
-        <p>Medipod Private Limited | address 1 | address 2 | address 3 | phone number | fax </p>
+        <p>MEDIPOD PTE LTD | 203 HENDERSON ROAD | #08-04G HENDERSON INDUSTRIAL PARK | SINGAPORE 159546 | +65 9152 2928</p>
       </section>
     </page>
   )

@@ -14,8 +14,8 @@ export default class CommissionTable extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      invoiceYear: moment().year(),
-      invoiceMonth: moment().month() + 1,
+      transactionYear: moment().year(),
+      transactionMonth: moment().month() + 1,
       page: '',
       pages: '',
       agentCommissions: [],
@@ -32,13 +32,13 @@ export default class CommissionTable extends Component {
   handlePaginate (event) {
     this.setState({ commissionTableLoading: true })
     const {
-      invoiceYear,
-      invoiceMonth
+      transactionYear,
+      transactionMonth
     } = this.state
 
     const formData = {
-      invoiceYear,
-      invoiceMonth
+      transactionYear,
+      transactionMonth
     }
     const queryString = qs.stringify(formData)
 
@@ -88,12 +88,14 @@ export default class CommissionTable extends Component {
   handleSearchChange () {
     this.setState({ commissionTableLoading: true })
     const {
-      invoiceYear,
-      invoiceMonth
+      transactionYear,
+      transactionMonth
     } = this.state
 
+    const referralAgentId = this.props.match.params.id
+
     const formData = {
-      invoiceYear, invoiceMonth
+      transactionYear, transactionMonth, referralAgentId
     }
     const queryString = qs.stringify(formData)
 
@@ -147,13 +149,15 @@ export default class CommissionTable extends Component {
 
   componentDidMount () {
     const {
-      invoiceMonth,
-      invoiceYear
+      transactionMonth,
+      transactionYear
     } = this.state
 
     const referralAgentId = this.props.match.params.id
 
-    const formData = { invoiceMonth, invoiceYear, referralAgentId }
+    console.log(referralAgentId)
+
+    const formData = { transactionMonth, transactionYear, referralAgentId }
 
     const queryString = qs.stringify(formData)
 
@@ -188,8 +192,8 @@ export default class CommissionTable extends Component {
   render () {
     console.log(this.state)
     const {
-      invoiceYear,
-      invoiceMonth,
+      transactionYear,
+      transactionMonth,
       page,
       pages,
       agentCommissions,
@@ -234,15 +238,15 @@ export default class CommissionTable extends Component {
     })
 
     const table = !commissionTableLoading
-    ? <Table celled basic selectable definition>
+    ? <Table size='small' celled basic selectable definition>
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Transaction Record</Table.HeaderCell>
+          <Table.HeaderCell>Patient</Table.HeaderCell>
+          <Table.HeaderCell>Doctor</Table.HeaderCell>
           <Table.HeaderCell>Invoice Number</Table.HeaderCell>
           <Table.HeaderCell>Invoice Date</Table.HeaderCell>
           <Table.HeaderCell>Invoice Status</Table.HeaderCell>
-          <Table.HeaderCell>Patient</Table.HeaderCell>
-          <Table.HeaderCell>Doctor</Table.HeaderCell>
           <Table.HeaderCell>Invoice Amount</Table.HeaderCell>
           <Table.HeaderCell>Commission Amount (SGD $)</Table.HeaderCell>
           <Table.HeaderCell />
@@ -260,17 +264,17 @@ export default class CommissionTable extends Component {
         <Form onSubmit={handleSearchChange}>
           <Form.Group widths='equal'>
             <Form.Select
-              label='Month'
+              label='Medipod Invoice Month'
               options={monthsSelectOption}
               placeholder='Select Month'
-              value={invoiceMonth}
-              name='invoiceMonth'
-              onChange={(e, {value}) => handleSelectChange(e, value, 'invoiceMonth')} />
+              value={transactionMonth}
+              name='transactionMonth'
+              onChange={(e, {value}) => handleSelectChange(e, value, 'transactionMonth')} />
             <Form.Input
-              label='Year'
+              label='Medipod Invoice Year'
               placeholder='IE: 2017'
-              name='invoiceYear'
-              value={invoiceYear}
+              name='transactionYear'
+              value={transactionYear}
               onChange={handleInputChange} />
             <Form.Field>
               <label>&nbsp;</label>

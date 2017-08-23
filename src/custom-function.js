@@ -34,9 +34,15 @@ const combineName = (obj) => {
   let lastName = obj['last name'] ? obj['last name'] : ''
   return `${firstName} ${lastName}`
 }
+const invoiceNumberGetter = ({ invoiceNumber, yearCreated }) => {
+  const _invoiceNumber = invoiceNumber || ''
+  const _yearCreated = yearCreated || ''
+
+  return `MP${_yearCreated}${_invoiceNumber}`
+}
 
 const monthsSelectOption = [
-  { key: '', text: '', value: '' },
+  { key: 'empty', text: 'Clear Month', value: '' },
   { key: 'jan', text: 'January', value: 1 },
   { key: 'feb', text: 'February', value: 2 },
   { key: 'mar', text: 'March', value: 3 },
@@ -84,4 +90,4 @@ const invoiceStatusType = [
   { key: 'VOID', text: 'VOID', value: 'VOID' }
 ]
 
-export { AuthHeader, M6117, combineName, monthsSelectOption, genderOption, uploadFileOption, accessType, invoiceStatusType }
+export { AuthHeader, M6117, combineName, invoiceNumberGetter, monthsSelectOption, genderOption, uploadFileOption, accessType, invoiceStatusType }

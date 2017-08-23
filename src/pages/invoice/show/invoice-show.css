@@ -46,8 +46,9 @@ body {
   grid-area: grid__invoice-topleft;
 }
 .grid__invoice-topright {
-  /*background-color: blue;*/
+  justify-self: end;
   grid-area: grid__invoice-topright;
+  /*background-color: blue;*/
 }
 .grid__invoice-mid {
   min-height: 20cm;
@@ -65,6 +66,10 @@ body {
 .fixed__invoice-bottom {
   position: absolute;
   bottom: 0;
+}
+
+.fixed__invoice-bottom p {
+font-size: 0.7em;
 }
 
 @media print {

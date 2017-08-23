@@ -5,23 +5,19 @@ import { Table, Button } from 'semantic-ui-react'
 import moment from 'moment'
 import * as currencyFormatter from 'currency-formatter'
 
-import { M6117, combineName } from 'custom-function'
+import { M6117, combineName, invoiceNumberGetter } from 'custom-function'
 
 const IndexRow = ({ updating, commissionData, commissionInput, handleInputChange, handleCommissionSubmit }) => {
   const {
     _id,
-    invoiceId: { createdAt: invoiceDate, statuses: invoiceStatuses },
+    invoiceId,
     invoiceAmount,
-    commissionAmount,
     transactionId,
     transactionId: { patient, receiving_doctor, _id: _transactionId }
   } = commissionData
 
-  console.log('invoiceStatuses', invoiceStatuses)
+  console.log('invoiceId', invoiceId)
 
-  const latestInvoiceStatus = !invoiceStatuses.length
-  ? '< N E W >'
-  : invoiceStatuses[invoiceStatuses.length - 1].name
 
   const {
     _id: patientId
@@ -34,8 +30,22 @@ const IndexRow = ({ updating, commissionData, commissionInput, handleInputChange
   const receivingDoctor = combineName(receiving_doctor)
   const receivingPatient = combineName(patient)
   const transactionRecord = M6117(transactionId)
-  const momentInvoiceDate = moment(invoiceDate).format('DD MMM YYYY')
+
+  const latestInvoiceStatus = invoiceId
+  ? !invoiceId.statuses.length
+    ? '< N E W >'
+    : invoiceId.statuses[invoiceId.statuses.length - 1].name
+  : '-'
+
+  const momentInvoiceDate = invoiceId
+  ? moment(invoiceId.createdAt).format('DD MMM YYYY')
+  : '-'
+
   const formattedInvoiceAmount = currencyFormatter.format(invoiceAmount, { code: 'SGD' })
+
+  const invoiceNumber = invoiceId
+  ? <Link to={`/invoice/${invoiceId._id}`}>{invoiceNumberGetter(invoiceId)}</Link>
+  : <Link to='/invoice/new'>Create Invoice</Link>
 
   return (
     <Table.Row>
@@ -44,21 +54,21 @@ const IndexRow = ({ updating, commissionData, commissionInput, handleInputChange
           {transactionRecord}
         </Link>
       </Table.Cell>
-      <Table.Cell>Invoice Number Here</Table.Cell>
-      <Table.Cell>{momentInvoiceDate}</Table.Cell>
-      <Table.Cell>{latestInvoiceStatus}</Table.Cell>
-      <Table.Cell>
+      <Table.Cell collapsing>
         <Link to={`/patient/${patientId}`}>
           {receivingPatient}
         </Link>
       </Table.Cell>
-      <Table.Cell>
+      <Table.Cell collapsing>
         <Link to={`/doctor/${doctorId}`}>
           {receivingDoctor}
         </Link>
       </Table.Cell>
-      <Table.Cell>{formattedInvoiceAmount}</Table.Cell>
-      <Table.Cell className='table-cell--rel'>
+      <Table.Cell collapsing>{invoiceNumber}</Table.Cell>
+      <Table.Cell collapsing>{momentInvoiceDate}</Table.Cell>
+      <Table.Cell collapsing>{latestInvoiceStatus}</Table.Cell>
+      <Table.Cell collapsing>{formattedInvoiceAmount}</Table.Cell>
+      <Table.Cell collapsing className='table-cell--rel'>
         <input
           placeholder='Amount'
           className='table-cell__input'
@@ -68,13 +78,7 @@ const IndexRow = ({ updating, commissionData, commissionInput, handleInputChange
           onChange={handleInputChange}
           />
       </Table.Cell>
-      <Table.Cell>
-        {/* <Button onClick={(event) => props.addonHandler(event, 'remove', props.transaction, props.index)}>Delete</Button> */}
-        {/* <Button
-            fluid
-            negative
-            icon='delete'
-            onClick={(event) => props.addonHandler(event, 'remove', props.transaction, props.index)} /> */}
+      <Table.Cell collapsing>
         <Button
           loading={updating}
           fluid

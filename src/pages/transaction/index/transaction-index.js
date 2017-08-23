@@ -30,7 +30,7 @@ export default class TransactionIndex extends Component {
       'transaction year': moment().year(),
       'transaction month': moment().month() + 1,
       doctorSearchResult: [],
-      selectedDoctor: {},
+      selectedDoctor: '',
       doctorId: ''
     }
     this.handlePaginate = this.handlePaginate.bind(this)
@@ -214,8 +214,8 @@ export default class TransactionIndex extends Component {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Transaction Record</Table.HeaderCell>
-          <Table.HeaderCell>Invoice Number</Table.HeaderCell>
-          <Table.HeaderCell>Invoice Date</Table.HeaderCell>
+          <Table.HeaderCell>Transaction / Invoice Number</Table.HeaderCell>
+          <Table.HeaderCell>Transaction / Invoice Date</Table.HeaderCell>
           <Table.HeaderCell>Patient</Table.HeaderCell>
           <Table.HeaderCell>Doctor</Table.HeaderCell>
           <Table.HeaderCell>Agent</Table.HeaderCell>

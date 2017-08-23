@@ -104,8 +104,9 @@ export default class AgentIndex extends Component {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Name</Table.HeaderCell>
-          <Table.HeaderCell>First Name</Table.HeaderCell>
-          <Table.HeaderCell>Last Name</Table.HeaderCell>
+          <Table.HeaderCell>IC / Passport</Table.HeaderCell>
+          <Table.HeaderCell>Contact Numeber</Table.HeaderCell>
+          <Table.HeaderCell>Email</Table.HeaderCell>
           <Table.HeaderCell>Gender</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
@@ -121,8 +122,8 @@ export default class AgentIndex extends Component {
         <div className='flex flex--row flex--jc-spacebetween'>
           <Search
             showNoResults={false}
-            // onResultSelect={this.handleResultSelect}
             onSearchChange={handleSearchChange}
+            // onResultSelect={this.handleResultSelect}
             // results={results}
             // value={value}
             // {...this.props}

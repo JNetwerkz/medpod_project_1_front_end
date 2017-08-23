@@ -105,9 +105,11 @@ class DoctorIndex extends Component {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Name</Table.HeaderCell>
-          <Table.HeaderCell>First Name</Table.HeaderCell>
-          <Table.HeaderCell>Last Name</Table.HeaderCell>
+          <Table.HeaderCell>Department / Institution / Clinic</Table.HeaderCell>
+          <Table.HeaderCell>Contact Number</Table.HeaderCell>
+          <Table.HeaderCell>Email</Table.HeaderCell>
           <Table.HeaderCell>Gender</Table.HeaderCell>
+          <Table.HeaderCell>Hospital</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
 

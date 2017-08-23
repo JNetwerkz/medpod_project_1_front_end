@@ -217,8 +217,10 @@ export default class InvoiceIndex extends Component {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Invoice Number</Table.HeaderCell>
-          <Table.HeaderCell>Date Created</Table.HeaderCell>
           <Table.HeaderCell>Invoicing Doctor</Table.HeaderCell>
+          <Table.HeaderCell>Date Created</Table.HeaderCell>
+          <Table.HeaderCell>Status</Table.HeaderCell>
+          <Table.HeaderCell>Grand Total</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
 

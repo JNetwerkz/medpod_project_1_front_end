@@ -6,7 +6,9 @@ import { Table } from 'semantic-ui-react'
 const IndexRow = ({ hospitalData, match }) => {
   const {
     name,
-    address,
+    nameAbbreviation,
+    associationPhoneNumber,
+    associationEmail,
     _id
   } = hospitalData
 
@@ -17,7 +19,9 @@ const IndexRow = ({ hospitalData, match }) => {
           {name}
           </Link>
         </Table.Cell>
-        <Table.Cell>{address}</Table.Cell>
+        <Table.Cell>{associationPhoneNumber}</Table.Cell>
+        <Table.Cell>{associationEmail}</Table.Cell>
+        <Table.Cell>{nameAbbreviation}</Table.Cell>
     </Table.Row>
   )
 }

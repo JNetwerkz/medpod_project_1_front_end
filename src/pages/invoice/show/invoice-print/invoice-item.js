@@ -34,17 +34,17 @@ const InvoiceItem = (props) => {
 
   const AddonItems = addons.map((addon, index) => {
     return (
-      <p key={`${addon.item.name}${index}`}>
+      <div key={`${addon.item.name}${index}`}>
         {`Addon - ${addon.item.name}`}
-      </p>
+      </div>
     )
   })
 
   const AddonAmount = addons.map((addon, index) => {
     return (
-      <p key={`${addon.amount}${index}`}>
+      <div key={`${addon.amount}${index}`}>
         {`${currencyFormatter.format(addon.amount, { code: 'SGD' })}`}
-      </p>
+      </div>
     )
   })
 

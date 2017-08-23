@@ -7,9 +7,10 @@ import { combineName } from 'custom-function'
 
 const IndexRow = ({ agentData, match }) => {
   const {
-    'first name': firstName,
-    'last name': lastName,
     gender,
+    personalPhoneNumber,
+    personalEmail,
+    'ic / passport': icPassport,
     _id
   } = agentData
 
@@ -20,8 +21,9 @@ const IndexRow = ({ agentData, match }) => {
           {`${combineName(agentData)}`}
           </Link>
         </Table.Cell>
-        <Table.Cell>{firstName}</Table.Cell>
-        <Table.Cell>{lastName}</Table.Cell>
+        <Table.Cell>{icPassport}</Table.Cell>
+        <Table.Cell>{personalPhoneNumber}</Table.Cell>
+        <Table.Cell>{personalEmail}</Table.Cell>
         <Table.Cell>{gender}</Table.Cell>
     </Table.Row>
   )

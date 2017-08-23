@@ -34,6 +34,7 @@ class TransactionNew extends Component {
       searchFocus: false,
       referralAgent: {},
       referralAgentId: '',
+      checkboxDisabled: true,
       // doctor modal selection
       doctorModalOpen: false,
       doctorSearchResult: [],
@@ -102,7 +103,7 @@ class TransactionNew extends Component {
     })
     .then((transactionNewRes) => {
       console.log('new transaction data', transactionNewRes.data)
-      const { errors, _id } = transactionNewRes.data
+      const { errors, _id, 'transaction month': transactionMonth, 'transaction year': transactionYear } = transactionNewRes.data
 
       if (errors) return this.setState({ errors })
       if (this.state.referralAgentId) return axios({
@@ -110,7 +111,9 @@ class TransactionNew extends Component {
         url: `${process.env.REACT_APP_API_ENDPOINT}/commission`,
         data: {
           referralAgentId: this.state.referralAgentId || '',
-          transactionId: _id
+          transactionId: _id,
+          transactionMonth,
+          transactionYear
         }
       })
 
@@ -160,7 +163,8 @@ class TransactionNew extends Component {
           selectedPatient: data,
           patient: data._id,
           referralAgent: data.referral_agent,
-          referralAgentId: data.referral_agent._id
+          referralAgentId: data.referral_agent._id,
+          checkboxDisabled: !data.referral_agent._id
         })
 
         const eventBubbleName = new Event('input', { bubbles: true })
@@ -236,7 +240,8 @@ class TransactionNew extends Component {
       doctorSearchResult,
       agentChecked,
       referralAgent,
-      referralAgentId
+      referralAgentId,
+      checkboxDisabled
     } = this.state
 
     const {
@@ -246,8 +251,6 @@ class TransactionNew extends Component {
       handleInputChange,
       handleCheckboxChange
     } = this
-
-    const checkboxDisabled = !referralAgentId
 
     return (
       <Container>
@@ -284,6 +287,7 @@ class TransactionNew extends Component {
             </Form.Field>
           </Form.Group>
           <Checkbox
+            value={referralAgentId}
             defaultChecked
             disabled={checkboxDisabled}
             name='agentCommission'

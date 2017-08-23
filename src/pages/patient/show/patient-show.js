@@ -331,6 +331,8 @@ class PatientShow extends Component {
   }
 
   render () {
+
+    console.log(this.state)
     const {
       notEditing,
       patientShow,
@@ -354,7 +356,9 @@ class PatientShow extends Component {
       errors
     } = this.state
 
-    const momentDob = moment(dob).format('DD MMM YYYY')
+    const momentDob = dob
+    ? moment(dob).format('DD MMM YYYY')
+    : ''
 
     const {
       'first name': agentFirstName,

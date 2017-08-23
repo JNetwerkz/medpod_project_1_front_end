@@ -5,7 +5,7 @@ import axios from 'axios'
 import qs from 'qs'
 import moment from 'moment'
 
-import TransactionTable from './_show-table'
+import CommissionTable from './_show-table'
 import ErrorMessage from 'partial/error'
 import EditButton from 'partial/_editButton'
 import SaveButton from 'partial/_saveButton'
@@ -236,11 +236,11 @@ export default class AgentShow extends Component {
           <SaveButton handleUpdateSubmit={handleUpdateSubmit} notEditing={notEditing} />
         </Header>
         {content}
-        <Divider hidden section />
+        <Divider section />
         <Header as='h2'>
-          Agent's Commission
+          Commission Record
         </Header>
-        <TransactionTable
+        <CommissionTable
           // handleSelectChange={handleSelectChange}
           // handleInputChange={handleInputChange}
           // handleSearchChange={handleSearchChange}

@@ -104,7 +104,9 @@ export default class HospitalIndex extends Component {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Name</Table.HeaderCell>
-          <Table.HeaderCell>Address</Table.HeaderCell>
+          <Table.HeaderCell>Contact Number</Table.HeaderCell>
+          <Table.HeaderCell>Email</Table.HeaderCell>
+          <Table.HeaderCell>Name Abbreviation</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
 

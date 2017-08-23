@@ -251,7 +251,8 @@ class TransactionShow extends Component {
       receiving_doctor,
       'invoice date': invoiceDate,
       'invoice number': invoiceNumber,
-      'transaction amount': transactionAmount
+      'transaction amount': transactionAmount,
+      additionalInfo
     } = transactionShow
 
     const momentInvoiceDate = moment(invoiceDate).format('DD MMM YYYY')
@@ -294,11 +295,11 @@ class TransactionShow extends Component {
           <Link to={`/doctor/${receiving_doctor._id}`}><p>Dr. {doctorName}</p></Link>
         </Form.Field>
         <Form.Field>
-          <label>Invoice Number</label>
+          <label>Transaction / Invoice Number</label>
           <p>{invoiceNumber}</p>
         </Form.Field>
         <Form.Field>
-          <label>Invoice Date</label>
+          <label>Transaction / Invoice Date</label>
           <p>{momentInvoiceDate}</p>
         </Form.Field>
       </Form.Group>
@@ -306,6 +307,12 @@ class TransactionShow extends Component {
         <Form.Field>
           <label>Transaction Amount</label>
           <p>{formattedTransactionAmount}</p>
+        </Form.Field>
+      </Form.Group>
+      <S3Subheader text='Additional Information' />
+      <Form.Group widths='equal'>
+        <Form.Field>
+          <p>{additionalInfo}</p>
         </Form.Field>
       </Form.Group>
     </Form>

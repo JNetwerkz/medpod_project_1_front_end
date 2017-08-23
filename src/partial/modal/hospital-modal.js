@@ -42,7 +42,7 @@ const HospitalModal = (props) => {
           </Header.Subheader>
         </Header>
         <section className='grid__modalbox-searcharea'>
-          <Input className='grid__modalbox-searchinput' fluid icon='search' autoFocus onChange={(event) => props.modalMethod('change', event)} placeholder='Search Hospital..' />
+          <Input className='grid__modalbox-searchinput' fluid icon='search' autoFocus onChange={(event) => props.modalMethod('change', event)} placeholder='Search Hospital by name or abbreviation..' />
           <Segment className='grid__modalbox-searchresult'>
             <List relaxed divided selection verticalAlign='middle' size='big'>
               {hospitalsList.length ? hospitalsList : <Header as='h4'>Search results return empty!</Header>}

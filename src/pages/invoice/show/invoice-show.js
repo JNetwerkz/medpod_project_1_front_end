@@ -86,6 +86,7 @@ export default class InvoiceShow extends Component {
   openPrintDialog () {
     window.print()
   }
+
   render () {
     if (this.state.loading) return <Segment loading />
     const {

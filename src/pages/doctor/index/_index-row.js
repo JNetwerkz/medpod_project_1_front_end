@@ -7,10 +7,12 @@ import { combineName } from 'custom-function'
 
 const IndexRow = ({ doctorData, match }) => {
   const {
-    'first name': firstName,
-    'last name': lastName,
+    _id,
     gender,
-    _id
+    associationName,
+    hospital: { _id: hospitalId, name: hospitalName },
+    associationPhoneNumber,
+    associationEmail
   } = doctorData
 
   return (
@@ -20,9 +22,11 @@ const IndexRow = ({ doctorData, match }) => {
           {`${combineName(doctorData)}`}
           </Link>
         </Table.Cell>
-        <Table.Cell>{firstName}</Table.Cell>
-        <Table.Cell>{lastName}</Table.Cell>
+        <Table.Cell>{associationName}</Table.Cell>
+        <Table.Cell>{associationPhoneNumber}</Table.Cell>
+        <Table.Cell>{associationEmail}</Table.Cell>
         <Table.Cell>{gender}</Table.Cell>
+        <Table.Cell><Link to={`/hospital/${hospitalId}`}>{hospitalName}</Link></Table.Cell>
     </Table.Row>
   )
 }
