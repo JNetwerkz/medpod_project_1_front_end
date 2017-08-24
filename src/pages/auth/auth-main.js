@@ -8,7 +8,6 @@ import ErrorMessage from 'partial/error'
 
 // import components
 import LoginForm from './components/login-form'
-import './auth-main.css'
 
 class AuthMain extends Component {
   constructor (props) {
