@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
-import { auth, storageKey, firebaseIdToken, userType } from './firebase-settings'
+import { auth, storageKey, firebaseIdToken, userType, userEmail, userName } from './firebase-settings'
 
 import './App.css'
 
@@ -27,15 +27,8 @@ class App extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      loading: true,
-      sideBarShow: false
+      loading: true
     }
-
-    this.showSideBar = this.showSideBar.bind(this)
-  }
-
-  showSideBar () {
-    this.setState({ sideBarShow: !this.state.sideBarShow })
   }
 
   componentDidMount () {
@@ -43,6 +36,8 @@ class App extends Component {
       console.log(user)
       if (user) {
         window.localStorage.setItem(storageKey, user.uid)
+        window.localStorage.setItem(userEmail, user.email)
+        window.localStorage.setItem(userName, user.displayName)
         console.log('step 1', window.localStorage.getItem(storageKey))
         user.getIdToken(true)
         .then((token) => {
@@ -66,6 +61,8 @@ class App extends Component {
         window.localStorage.removeItem(storageKey)
         window.localStorage.removeItem(firebaseIdToken)
         window.localStorage.removeItem(userType)
+        window.localStorage.removeItem(userEmail)
+        window.localStorage.removeItem(userName)
         axios.defaults.headers.common['Authorization'] = ''
         return this.setState({
           loading: false
@@ -110,9 +107,6 @@ class App extends Component {
   // }
 
   render () {
-    const { sideBarShow } = this.state
-    console.log(sideBarShow)
-
     if (this.state.loading) {
       return (
         <Segment style={{height: '100vh'}}>

@@ -30,7 +30,7 @@ class TransactionNew extends Component {
       // patient modal selection
       patientModalOpen: false,
       patientSearchResult: [],
-      selectedPatient: {},
+      selectedPatient: '',
       searchFocus: false,
       referralAgent: {},
       referralAgentId: '',
@@ -38,7 +38,7 @@ class TransactionNew extends Component {
       // doctor modal selection
       doctorModalOpen: false,
       doctorSearchResult: [],
-      selectedDoctor: {},
+      selectedDoctor: '',
       errors: null
     }
     this.handleInputChange = this.handleInputChange.bind(this)

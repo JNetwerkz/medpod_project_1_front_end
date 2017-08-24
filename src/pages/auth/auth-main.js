@@ -8,6 +8,7 @@ import ErrorMessage from 'partial/error'
 
 // import components
 import LoginForm from './components/login-form'
+import './auth-main.css'
 
 class AuthMain extends Component {
   constructor (props) {
@@ -15,7 +16,8 @@ class AuthMain extends Component {
     this.state = {
       email: '',
       password: '',
-      errors: null
+      errors: null,
+      loading: false
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -34,6 +36,7 @@ class AuthMain extends Component {
 
   handleSubmit (event) {
     event.preventDefault()
+    this.setState({ loading: true })
 
     const fromState = this.props.location.state
 
@@ -47,7 +50,7 @@ class AuthMain extends Component {
       })
       .catch((err) => {
         return err.message
-        ? this.setState({ errors: ['There is something wrong with your login. Please check your email or password.'] })
+        ? this.setState({ errors: ['There is something wrong with your login. Please check your email or password.'], loading: false })
         : ''
       })
   }
@@ -60,7 +63,7 @@ class AuthMain extends Component {
 
   render () {
     console.log('loginmain props', this)
-    const { errors, password, email } = this.state
+    const { errors, password, email, loading } = this.state
     const { handleChange, handleSubmit } = this
     return (
       <div className='flex flex--column'>
@@ -91,19 +94,19 @@ class AuthMain extends Component {
                   placeholder='******' />
               </Form.Field>
               <Form.Field>
-                <Form.Button primary>Sign In</Form.Button>
+                <Form.Button loading={loading} primary>Sign In</Form.Button>
               </Form.Field>
             </Form.Group>
           </Form>
         </section>
         <Divider section hidden />
-        <section className='flex flex--row flex--jc-center flex-grow'>
+        <section className='flex flex--row flex--jc-center flex--grow'>
           <div>
-            <Image src='https://s3-ap-southeast-1.amazonaws.com/medipod.1/Medipod+Logo.jpg' size='big' verticalAlign='middle' />
+            <Image src='https://s3-ap-southeast-1.amazonaws.com/medipod.1/Medipod+Logo.jpg' size='small' verticalAlign='middle' />
             {/* <h1 className='medipod'>
             Medipod
           </h1> */}
-          <Header as='h1' textAlign='right'>
+          <Header as='h1'>
             Customer Management System
           </Header>
 

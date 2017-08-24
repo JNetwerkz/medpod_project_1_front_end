@@ -11,24 +11,23 @@ export default class PatientMain extends Component {
   render () {
     return (
       <Container fluid>
-        <Header as='h1' dividing>
-          <Link to={this.props.match.url}>
-            <Icon name='users' />
-            <Header.Content>
-                Patients
-            </Header.Content>
-          </Link>
-          <Header.Subheader>
-            <Dropdown as='h4' text={'Manage Patients'}>
-              <Dropdown.Menu>
-                <Dropdown.Menu scrolling>
-                  <Dropdown.Item as={Link} to={`/patient/new`} icon='plus' text='Add New Patient' />
+          <Header as='h1' dividing>
+            <Link to={this.props.match.url}>
+              <Icon name='users' />
+              <Header.Content>
+                  Patients
+              </Header.Content>
+            </Link>
+            <Header.Subheader>
+              <Dropdown as='h4' text={'Manage Patients'}>
+                <Dropdown.Menu>
+                  <Dropdown.Menu scrolling>
+                    <Dropdown.Item as={Link} to={`/patient/new`} icon='plus' text='Add New Patient' />
+                  </Dropdown.Menu>
                 </Dropdown.Menu>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Header.Subheader>
-        </Header>
-
+              </Dropdown>
+            </Header.Subheader>
+          </Header>
         <Switch>
           <Route
             exact

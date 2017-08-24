@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { Menu, Divider } from 'semantic-ui-react'
 
-import { userType, auth, isAuthenticated } from 'firebase-settings'
+import { userType, userEmail, userName, auth, isAuthenticated } from 'firebase-settings'
 
 export default class NavMain extends Component {
   constructor (props) {
@@ -33,30 +33,33 @@ export default class NavMain extends Component {
 
 
   render () {
-    if (!isAuthenticated()) return null 
+    if (!isAuthenticated()) return null
     const currentUserType = window.localStorage.getItem(userType)
+    const currentUserEmail = window.localStorage.getItem(userEmail)
+    const currentUserName = window.localStorage.getItem(userName) || ''
     console.log('currentusertype', currentUserType)
     const { activeItem } = this.state
     const { handleSignOut, handleNavItemClick } = this
     return (
       <Menu stackable inverted secondary vertical size='large' color='black' id='app__nav'>
+        <Menu.Item as={Link} to='/transaction' name='transaction' active={activeItem === '/transaction'} onClick={handleNavItemClick}>
+          Transactions
+        </Menu.Item>
         <Menu.Item as={Link} to='/patient' name='patient' active={activeItem === '/patient'} onClick={handleNavItemClick}>
           Patients
+        </Menu.Item>
+        <Menu.Item as={Link} to='/agent' name='agent' active={activeItem === '/agent'} onClick={handleNavItemClick}>
+          Agents
+        </Menu.Item>
+        <Divider section />
+        <Menu.Item as={Link} to='/hospital' name='hospital' active={activeItem === '/hospital'} onClick={handleNavItemClick}>
+          Hospitals
         </Menu.Item>
         <Menu.Item as={Link} to='/doctor' name='doctor' active={activeItem === '/doctor'} onClick={handleNavItemClick}>
           Doctors
         </Menu.Item>
-        <Menu.Item as={Link} to='/transaction' name='transaction' active={activeItem === '/transaction'} onClick={handleNavItemClick}>
-          Transactions
-        </Menu.Item>
-        <Menu.Item as={Link} to='/hospital' name='hospital' active={activeItem === '/hospital'} onClick={handleNavItemClick}>
-          Hospitals
-        </Menu.Item>
         <Menu.Item as={Link} to='/addon' name='addon' active={activeItem === '/addon'} onClick={handleNavItemClick}>
           Addons
-        </Menu.Item>
-        <Menu.Item as={Link} to='/agent' name='agent' active={activeItem === '/agent'} onClick={handleNavItemClick}>
-          Agents
         </Menu.Item>
         <Divider section />
         <Menu.Item
@@ -69,9 +72,14 @@ export default class NavMain extends Component {
         </Menu.Item>
         <Divider section />
         <Menu.Item>
-          <Menu.Header>Access Level: {currentUserType}</Menu.Header>
+          <Menu.Header>
+            {/* {currentUserName || ''}<br /><br /> */}
+            {currentUserEmail}<br /><br />
+            {currentUserType}
+          </Menu.Header>
+          {/* <Menu.Header>Access Level: {currentUserType}</Menu.Header> */}
         </Menu.Item>
-        <Menu.Item as='a' name='enterprise' onClick={handleSignOut}>Log out</Menu.Item>
+        <Menu.Item as='a' onClick={handleSignOut}>Log out</Menu.Item>
       </Menu>
     )
   }

@@ -14,6 +14,8 @@ const firebaseApp = firebase.initializeApp(config)
 const auth = firebaseApp.auth()
 const db = firebaseApp.database()
 const storageKey = 'KEY_FOR_LOCAL_STORAGE'
+const userEmail = 'USER_EMAIL'
+const userName = 'USER_NAME'
 const userType = 'USER_TYPE'
 const firebaseIdToken = 'ID_TOKEN_FOR_LOCAL_STORAGE'
 
@@ -59,4 +61,4 @@ const isGrantedAccess = (path) => {
   return userAccess[window.localStorage.getItem(userType)][path]
 }
 
-export {firebaseApp, auth, db, isAuthenticated, isGrantedAccess, storageKey, firebaseIdToken, userType}
+export { firebaseApp, auth, db, isAuthenticated, isGrantedAccess, storageKey, firebaseIdToken, userType, userEmail, userName}

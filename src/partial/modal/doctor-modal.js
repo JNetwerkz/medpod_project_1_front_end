@@ -6,17 +6,6 @@ import { Input, Button, List, Header, Icon, Segment, Table } from 'semantic-ui-r
 import { combineName } from 'custom-function'
 import ModalSelectedDetails from './_modalSelectedDetails'
 
-const DoctorDetails = (data) => {
-  return (
-    <div>
-      <h2>Details</h2>
-      <ul>
-        <li>{combineName(data.selectedDoctor)}</li>
-      </ul>
-    </div>
-  )
-}
-
 const DoctorModal = (props) => {
   const {
     doctorSearchResult,
