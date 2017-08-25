@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 
-import { Container, Header, Table, Menu, Icon, Search, Form, Divider } from 'semantic-ui-react'
+import { Container, Table, Menu, Icon, Form, Divider } from 'semantic-ui-react'
 
 import axios from 'axios'
 import qs from 'qs'
 import moment from 'moment'
 
-import { AuthHeader, M6117, combineName, monthsSelectOption } from 'custom-function'
+import { monthsSelectOption } from 'custom-function'
 
 import IndexRow from './_index-row'
 import DoctorModal from 'partial/modal/doctor-modal'
@@ -51,8 +50,6 @@ export default class InvoiceIndex extends Component {
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
 
-    console.log(name, value)
-
     this.setState({
       [name]: value
     })
@@ -71,7 +68,6 @@ export default class InvoiceIndex extends Component {
       yearCreated,
       invoicing_doctor
     }
-    console.log(formData)
 
     const queryString = qs.stringify(formData)
 
@@ -101,12 +97,10 @@ export default class InvoiceIndex extends Component {
         break
 
       case 'close':
-        console.log('closing modal')
         this.setState({ doctorModalOpen: false })
         break
 
       case 'change':
-          // console.log('searching doctor')
         if (event.currentTarget.value.length >= 2) {
           axios.get(`${process.env.REACT_APP_API_ENDPOINT}/doctor/search`, {
             params: { search: event.currentTarget.value }
@@ -118,7 +112,6 @@ export default class InvoiceIndex extends Component {
         }
         break
       case 'select':
-          // console.log('select doctor')
         this.setState({
           selectedDoctor: data,
           doctorId: data._id
@@ -201,7 +194,6 @@ export default class InvoiceIndex extends Component {
     const pagesArray = Array.from({length: pages}, (v, i) => i + 1)
 
     const MenuItems = pagesArray.map((item, index) => {
-      console.log(typeof item)
       return (
         <Menu.Item link
           onClick={handlePaginate}
@@ -252,7 +244,6 @@ export default class InvoiceIndex extends Component {
                 readOnly
                 onChange={() => console.log()}
                 ref={(input) => {
-                  console.log('input', input)
                   this.doctorNameRef = input
                 }}
                 value={`${selectedDoctor['first name'] || ''} ${selectedDoctor['last name'] || ''}`} />
@@ -264,7 +255,6 @@ export default class InvoiceIndex extends Component {
                 name='receiving doctor'
                 onChange={() => console.log()}
                 ref={(input) => {
-                  console.log('input', input)
                   this.doctorIdRef = input
                 }}
                 value={doctorId} />
@@ -309,8 +299,6 @@ export default class InvoiceIndex extends Component {
     }
 
     const queryString = qs.stringify(formData)
-
-    console.log(queryString)
 
     axios({
       method: 'GET',

@@ -3,18 +3,13 @@ import ReactDOM from 'react-dom'
 import axios from 'axios'
 
 import { Container, Button, Header, Divider, Form, List, Accordion, Icon, Segment } from 'semantic-ui-react'
-import * as currencyFormatter from 'currency-formatter'
 import moment from 'moment'
 
 import ErrorMessage from 'partial/error'
-import { combineName, invoiceStatusType } from 'custom-function'
-import S3Subheader from 'partial/_subheaders'
+import { invoiceStatusType } from 'custom-function'
 
-// import * as PrintTemplate from 'react-print'
 import './invoice-show.css'
 
-// import MyTemplate from './invoice-print/template'
-// import Template2 from './template-2'
 import PrintTemplate from './print-template'
 import ViewTemplate from './view-template'
 
@@ -46,8 +41,6 @@ export default class InvoiceShow extends Component {
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
 
-    console.log(name, value)
-
     this.setState({
       [name]: value
     })
@@ -61,15 +54,12 @@ export default class InvoiceShow extends Component {
 
     const formData = this.state
 
-    console.log(formData)
-
     axios({
       method: 'POST',
       url: `${process.env.REACT_APP_API_ENDPOINT}/invoice/${_id}/status/new`,
       data: formData
     })
     .then((res) => {
-      console.log('status update', res.data)
       const { errors } = res.data
 
       errors
@@ -92,13 +82,11 @@ export default class InvoiceShow extends Component {
     const {
       invoiceShow,
       name,
-      createdAt,
       errors
     } = this.state
 
     const {
       handleSelectChange,
-      handleInputChange,
       openPrintDialog,
       handleStatusUpdateSubmit
     } = this
@@ -106,8 +94,6 @@ export default class InvoiceShow extends Component {
     const {
       statuses
     } = invoiceShow
-
-
 
     const lastIndexOfStatus = statuses.length - 1
     let lastStatus, lastStatusName
@@ -137,7 +123,6 @@ export default class InvoiceShow extends Component {
         <ErrorMessage errors={errors} />
         <Divider hidden section />
         <div className='flex flex--row flex--jc-spacearound'>
-
           <section>
             <ViewTemplate {...invoiceShow} />
           </section>
@@ -181,12 +166,9 @@ export default class InvoiceShow extends Component {
       url: `${process.env.REACT_APP_API_ENDPOINT}/invoice/${this.props.match.params.id}`
     })
     .then((res) => {
-      console.log('InvoiceShow res', res.data)
       this.setState({ invoiceShow: res.data, loading: false })
       ReactDOM.render(<PrintTemplate {...this.state.invoiceShow} />, document.getElementById('print-mount'))
     })
     .catch((err) => console.error(err))
   }
 }
-
-// ReactDOM.render(<Template2 {...this.state.invoiceShow} />, document.getElementById('print-mount'))

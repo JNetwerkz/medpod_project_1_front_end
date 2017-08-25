@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom'
 
 import axios from 'axios'
 
-import { Form, Header, Container, Button, Divider } from 'semantic-ui-react'
+import { Form, Header, Container, Button } from 'semantic-ui-react'
 import ErrorMessage from 'partial/error'
 import S3Subheader from 'partial/_subheaders'
 
@@ -13,7 +13,6 @@ export default class HospitalNew extends Component {
     this.state = {
       redirectToShow: false,
       redirectTo: '',
-
       // form input fields
       name: '',
       nameAbbreviation: '',
@@ -36,15 +35,12 @@ export default class HospitalNew extends Component {
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
 
-    console.log(name, value)
-
     this.setState({
       [name]: value
     })
   }
 
   handleSelectChange (event, value, name) {
-    console.log(name, value)
     this.setState({
       [name]: value
     })
@@ -53,8 +49,6 @@ export default class HospitalNew extends Component {
   handleSubmit (event) {
     event.preventDefault()
     const formData = this.state
-
-    console.log(formData)
 
     axios({
       method: 'POST',

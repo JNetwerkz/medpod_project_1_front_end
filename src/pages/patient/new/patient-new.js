@@ -15,7 +15,7 @@ const options = [
   { key: 'o', text: 'Others', value: 'others' }
 ]
 
-class PatientNew extends Component {
+export default class PatientNew extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -51,15 +51,12 @@ class PatientNew extends Component {
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
 
-    console.log(name, value)
-
     this.setState({
       [name]: value
     })
   }
 
   handleSelectChange (event, value, name) {
-    console.log(name, value)
     this.setState({
       [name]: value
     })
@@ -106,12 +103,10 @@ class PatientNew extends Component {
         break
 
       case 'close':
-        console.log('closing modal')
         this.setState({ agentModalOpen: false })
         break
 
       case 'change':
-        console.log('searching agent')
         if (event.currentTarget.value.length >= 2) {
           axios.get(`${process.env.REACT_APP_API_ENDPOINT}/agent/search`, {
             params: { search: event.currentTarget.value }
@@ -123,12 +118,9 @@ class PatientNew extends Component {
         }
         break
       case 'select':
-        console.log('select agent')
-        console.log(data)
         this.setState({
           selectedAgent: data,
           referral_agent: data._id
-          // patientModalOpen: false
         })
 
         const eventBubbleName = new Event('input', { bubbles: true })
@@ -205,7 +197,6 @@ class PatientNew extends Component {
                 readOnly
                 onChange={() => console.log()}
                 ref={(input) => {
-                  console.log('input', input)
                   this.agentNameRef = input
                 }}
                 value={`${selectedAgent['first name'] || ''} ${selectedAgent['last name'] || ''}`} />
@@ -242,5 +233,3 @@ class PatientNew extends Component {
     )
   }
 }
-
-export default PatientNew

@@ -4,14 +4,12 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import axios from 'axios'
 import moment from 'moment'
 
-import { Button, Form, Header, Input, Select, Container, Divider } from 'semantic-ui-react'
+import { Header, Container, Divider } from 'semantic-ui-react'
 
 import InvoiceStageOne from './_stageOne'
 import InvoiceStageTwo from './_stageTwo'
-import InvoiceStageThree from './_stageThree'
 import InvoiceNav from '../invoice-nav'
 import ErrorMessage from 'partial/error'
-
 
 export default class InvoiceNew extends Component {
   constructor (props) {
@@ -48,10 +46,6 @@ export default class InvoiceNew extends Component {
     this.printingStuff = this.printingStuff.bind(this)
   }
 
-  printingStuff (stuff) {
-    console.log(this.state[stuff])
-  }
-
   handleSelectChange (event, value, name) {
     this.setState({
       [name]: value
@@ -62,8 +56,6 @@ export default class InvoiceNew extends Component {
     const target = event.target
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
-
-    console.log(name, value)
 
     this.setState({
       [name]: value
@@ -77,16 +69,12 @@ export default class InvoiceNew extends Component {
       'transaction year': this.state['transaction year'],
       'receiving_doctor': this.state.doctorId
     }
-    console.log(formData)
-
     axios({
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/transaction/search`,
       params: formData
     })
     .then((res) => {
-      console.log('transaction search data', res.data)
-
       const checkedTransaction = {}
 
       const selectedTransaction = {}
@@ -138,10 +126,6 @@ export default class InvoiceNew extends Component {
           doctorId: data._id
             // patientModalOpen: false
         })
-          // const eventBubbleName = new Event('input', { bubbles: true })
-          // this.doctorNameRef.dispatchEvent(eventBubbleName)
-          // const eventBubbleId = new Event('input', { bubbles: true })
-          // this.doctorIdRef.dispatchEvent(eventBubbleId)
         break
       default:
         break
@@ -173,8 +157,6 @@ export default class InvoiceNew extends Component {
   }
 
   handleStageTwoAmtPercentChange (event, inputType) {
-    console.log('value', event.target.value)
-
     const transactionId = event.target.name
     const selectedTransaction = this.state.selectedTransaction
     const transactionObj = selectedTransaction[transactionId]
@@ -203,6 +185,7 @@ export default class InvoiceNew extends Component {
       receivable[inputType] = stringInput
       receivable[outputType] = stringOutput
     }
+
     this.setState({
       selectedTransaction: selectedTransaction
     })
@@ -210,8 +193,6 @@ export default class InvoiceNew extends Component {
 
   handleStageTwoAddonMethod (event, type, transactionId, index, value) {
     event.preventDefault()
-    console.log(event)
-    console.log(event.type)
     let selectedAddon = this.state.selectedAddon
     switch (type) {
       case 'add':
@@ -223,38 +204,26 @@ export default class InvoiceNew extends Component {
           selectedAddon[transactionId] = []
           selectedAddon[transactionId].push({item: '', amount: ''})
         }
-        // console.log('selectedAddon.transactionId', selectedAddon.transactionId)
-
         this.setState({ selectedAddon })
 
         break
       case 'select':
-        // console.log('handleStageTwoAddonMethod select')
         selectedAddon[transactionId][index].item = value
 
         this.setState({ selectedAddon })
         break
       case 'amtInput':
-        // console.log('handleStageTwoAddonMethod amtInput')
         const valueFromEventInput = event.target.value
         selectedAddon[transactionId][index].amount = valueFromEventInput
 
         this.setState({ selectedAddon })
         break
       case 'remove':
-        // console.log('handleStageTwoAddonMethod delete')
-        // console.log(index)
-        const removed = selectedAddon[transactionId].splice(index, 1)
-
-        // console.log('removed', removed)
-        // console.log('selectedAddon', selectedAddon)
+        selectedAddon[transactionId].splice(index, 1)
 
         this.setState({ selectedAddon })
         break
       case 'createAddon':
-        console.log('handleStageTwoAddonMethod createAddon')
-        console.log(value)
-
         axios({
           method: 'POST',
           url: `${process.env.REACT_APP_API_ENDPOINT}/addon`,
@@ -294,7 +263,6 @@ export default class InvoiceNew extends Component {
       data: formData
     })
     .then((res) => {
-      console.log(res.data)
       const { errors } = res.data
 
       errors
@@ -308,7 +276,6 @@ export default class InvoiceNew extends Component {
         redirectTo: res.data._id,
         errors: null
       })
-
     })
     .catch((err) => console.log(err))
   }
@@ -317,17 +284,12 @@ export default class InvoiceNew extends Component {
     axios
     .get(`${process.env.REACT_APP_API_ENDPOINT}/addon`)
     .then((res) => {
-      console.log(res.data)
-      //  { key: 'Chinese', text: 'Chinese', value: 'Chinese' },
       const addonSelection = []
 
       res.data.forEach((item) => {
         let { _id: key, name: text, _id: value, status } = item
-        console.log(item)
-        // if (status === 'active') return { key, text, value }
         return status === 'active' ? addonSelection.push({ key, text, value }) : ''
       })
-      console.log(addonSelection)
       this.setState({ addonSelection })
     })
     .catch((err) => console.log(err))
@@ -340,15 +302,13 @@ export default class InvoiceNew extends Component {
     const { errors } = this.state
     return (
       <Container>
-          <ErrorMessage errors={errors} />
-          <Header as='h1'>
+        <ErrorMessage errors={errors} />
+        <Header as='h1'>
             New Invoice
           </Header>
-          <InvoiceNav {...this.props} transactionSearchResult={this.state.transactionSearchResult} />
+        <InvoiceNav {...this.props} transactionSearchResult={this.state.transactionSearchResult} />
         <Divider hidden />
 
-        {/* <Button loading={this.state.loading} onClick={() => this.printingStuff('selectedTransaction')}>Print selectedTransaction</Button>
-        <Button loading={this.state.loading} onClick={() => this.printingStuff('selectedAddon')}>Print selectedAddon</Button> */}
         <Switch>
           <Route
             exact
@@ -389,34 +349,7 @@ export default class InvoiceNew extends Component {
               />}
             path={`${this.props.match.url}/setup_invoice_amount`}
           />
-          {/* <Route
-            exact
-            render={(props) =>
-              <InvoiceStageThree
-                {...props}
-                // handleStageTwoAmtPercentChange={this.handleStageTwoAmtPercentChange}
-                handleStageTwoSubmit={this.handleStageTwoSubmit}
-                handleStageTwoAddonMethod={this.handleStageTwoAddonMethod}
-                selectedTransaction={this.state.selectedTransaction}
-                addonSelection={this.state.addonSelection}
-                selectedAddon={this.state.selectedAddon}
-              />}
-            path={`${this.props.match.url}/setup_addon_amount`}
-          /> */}
         </Switch>
-        {/* <InvoiceStageOne
-          handleSubmit={this.handleSubmit}
-          handleSelectChange={this.handleSelectChange}
-          handleInputChange={this.handleInputChange}
-          doctorModalMethod={this.doctorModalMethod}
-          transactionYear={this.state['transaction year']}
-          transactionMonth={this.state['transaction year']}
-          // modal related
-          doctorModalOpen={this.state.doctorModalOpen}
-          doctorSearchResult={this.state.doctorSearchResult}
-          selectedDoctor={this.state.selectedDoctor}
-          doctorId={this.state.doctorId}
-        /> */}
       </Container>
     )
   }

@@ -53,14 +53,12 @@ class AuthMain extends Component {
   }
 
   render () {
-    console.log('loginmain props', this)
     const { errors, password, email, loading } = this.state
     const { handleChange, handleSubmit } = this
     return (
       <div id='app__auth' className='flex flex--column flex--jc-center flex--align--center'>
         <ErrorMessage errors={errors} />
         <Segment raised padded='very' color='olive'>
-
           <div className='flex flex--column flex--jc-center flex--align--center'>
             <Image src='https://s3-ap-southeast-1.amazonaws.com/medipod.1/Medipod+Logo.jpg' size='small' verticalAlign='middle' />
             <Header as='h4' dividing textAlign='justified'>
@@ -69,7 +67,7 @@ class AuthMain extends Component {
             <Form onSubmit={handleSubmit}>
               <Form.Group widths='equal'>
                 <Form.Input
-                  label='Email'
+                  label={<label>E M A I L</label>}
                   value={email}
                   name='email'
                   onChange={handleChange}
@@ -77,13 +75,13 @@ class AuthMain extends Component {
                   type='email'
                   placeholder='medipod@medipod.co' />
                 <Form.Input
-                  label='Password'
+                  label={<label>P A S S W O R D</label>}
                   value={password}
                   name='password'
                   onChange={handleChange}
                   transparent
                   type='password'
-                  placeholder='***********' />
+                  placeholder='* * * * * * * *' />
               </Form.Group>
               <Divider hidden />
               <Button color='olive' fluid loading={loading}>Sign In</Button>

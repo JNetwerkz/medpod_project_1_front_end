@@ -1,11 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { Segment, Header, List, Table, Container, Button, Popup } from 'semantic-ui-react'
+import { Segment, Header, Table, Container, Button, Popup } from 'semantic-ui-react'
 
 import TableRow from './_stageOne-tableRow'
 
-const SearchResults = (props) => {
+export default (props) => {
   const transactionList = props.transactionSearchResult.map((item) => {
     return (
       <TableRow
@@ -58,5 +58,3 @@ const SearchResults = (props) => {
     </Container>
   )
 }
-
-export default SearchResults

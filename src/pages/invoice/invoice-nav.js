@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 
-import { Container, Breadcrumb } from 'semantic-ui-react'
+import { Breadcrumb } from 'semantic-ui-react'
 
 const customStyle = {
   color: 'black',
@@ -11,37 +11,22 @@ const customStyle = {
 
 class InvoiceNav extends Component {
   render () {
-    console.log('invoice nav props', this.props)
     return (
-        <Breadcrumb size='large'>
-          <Breadcrumb.Section exact activeStyle={customStyle} as={NavLink} to={`${this.props.match.url}`}>Select Transactions</Breadcrumb.Section>
+      <Breadcrumb size='large'>
+        <Breadcrumb.Section exact activeStyle={customStyle} as={NavLink} to={`${this.props.match.url}`}>Select Transactions</Breadcrumb.Section>
 
-          <Breadcrumb.Divider icon='right angle' />
-
-          {
+        <Breadcrumb.Divider icon='right angle' />
+        {
             !this.props.transactionSearchResult.length
             ? '..'
             : <div className='block--inline'>
-                <Breadcrumb.Section exact activeStyle={customStyle} as={NavLink} to={`${this.props.match.url}/setup_invoice_amount`}>
+              <Breadcrumb.Section exact activeStyle={customStyle} as={NavLink} to={`${this.props.match.url}/setup_invoice_amount`}>
                   Setup Invoice Amount
                 </Breadcrumb.Section>
-                <Breadcrumb.Divider icon='right angle' />
-              </div>
+              <Breadcrumb.Divider icon='right angle' />
+            </div>
           }
-
-          {
-            
-          }
-
-        </Breadcrumb>
-      // <Container fluid>
-      //   <li>
-      //     <NavLink activeStyle={{fontWeight: 'bold', color: 'blue'}} to={`${this.props.match.url}`}>Select Transactions</NavLink>
-      //   </li>
-      //   <li>
-      //     <NavLink activeStyle={{fontWeight: 'bold', color: 'blue'}} to={`${this.props.match.url}/setup`}>Modify Percentage</NavLink>
-      //   </li>
-      // </Container>
+      </Breadcrumb>
     )
   }
 }

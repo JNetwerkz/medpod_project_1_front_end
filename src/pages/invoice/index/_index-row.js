@@ -20,9 +20,9 @@ const IndexRow = ({ invoiceData, match }) => {
   const invoiceNumber = invoiceNumberGetter(invoiceData)
   const parsedGrandTotal = currencyFormatter.format(grandTotal, { code: 'SGD' })
 
-  const latestStatus = !invoiceData.statuses.length
+  const latestStatus = !statuses.length
     ? '< N E W >'
-    : invoiceData.statuses[invoiceData.statuses.length - 1].name
+    : statuses[statuses.length - 1].name
 
   return (
     <Table.Row>

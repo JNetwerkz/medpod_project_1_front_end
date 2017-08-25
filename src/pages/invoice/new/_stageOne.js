@@ -1,13 +1,12 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
-import { Form, Container, Segment, Divider } from 'semantic-ui-react'
+import { Form, Divider } from 'semantic-ui-react'
 
 import { monthsSelectOption } from 'custom-function'
 import DoctorModal from 'partial/modal/doctor-modal'
 import SearchResults from './_stageOne-results'
 
-const InvoiceStageOne = (props) => {
+export default (props) => {
   return (
     <div className='grid grid__invoice-new'>
       <section className='grid__invoice-new-search'>
@@ -18,14 +17,9 @@ const InvoiceStageOne = (props) => {
             <Form.Field>
               <label>Doctor</label>
               <input
-
                 onClick={() => props.doctorModalMethod('open')} type='text' name='doctorName'
                 readOnly
                 onChange={() => console.log()}
-                // ref={(input) => {
-                //   console.log('input', input)
-                //   this.doctorNameRef = input
-                // }}
                 value={`${props.selectedDoctor['first name'] || ''} ${props.selectedDoctor['last name'] || ''}`} />
             </Form.Field>
             <Form.Field>
@@ -34,10 +28,6 @@ const InvoiceStageOne = (props) => {
                 type='text'
                 name='receiving doctor'
                 onChange={() => console.log()}
-                // ref={(input) => {
-                //   console.log('input', input)
-                //   this.doctorIdRef = input
-                // }}
                 value={props.doctorId} />
             </Form.Field>
             <Form.Field>
@@ -61,5 +51,3 @@ const InvoiceStageOne = (props) => {
     </div>
   )
 }
-
-export default InvoiceStageOne

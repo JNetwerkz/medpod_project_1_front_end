@@ -8,8 +8,8 @@ import moment from 'moment'
 import { combineName, invoiceNumberGetter } from 'custom-function'
 import InvoiceItem from './invoice-print/invoice-item'
 
-const ViewTemplate = (invoiceData) => {
-  const { invoicing_doctor, transactions, _id, createdAt, grandTotal } = invoiceData
+export default (invoiceData) => {
+  const { invoicing_doctor, transactions, createdAt, grandTotal } = invoiceData
   const {
     associationAddress_country,
     associationAddress_postalcode,
@@ -33,22 +33,6 @@ const ViewTemplate = (invoiceData) => {
   // let grandTotalAmount = 0
 
   const InvoiceItems = transactions.map((item, index) => {
-    const {
-      receivable,
-      addons
-    } = item
-
-    // const receivableTotal = parseFloat(receivable.amount)
-    // console.log(receivableTotal)
-    // const addOnTotal = addons.reduce((acc, val) => {
-    //   if (val.amount === '') return acc
-    //   acc = acc + parseFloat(val.amount)
-    //   return acc
-    // }, 0)
-    // console.log(addOnTotal)
-
-    // grandTotalAmount = grandTotalAmount + receivableTotal + addOnTotal
-
     return (
       <InvoiceItem
         key={item.transaction._id}
@@ -118,9 +102,6 @@ const ViewTemplate = (invoiceData) => {
             </Table.Body>
           </Table>
         </section>
-        {/* <section className='grid__invoice-bottom'>
-          <p>Medipod</p>
-        </section> */}
       </div>
       <section className='fixed__invoice-bottom'>
         <p>MEDIPOD PTE LTD | 203 HENDERSON ROAD | #08-04G HENDERSON INDUSTRIAL PARK | SINGAPORE 159546 | +65 9152 2928</p>
@@ -128,5 +109,3 @@ const ViewTemplate = (invoiceData) => {
     </page>
   )
 }
-
-export default ViewTemplate

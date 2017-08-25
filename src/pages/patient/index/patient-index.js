@@ -6,7 +6,7 @@ import axios from 'axios'
 import IndexRow from './_index-row'
 import LoadingSmall from 'partial/loading-small'
 
-class PatientIndex extends Component {
+export default class PatientIndex extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -121,11 +121,7 @@ class PatientIndex extends Component {
         <div className='flex flex--row flex--jc-spacebetween'>
           <Search
             showNoResults={false}
-            // onResultSelect={this.handleResultSelect}
             onSearchChange={handleSearchChange}
-            // results={results}
-            // value={value}
-            // {...this.props}
           />
           <Menu floated='right' pagination>
             <Menu.Item as='a' data-page={prevPage} icon onClick={handlePaginate}>
@@ -148,7 +144,6 @@ class PatientIndex extends Component {
       url: `${process.env.REACT_APP_API_ENDPOINT}/patient`
     })
     .then((res) => {
-      console.log('PatientIndex res', res.data)
       const {
         docs: patientIndex,
         page,
@@ -160,5 +155,3 @@ class PatientIndex extends Component {
     })
   }
 }
-
-export default PatientIndex

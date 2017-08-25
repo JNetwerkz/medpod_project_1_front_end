@@ -6,9 +6,6 @@ import { Container, Header, Icon, Dropdown } from 'semantic-ui-react'
 import InvoiceNew from './new/invoice-new'
 import InvoiceShow from './show/invoice-show'
 import InvoiceIndex from './index/invoice-index'
-import InvoiceNav from './invoice-nav'
-// import TransactionShow from './show/transaction-show'
-// import TransactionIndex from './index/transaction-index'
 
 export default class InvoiceMain extends Component {
   render () {

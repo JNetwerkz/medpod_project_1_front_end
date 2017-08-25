@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 
-import { Input, Button, Container, Header, Segment, Form } from 'semantic-ui-react'
+import { Input, Container, Header, Segment, Form } from 'semantic-ui-react'
 
 import axios from 'axios'
 
-import { combineName } from 'custom-function'
 import ErrorMessage from 'partial/error'
 import EditButton from 'partial/_editButton'
 import SaveButton from 'partial/_saveButton'
@@ -56,8 +55,6 @@ export default class HospitalShow extends Component {
     this.setState({
       [name]: value
     })
-
-    console.log(name, value)
   }
 
   handleUpdateSubmit () {
@@ -242,7 +239,6 @@ export default class HospitalShow extends Component {
       url: `${process.env.REACT_APP_API_ENDPOINT}/hospital/${this.props.match.params.id}`
     })
     .then((res) => {
-      console.log('HospitalShow res', res.data)
       this.setState({ hospitalShow: res.data, ...res.data, segmentLoading: false })
     })
     .catch((err) => console.error(err))

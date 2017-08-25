@@ -1,16 +1,14 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
-import { Form, Container, Table, Popup, Button, Segment, Header, Divider } from 'semantic-ui-react'
+import { Container, Button, Segment, Header, Divider } from 'semantic-ui-react'
 
-import SetupRow from './_stageTwo-setupRow'
 import TableRow from './_stageTwo-tableRow'
 import GrandTotal from './_stageTwo-grandTotal'
 import ErrorMessage from 'partial/error'
 
 import { M6117, combineName } from 'custom-function'
 
-const InvoiceStageTwo = (props) => {
+export default (props) => {
   const {
     selectedTransaction,
     selectedAddon,
@@ -44,13 +42,6 @@ const InvoiceStageTwo = (props) => {
   return (
     <Container fluid>
       <form onSubmit={props.handleStageTwoSubmit}>
-        {/* <Popup
-          trigger={
-            <Button primary as={Link} to={`/invoice/new/setup_addon_amount`} floated='right'>Confirm</Button>
-          }
-          content='Next: Setup addon amount'
-          position='left center'
-        /> */}
         {TableRows}
         <section>
           <Segment.Group>
@@ -77,5 +68,3 @@ const InvoiceStageTwo = (props) => {
     </Container>
   )
 }
-
-export default InvoiceStageTwo
