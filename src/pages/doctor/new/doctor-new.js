@@ -9,7 +9,7 @@ import HospitalModal from 'partial/modal/hospital-modal'
 import ErrorMessage from 'partial/error'
 import S3Subheader from 'partial/_subheaders'
 
-class DoctorNew extends Component {
+export default class DoctorNew extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -47,15 +47,12 @@ class DoctorNew extends Component {
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
 
-    console.log(name, value)
-
     this.setState({
       [name]: value
     })
   }
 
   handleSelectChange (event, value, name) {
-    console.log(name, value)
     this.setState({
       [name]: value
     })
@@ -66,8 +63,6 @@ class DoctorNew extends Component {
     const formData = this.state
 
     if (!formData.hospital) return this.setState({ errors: ['Please select Hospital from search function provided'] })
-
-    console.log(formData)
 
     axios({
       method: 'POST',
@@ -93,12 +88,10 @@ class DoctorNew extends Component {
         break
 
       case 'close':
-        console.log('closing modal')
         this.setState({ hospitalModalOpen: false })
         break
 
       case 'change':
-        console.log('searching hospital')
         if (event.currentTarget.value.length >= 2) {
           axios.get(`${process.env.REACT_APP_API_ENDPOINT}/hospital/search`, {
             params: { search: event.currentTarget.value }
@@ -110,12 +103,9 @@ class DoctorNew extends Component {
         }
         break
       case 'select':
-        console.log('select hospital')
-        console.log(data)
         this.setState({
           selectedHospital: data,
           hospital: data._id
-          // patientModalOpen: false
         })
 
         const eventBubbleName = new Event('input', { bubbles: true })
@@ -134,7 +124,6 @@ class DoctorNew extends Component {
     const {
       'first name': firstName,
       'last name': lastName,
-      gender,
       hospital,
       associationName,
       associationAddress_street,
@@ -169,50 +158,50 @@ class DoctorNew extends Component {
           </Header>
           <S3Subheader text='Personal Information' />
           <Form.Group widths='equal'>
-            <Form.Input label='First name' placeholder='First name' name='first name'
+            <Form.Input required label='First name' placeholder='First name' name='first name'
               value={firstName} onChange={handleInputChange} />
 
-            <Form.Input label='Last name' placeholder='Last name' name='last name'
+            <Form.Input required label='Last name' placeholder='Last name' name='last name'
               value={lastName} onChange={handleInputChange} />
 
-            <Form.Select label='Gender' options={genderOption} placeholder='Gender' onChange={(e, {value}) => handleSelectChange(e, value, 'gender')} />
+            <Form.Select required label='Gender' options={genderOption} placeholder='Gender' onChange={(e, {value}) => handleSelectChange(e, value, 'gender')} />
           </Form.Group>
 
           <S3Subheader text='Department / Institution / Clinic' />
           <Form.Group widths='equal'>
-            <Form.Input label='Name' placeholder='IE: Novena Cancer Centre' name='associationName'
+            <Form.Input required label='Name' placeholder='IE: Novena Cancer Centre' name='associationName'
               value={associationName} onChange={handleInputChange} />
-            <Form.Input label='Contact Number' placeholder='8125 XXXX' name='associationPhoneNumber'
-              value={associationPhoneNumber} onChange={handleInputChange} />
-            <Form.Input type='email' label='Email' placeholder='account@novenacc.com' name='associationEmail'
-              value={associationEmail} onChange={handleInputChange} />
-
+            <Form.Input required label='Unit Number' name='associationAddress_unit'
+              value={associationAddress_unit} onChange={handleInputChange} />
+            <Form.Input required label='Block & Street' name='associationAddress_street'
+              value={associationAddress_street} onChange={handleInputChange} />
           </Form.Group>
+
           <Divider hidden />
 
           <Form.Group widths='equal'>
-            <Form.Input label='Unit Number' name='associationAddress_unit'
-              value={associationAddress_unit} onChange={handleInputChange} />
-            <Form.Input label='Block & Street' name='associationAddress_street'
-              value={associationAddress_street} onChange={handleInputChange} />
-            <Form.Input label='Postal Code' name='associationAddress_postalcode'
+            <Form.Input required label='Postal Code' name='associationAddress_postalcode'
               value={associationAddress_postalcode} onChange={handleInputChange} />
-          </Form.Group>
-          <Divider hidden />
-          <Form.Group>
-            <Form.Input label='Country' placeholder='Singapore' name='associationAddress_country'
+            <Form.Input required label='Country' placeholder='Singapore' name='associationAddress_country'
               value={associationAddress_country} onChange={handleInputChange} />
+          </Form.Group>
+
+          <S3Subheader text='Contact Infomation' />
+          <Form.Group widths='equal'>
+            <Form.Input label='Phone Number' name='associationPhoneNumber'
+              value={associationPhoneNumber} onChange={handleInputChange} />
+            <Form.Input label='Email' name='associationEmail'
+              value={associationEmail} onChange={handleInputChange} />
           </Form.Group>
 
           <S3Subheader text='Hospital' />
           <Form.Group widths='equal'>
-            <Form.Field>
-              <label>Hospital</label>
+            <Form.Field required>
+              <label>Name</label>
               <input onClick={() => this.hospitalModalMethod('open')} type='text' name='hospitalName'
                 readOnly
-                onChange={() => console.log()}
+                onChange={() => {}}
                 ref={(input) => {
-                  console.log('input', input)
                   this.hospitalNameRef = input
                 }}
                 value={`${selectedHospital.name || ''}`} />
@@ -223,9 +212,8 @@ class DoctorNew extends Component {
               <input readOnly
                 type='text'
                 name='hospital'
-                onChange={() => console.log()}
+                onChange={() => {}}
                 ref={(input) => {
-                  console.log('input', input)
                   this.hospitalIdRef = input
                 }}
                 value={hospital} />
@@ -248,5 +236,3 @@ class DoctorNew extends Component {
     )
   }
 }
-
-export default DoctorNew

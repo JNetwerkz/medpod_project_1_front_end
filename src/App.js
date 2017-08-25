@@ -38,11 +38,9 @@ class App extends Component {
         window.localStorage.setItem(storageKey, user.uid)
         window.localStorage.setItem(userEmail, user.email)
         window.localStorage.setItem(userName, user.displayName)
-        console.log('step 1', window.localStorage.getItem(storageKey))
         user.getIdToken(true)
         .then((token) => {
           window.localStorage.setItem(firebaseIdToken, token)
-          console.log('step 2', window.localStorage.getItem(firebaseIdToken))
           return token
         })
         .then((token) => {
@@ -51,13 +49,11 @@ class App extends Component {
         })
         .then((res) => {
           window.localStorage.setItem(userType, res.data[user.uid])
-          console.log('step 3', window.localStorage.getItem(userType))
           return this.setState({
             loading: false
           })
         })
       } else {
-        console.log('onAuthStateChanged removing storageKey')
         window.localStorage.removeItem(storageKey)
         window.localStorage.removeItem(firebaseIdToken)
         window.localStorage.removeItem(userType)
@@ -70,41 +66,6 @@ class App extends Component {
       }
     })
   }
-  // componentDidMount () {
-  //   auth.onAuthStateChanged(user => {
-  //     console.log('onAuthStateChanged user', user)
-  //     if (user) {
-  //       window.localStorage.setItem(storageKey, user.uid)
-  //       console.log('step 1', window.localStorage.getItem(storageKey))
-  //       user.getIdToken(true).then((token) => {
-  //         window.localStorage.setItem(firebaseIdToken, token)
-  //         console.log('step 2', window.localStorage.getItem(firebaseIdToken))
-  //         axios
-  //         .get(`${process.env.REACT_APP_FIREBASE_DATABASE_URL}${token}`)
-  //         .then((res) => {
-  //           window.localStorage.setItem(userType, res.data[user.uid])
-  //               console.log('step 3', window.localStorage.getItem(userType))
-  //           axios.defaults.headers.common['Authorization'] = AuthHeader()
-  //           this.setState({
-  //             loading: false
-  //           })
-  //         })
-  //         .catch((err) => {
-  //           console.error(err)
-  //         })
-  //       })
-  //     } else {
-  //       console.log('onAuthStateChanged removing storageKey')
-  //       window.localStorage.removeItem(storageKey)
-  //       window.localStorage.removeItem(firebaseIdToken)
-  //       window.localStorage.removeItem(userType)
-  //       axios.defaults.headers.common['Authorization'] = ''
-  //       this.setState({
-  //         loading: false
-  //       })
-  //     }
-  //   })
-  // }
 
   render () {
     if (this.state.loading) {
@@ -123,188 +84,27 @@ class App extends Component {
           <div>
             <Route path='/' render={({ location }) => <NavMain {...location} />} />
             <Segment basic id='app__main' className='flex--grow'>
-                <Switch>
-                  <Route exact path='/' component={() => <Redirect to='/patient' />} />
-                  <PrivateRoute path='/patient' component={PatientMain} />
-                  <PrivateRoute path='/transaction' component={TransactionMain} />
-                  <PrivateRoute path='/doctor' component={DoctorMain} />
-                  <PrivateRoute path='/hospital' component={HospitalMain} />
-                  <PrivateRoute path='/addon' component={AddonMain} />
-                  <PrivateRoute path='/agent' component={AgentMain} />
-                  <PrivateRoute path='/invoice' component={InvoiceMain} />
-                  <PrivateRoute path='/user' component={UserMain} />
-                  <RedirectFromLoginRoute exact path='/login' component={AuthMain} />
-                  {/* <Route exact path='/login'
-                  render={(props) => <AuthMain {...props} />} /> */}
-                  <Route exact path='/unauthorised'
+              <Switch>
+                <Route exact path='/' component={() => <Redirect to='/patient' />} />
+                <PrivateRoute path='/patient' component={PatientMain} />
+                <PrivateRoute path='/transaction' component={TransactionMain} />
+                <PrivateRoute path='/doctor' component={DoctorMain} />
+                <PrivateRoute path='/hospital' component={HospitalMain} />
+                <PrivateRoute path='/addon' component={AddonMain} />
+                <PrivateRoute path='/agent' component={AgentMain} />
+                <PrivateRoute path='/invoice' component={InvoiceMain} />
+                <PrivateRoute path='/user' component={UserMain} />
+                <RedirectFromLoginRoute exact path='/login' component={AuthMain} />
+                <Route exact path='/unauthorised'
                   render={(props) => <UnauthorisedMain {...props} />} />
-                </Switch>
+              </Switch>
             </Segment>
           </div>
-          {/* <div className='flex flex--row'>
-                <Route path='/' render={({ location }) => <NavMain {...location} />} />c
-            <Segment basic id='app__main' className='flex--grow'>
-                <Switch>
-                  <Route exact path='/' component={() => <Redirect to='/patient' />} />
-                  <PrivateRoute path='/patient' component={PatientMain} />
-                  <PrivateRoute path='/transaction' component={TransactionMain} />
-                  <PrivateRoute path='/doctor' component={DoctorMain} />
-                  <PrivateRoute path='/hospital' component={HospitalMain} />
-                  <PrivateRoute path='/addon' component={AddonMain} />
-                  <PrivateRoute path='/agent' component={AgentMain} />
-                  <PrivateRoute path='/invoice' component={InvoiceMain} />
-                  <PrivateRoute path='/user' component={UserMain} />
-                  <RedirectFromLoginRoute exact path='/login' component={AuthMain} />
-                  <Route exact path='/unauthorised'
-                  render={(props) => <UnauthorisedMain {...props} />} />
-                </Switch>
-            </Segment>
-
-          </div> */}
-
-
-          {/* <Sidebar.Pushable as={Segment}>
-            <Sidebar as={Menu} animation='uncover' width='thin' visible={sideBarShow} vertical inverted>
-              <Route path='/' render={({ location }) => <NavMain {...location} />} />
-            </Sidebar>
-
-            <Sidebar.Pusher>
-              <div className='flex flex--row'>
-                <Segment basic className='flex__menu-button flex--column' id='app__leftcolumn'>
-                  <section>
-                    <Button icon='sidebar' onClick={this.showSideBar} />
-                  </section>
-
-                  <section>
-                    <Dropdown icon='filter' floating button className='icon'>
-                      <Dropdown.Menu>
-                        <Dropdown.Header content='New' />
-                        <Dropdown.Menu scrolling>
-                          <Route path='/' render={() => <Dropdown.Item key={'transaction'} text='Transaction' as={Link} to={`/transaction/new`} />} />
-                          <Route path='/' render={() => <Dropdown.Item key={'invoice'} text='Invoice' as={Link} to={`/invoice/new`} />} />
-                          <Dropdown.Divider />
-                          <Route path='/' render={() => <Dropdown.Item key={'patient'} text='Patient' as={Link} to={`/patient/new`} />} />
-                          <Route path='/' render={() => <Dropdown.Item key={'doctor'} text='Doctor' as={Link} to={`/doctor/new`} />} />
-                          <Route path='/' render={() => <Dropdown.Item key={'hospital'} text='Hospital' as={Link} to={`/hospital/new`} />} />
-                          <Route path='/' render={() => <Dropdown.Item key={'addon'} text='Addon' as={Link} to={`/addon/new`} />} />
-                          <Route path='/' render={() => <Dropdown.Item key={'agent'} text='Agent' as={Link} to={`/agent/new`} />} />
-                        </Dropdown.Menu>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </section>
-                </Segment>
-
-                <Segment basic className='flex__maincontent flex--grow' id='app__rightcolumn'>
-                  <Switch>
-                    <Route exact path='/test'
-                      render={(props) => <TestMain {...props} />} />
-                    <PrivateRoute exact path='/' component={HomeMain} />
-                    <PrivateRoute path='/patient' component={PatientMain} />
-                    <PrivateRoute path='/transaction' component={TransactionMain} />
-                    <PrivateRoute path='/doctor' component={DoctorMain} />
-                    <PrivateRoute path='/hospital' component={HospitalMain} />
-                    <PrivateRoute path='/addon' component={AddonMain} />
-                    <PrivateRoute path='/agent' component={AgentMain} />
-                    <PrivateRoute path='/invoice' component={InvoiceMain} />
-                    <Route exact path='/login'
-                      render={(props) => <AuthMain {...props} />} />
-                    <Route exact path='/unauthorised'
-                      render={(props) => <UnauthorisedMain {...props} />} />
-                  </Switch>
-                </Segment>
-
-              </div>
-            </Sidebar.Pusher>
-
-          </Sidebar.Pushable> */}
         </BrowserRouter>
 
-        {/* <BrowserRouter>
-          <Sidebar.Pushable as={Segment}>
-            <Sidebar as={Menu} animation='uncover' width='thin' visible={sideBarShow} vertical inverted>
-              <Route path='/' render={({ location }) => <NavMain {...location} />} />
-            </Sidebar>
-
-            <Sidebar.Pusher>
-              <div className='flex flex--row'>
-                <Segment basic className='flex__menu-button flex--column' id='app__leftcolumn'>
-                  <section>
-                    <Button icon='sidebar' onClick={this.showSideBar} />
-                  </section>
-
-                  <section>
-                    <Dropdown icon='filter' floating button className='icon'>
-                      <Dropdown.Menu>
-                        <Dropdown.Header content='New' />
-                        <Dropdown.Menu scrolling>
-                            <Route path='/' render={() => <Dropdown.Item key={'transaction'} text='Transaction' as={Link} to={`/transaction/new`} />} />
-                            <Route path='/' render={() => <Dropdown.Item key={'invoice'} text='Invoice' as={Link} to={`/invoice/new`} />} />
-                            <Dropdown.Divider />
-                            <Route path='/' render={() => <Dropdown.Item key={'patient'} text='Patient' as={Link} to={`/patient/new`} />} />
-                            <Route path='/' render={() => <Dropdown.Item key={'doctor'} text='Doctor' as={Link} to={`/doctor/new`} />} />
-                            <Route path='/' render={() => <Dropdown.Item key={'hospital'} text='Hospital' as={Link} to={`/hospital/new`} />} />
-                            <Route path='/' render={() => <Dropdown.Item key={'addon'} text='Addon' as={Link} to={`/addon/new`} />} />
-                            <Route path='/' render={() => <Dropdown.Item key={'agent'} text='Agent' as={Link} to={`/agent/new`} />} />
-                          </Dropdown.Menu>
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </section>
-                </Segment>
-
-                <Segment basic className='flex__maincontent flex--grow' id='app__rightcolumn'>
-                  <Switch>
-                    <Route exact path='/test'
-                      render={(props) => <TestMain {...props} />} />
-                    <PrivateRoute exact path='/' component={HomeMain} />
-                    <PrivateRoute path='/patient' component={PatientMain} />
-                    <PrivateRoute path='/transaction' component={TransactionMain} />
-                    <PrivateRoute path='/doctor' component={DoctorMain} />
-                    <PrivateRoute path='/hospital' component={HospitalMain} />
-                    <PrivateRoute path='/addon' component={AddonMain} />
-                    <PrivateRoute path='/agent' component={AgentMain} />
-                    <PrivateRoute path='/invoice' component={InvoiceMain} />
-                    <Route exact path='/login'
-                      render={(props) => <AuthMain {...props} />} />
-                    <Route exact path='/unauthorised'
-                      render={(props) => <UnauthorisedMain {...props} />} />
-                  </Switch>
-                </Segment>
-
-              </div>
-            </Sidebar.Pusher>
-
-          </Sidebar.Pushable>
-        </BrowserRouter>
- */}
       </div>
     )
   }
 }
 
 export default App
-
-{ /* <div className='App'>
-  <header>
-    <Route path='/' render={({ location }) => <NavMain {...location} />} />
-  </header>
-  <button onClick={() => console.log(window.localStorage)}>Print localStorage</button>
-  <main>
-    <Icon name='sidebar' size='big' />
-    <Switch>
-      <Route exact path='/test'
-        render={(props) => <TestMain {...props} />} />
-      <PrivateRoute exact path='/' component={HomeMain} />
-      <PrivateRoute path='/patient' component={PatientMain} />
-      <PrivateRoute path='/transaction' component={TransactionMain} />
-      <PrivateRoute path='/doctor' component={DoctorMain} />
-      <PrivateRoute path='/hospital' component={HospitalMain} />
-      <PrivateRoute path='/addon' component={AddonMain} />
-      <PrivateRoute path='/agent' component={AgentMain} />
-      <PrivateRoute path='/invoice' component={InvoiceMain} />
-      <Route exact path='/login'
-        render={(props) => <AuthMain {...props} />} />
-      <Route exact path='/unauthorised'
-        render={(props) => <UnauthorisedMain {...props} />} />
-    </Switch>
-  </main>
-</div> */ }

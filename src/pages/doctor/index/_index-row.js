@@ -17,16 +17,16 @@ const IndexRow = ({ doctorData, match }) => {
 
   return (
     <Table.Row>
-        <Table.Cell collapsing textAlign='right'>
-          <Link to={`${match.url}/${_id}`}>
+      <Table.Cell collapsing textAlign='right'>
+        <Link to={`${match.url}/${_id}`}>
           {`${combineName(doctorData)}`}
-          </Link>
-        </Table.Cell>
-        <Table.Cell>{associationName}</Table.Cell>
-        <Table.Cell>{associationPhoneNumber}</Table.Cell>
-        <Table.Cell>{associationEmail}</Table.Cell>
-        <Table.Cell>{gender}</Table.Cell>
-        <Table.Cell><Link to={`/hospital/${hospitalId}`}>{hospitalName}</Link></Table.Cell>
+        </Link>
+      </Table.Cell>
+      <Table.Cell>{associationName}</Table.Cell>
+      <Table.Cell>{associationPhoneNumber}</Table.Cell>
+      <Table.Cell>{associationEmail}</Table.Cell>
+      <Table.Cell>{gender}</Table.Cell>
+      <Table.Cell><Link to={`/hospital/${hospitalId}`}>{hospitalName}</Link></Table.Cell>
     </Table.Row>
   )
 }

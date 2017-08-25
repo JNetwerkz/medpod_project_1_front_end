@@ -40,6 +40,16 @@
   margin-left: 15rem;
 }
 
+#app__auth {
+  margin-left: -15rem;
+  height: 80vh;
+}
+
+#app__auth > div {
+  width: 20%;
+  margin: auto;
+}
+
 /*
 #app__leftcolumn {
   background-color: rgb(27, 28, 29);
@@ -93,6 +103,10 @@
 
 .flex--jc-end {
   justify-content: flex-end;
+}
+
+.flex--align--center {
+  align-items: center;
 }
 
 .container__login {

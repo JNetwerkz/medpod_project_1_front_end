@@ -5,7 +5,7 @@ import moment from 'moment'
 import qs from 'qs'
 import axios from 'axios'
 
-import { M6117, combineName, monthsSelectOption } from 'custom-function'
+import { monthsSelectOption } from 'custom-function'
 
 import IndexRow from './_index-row'
 import LoadingSmall from 'partial/loading-small'
@@ -78,8 +78,6 @@ export default class CommissionTable extends Component {
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
 
-    console.log(name, value)
-
     this.setState({
       [name]: value
     })
@@ -98,8 +96,6 @@ export default class CommissionTable extends Component {
       transactionYear, transactionMonth, referralAgentId
     }
     const queryString = qs.stringify(formData)
-
-    console.log(queryString)
 
     axios({
       method: 'GET',
@@ -140,8 +136,6 @@ export default class CommissionTable extends Component {
         ? res.data
         : item
       })
-      console.log(agentCommissions)
-
       this.setState({ agentCommissions, commissionButtonLoading: { [id]: false } })
     })
     .catch((err) => console.error(err))
@@ -154,8 +148,6 @@ export default class CommissionTable extends Component {
     } = this.state
 
     const referralAgentId = this.props.match.params.id
-
-    console.log(referralAgentId)
 
     const formData = { transactionMonth, transactionYear, referralAgentId }
 
@@ -173,7 +165,6 @@ export default class CommissionTable extends Component {
       console.log(res.data.docs)
       const {
         docs: agentCommissions,
-        total,
         ...rest
       } = res.data
       const commissionInputs = {}
@@ -190,7 +181,6 @@ export default class CommissionTable extends Component {
   }
 
   render () {
-    console.log(this.state)
     const {
       transactionYear,
       transactionMonth,
@@ -205,7 +195,6 @@ export default class CommissionTable extends Component {
       handleInputChange,
       handleSearchChange,
       handlePaginate,
-      handleCommissionChange,
       handleCommissionSubmit
     } = this
 

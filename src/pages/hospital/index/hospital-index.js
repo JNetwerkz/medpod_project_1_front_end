@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 
-import { Container, Header, Table, Menu, Icon, Search } from 'semantic-ui-react'
+import { Container, Table, Menu, Icon, Search } from 'semantic-ui-react'
 
 import axios from 'axios'
 
@@ -88,7 +87,6 @@ export default class HospitalIndex extends Component {
     const pagesArray = Array.from({length: pages}, (v, i) => i + 1)
 
     const MenuItems = pagesArray.map((item, index) => {
-      console.log(typeof item)
       return (
         <Menu.Item link
           onClick={handlePaginate}
@@ -144,7 +142,6 @@ export default class HospitalIndex extends Component {
       url: `${process.env.REACT_APP_API_ENDPOINT}/hospital`
     })
     .then((res) => {
-      console.log('HospitalIndex res', res.data)
       const {
         docs: hospitalIndex,
         page,

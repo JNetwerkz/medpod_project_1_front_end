@@ -36,15 +36,12 @@ export default class AgentNew extends Component {
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
 
-    console.log(name, value)
-
     this.setState({
       [name]: value
     })
   }
 
   handleSelectChange (event, value, name) {
-    console.log(name, value)
     this.setState({
       [name]: value
     })
@@ -60,7 +57,6 @@ export default class AgentNew extends Component {
       data: formData
     })
     .then((res) => {
-      console.log('new agent data', res.data)
       const { errors } = res.data
 
       errors
@@ -102,10 +98,10 @@ export default class AgentNew extends Component {
         </Header>
           <S3Subheader text='Personal Information' />
           <Form.Group widths='equal'>
-            <Form.Input value={firstName} label='First name' placeholder='First name' name='first name' onChange={handleInputChange} />
-            <Form.Input value={lastName} label='Last name' placeholder='Last name' name='last name' onChange={handleInputChange} />
-            <Form.Input value={icPassport} label='IC / Passport' placeholder='IC / Passport' name='ic / passport' onChange={handleInputChange} />
-            <Form.Select value={gender} label='Gender' options={genderOption} placeholder='Gender' onChange={(e, {value}) => handleSelectChange(e, value, 'gender')} />
+            <Form.Input required value={firstName} label='First name' placeholder='First name' name='first name' onChange={handleInputChange} />
+            <Form.Input required value={lastName} label='Last name' placeholder='Last name' name='last name' onChange={handleInputChange} />
+            <Form.Input required value={icPassport} label='IC / Passport' placeholder='IC / Passport' name='ic / passport' onChange={handleInputChange} />
+            <Form.Select required value={gender} label='Gender' options={genderOption} placeholder='Gender' onChange={(e, {value}) => handleSelectChange(e, value, 'gender')} />
           </Form.Group>
           <Divider hidden />
           <Form.Group widths='equal'>

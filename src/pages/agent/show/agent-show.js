@@ -133,6 +133,7 @@ export default class AgentShow extends Component {
             notEditing
             ? <p>{firstName}</p>
             : <Input
+              required
               value={firstName}
               onChange={handleEditChange}
               name='first name'

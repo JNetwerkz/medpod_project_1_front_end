@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { Segment, Form, Header, Container, Input, Divider, TextArea } from 'semantic-ui-react'
+import { Segment, Form, Header, Container, Input, TextArea } from 'semantic-ui-react'
 
 import axios from 'axios'
 
@@ -63,8 +63,6 @@ class DoctorShow extends Component {
       name
     } = event.target
 
-    console.log(name, value)
-
     this.setState({
       [name]: value
     })
@@ -117,7 +115,6 @@ class DoctorShow extends Component {
         ...res.data,
         errors: null
       })
-      // this.setState({ doctorShow: res.data, notEditing: true, ...res.data })
     })
     .catch((err) => console.error(err))
   }
@@ -129,12 +126,10 @@ class DoctorShow extends Component {
         break
 
       case 'close':
-        console.log('closing modal')
         this.setState({ hospitalModalOpen: false })
         break
 
       case 'change':
-        console.log('searching hospital')
         if (event.currentTarget.value.length >= 2) {
           axios.get(`${process.env.REACT_APP_API_ENDPOINT}/hospital/search`, {
             params: { search: event.currentTarget.value }
@@ -146,7 +141,6 @@ class DoctorShow extends Component {
         }
         break
       case 'select':
-        console.log('select hospital')
         this.setState({
           hospital: data,
           selectedHospital: data
@@ -266,37 +260,6 @@ class DoctorShow extends Component {
           }
         </Form.Field>
         <Form.Field>
-          <label>Contact Number</label>
-          {
-            notEditing
-            ? <p>{associationPhoneNumber}</p>
-            : <Input
-              value={associationPhoneNumber}
-              onChange={handleEditChange}
-              name='associationPhoneNumber'
-              // transparent
-              disabled={notEditing}
-               />
-          }
-        </Form.Field>
-        <Form.Field>
-          <label>Email</label>
-          {
-            notEditing
-            ? <p>{associationEmail}</p>
-            : <Input
-              value={associationEmail}
-              onChange={handleEditChange}
-              name='associationEmail'
-              // transparent
-              disabled={notEditing}
-               />
-          }
-        </Form.Field>
-      </Form.Group>
-      <Divider hidden />
-      <Form.Group widths='equal'>
-        <Form.Field>
           <label>Unit Number</label>
           {
             notEditing
@@ -339,8 +302,7 @@ class DoctorShow extends Component {
           }
         </Form.Field>
       </Form.Group>
-      <Divider hidden />
-      <Form.Group>
+      <Form.Group widths='equal'>
         <Form.Field>
           <label>Country</label>
           {
@@ -356,7 +318,37 @@ class DoctorShow extends Component {
           }
         </Form.Field>
       </Form.Group>
-      <Divider hidden />
+      <S3Subheader text='Contact Information' />
+      <Form.Group widths='equal'>
+        <Form.Field>
+          <label>Contact Number</label>
+          {
+            notEditing
+            ? <p>{associationPhoneNumber}</p>
+            : <Input
+              value={associationPhoneNumber}
+              onChange={handleEditChange}
+              name='associationPhoneNumber'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+        <Form.Field>
+          <label>Email</label>
+          {
+            notEditing
+            ? <p>{associationEmail}</p>
+            : <Input
+              value={associationEmail}
+              onChange={handleEditChange}
+              name='associationEmail'
+              // transparent
+              disabled={notEditing}
+               />
+          }
+        </Form.Field>
+      </Form.Group>
       <S3Subheader text='Hospital' />
       <Form.Group widths='equal'>
         <Form.Field>
@@ -368,7 +360,6 @@ class DoctorShow extends Component {
                 readOnly
                 onChange={() => console.log()}
                 ref={(input) => {
-                  console.log('input', input)
                   this.hospitalNameRef = input
                 }}
                 value={hospitalName} />
@@ -388,7 +379,6 @@ class DoctorShow extends Component {
                 name='hospital'
                 onChange={() => console.log()}
                 ref={(input) => {
-                  console.log('input', input)
                   this.hospitalIdRef = input
                 }}
                 value={hospitalId} />
@@ -404,9 +394,8 @@ class DoctorShow extends Component {
           value={additionalInfo}
           onChange={handleEditChange}
           name='additionalInfo' />
-
       }
-      </Form>
+    </Form>
 
     return (
       <Container>
@@ -434,7 +423,6 @@ class DoctorShow extends Component {
       url: `${process.env.REACT_APP_API_ENDPOINT}/doctor/${this.props.match.params.id}`
     })
     .then((res) => {
-      console.log('DoctorShow res', res.data)
       this.setState({ doctorShow: res.data, ...res.data, segmentLoading: false })
     })
     .catch((err) => console.error(err))

@@ -217,10 +217,10 @@ export default class UserMain extends Component {
           <Segment>
             <Form onSubmit={handleSubmit}>
               <Form.Group widths='equal'>
-                <Form.Field control={Input} label='Email' name='email' placeholder='Email' value={email} onChange={handleInputChange} />
-                <Form.Field control={Input} label='Password' name='password' placeholder='Password' value={password} onChange={handleInputChange} />
+                <Form.Field required control={Input} label='Email' name='email' placeholder='Email' value={email} onChange={handleInputChange} />
+                <Form.Field required control={Input} label='Password' name='password' placeholder='Password' value={password} onChange={handleInputChange} />
                 <Form.Field control={Input} label='Username' name='displayName' placeholder='Username' value={displayName} onChange={handleInputChange} />
-                <Form.Field control={Select} label='User Access' name='userType' options={accessType} placeholder='Access Type' value={userType} onChange={(event, {value}) => handleSelectChange(event, value, 'userType')} />
+                <Form.Field required control={Select} label='User Access' name='userType' options={accessType} placeholder='Access Type' value={userType} onChange={(event, {value}) => handleSelectChange(event, value, 'userType')} />
                 <Form.Field>
                   <label>&nbsp;</label>
                   <Form.Button fluid type='submit'>Confirm</Form.Button>

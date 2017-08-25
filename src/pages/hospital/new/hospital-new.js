@@ -103,17 +103,17 @@ export default class HospitalNew extends Component {
           </Header>
           <S3Subheader text='Basic Information' />
           <Form.Group widths='equal'>
-            <Form.Input value={name} label='Name' placeholder='Mount Elizabeth Orchard' name='name' onChange={handleInputChange} />
+            <Form.Input required value={name} label='Name' placeholder='Mount Elizabeth Orchard' name='name' onChange={handleInputChange} />
             <Form.Input value={nameAbbreviation} label='Name Abbreviation' placeholder='MEO' name='nameAbbreviation' onChange={handleInputChange} />
             <Form.Input value={associationPhoneNumber} label='Contact Number' placeholder='8125 XXXX' name='associationPhoneNumber' onChange={handleInputChange} />
             <Form.Input value={associationEmail} label='Email' placeholder='accounts@mounte.com' name='associationEmail' onChange={handleInputChange} />
           </Form.Group>
           <S3Subheader text='Address' />
           <Form.Group widths='equal'>
-              <Form.Input value={associationAddress_unit} label='Unit Number' name='associationAddress_unit' onChange={handleInputChange} />
-              <Form.Input value={associationAddress_street} label='Block & Street' name='associationAddress_street' onChange={handleInputChange} />
-              <Form.Input value={associationAddress_postalcode} label='Postal Code' name='associationAddress_postalcode' onChange={handleInputChange} />
-              <Form.Input label='Country' placeholder='Singapore' name='associationAddress_country'
+              <Form.Input required value={associationAddress_unit} label='Unit Number' name='associationAddress_unit' onChange={handleInputChange} />
+              <Form.Input required value={associationAddress_street} label='Block & Street' name='associationAddress_street' onChange={handleInputChange} />
+              <Form.Input required value={associationAddress_postalcode} label='Postal Code' name='associationAddress_postalcode' onChange={handleInputChange} />
+              <Form.Input required label='Country' placeholder='Singapore' name='associationAddress_country'
                 value={associationAddress_country} onChange={handleInputChange} />
           </Form.Group>
         </Form>

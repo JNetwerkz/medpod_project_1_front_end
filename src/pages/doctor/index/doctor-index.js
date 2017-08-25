@@ -1,16 +1,12 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 
 import { Search, Table, Menu, Container, Icon } from 'semantic-ui-react'
-
 import axios from 'axios'
-
-import { combineName } from 'custom-function'
 
 import IndexRow from './_index-row'
 import LoadingSmall from 'partial/loading-small'
 
-class DoctorIndex extends Component {
+export default class DoctorIndex extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -126,7 +122,6 @@ class DoctorIndex extends Component {
             showNoResults={false}
             onSearchChange={handleSearchChange}
         />
-
           <Menu floated='right' pagination>
             <Menu.Item as='a' data-page={prevPage} icon onClick={handlePaginate}>
               <Icon name='left chevron' />
@@ -148,7 +143,6 @@ class DoctorIndex extends Component {
       url: `${process.env.REACT_APP_API_ENDPOINT}/doctor`
     })
     .then((res) => {
-      console.log('DoctorIndex res', res.data)
       const {
         docs: doctorIndex,
         page,
@@ -160,5 +154,3 @@ class DoctorIndex extends Component {
     })
   }
 }
-
-export default DoctorIndex

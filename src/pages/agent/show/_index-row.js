@@ -16,9 +16,6 @@ const IndexRow = ({ updating, commissionData, commissionInput, handleInputChange
     transactionId: { patient, receiving_doctor, _id: _transactionId }
   } = commissionData
 
-  console.log('invoiceId', invoiceId)
-
-
   const {
     _id: patientId
   } = patient

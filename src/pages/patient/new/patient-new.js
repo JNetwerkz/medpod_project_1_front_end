@@ -179,13 +179,13 @@ class PatientNew extends Component {
 
           <S3Subheader text='Personal Information' />
           <Form.Group widths='equal'>
-            <Form.Field control={Input} label='First name' name='first name' placeholder='First name' value={firstName} onChange={handleInputChange} />
+            <Form.Field control={Input} required label='First name' name='first name' placeholder='First name' value={firstName} onChange={handleInputChange} />
 
-            <Form.Field control={Input} label='Last name' name='last name' placeholder='Last name' value={lastName} onChange={handleInputChange} />
+            <Form.Field control={Input} required label='Last name' name='last name' placeholder='Last name' value={lastName} onChange={handleInputChange} />
 
-            <Form.Field control={Input} label='IC / Passport' name='ic / passport' placeholder='IC / Passport' value={icPassport} onChange={handleInputChange} />
+            <Form.Field control={Input} required label='IC / Passport' name='ic / passport' placeholder='IC / Passport' value={icPassport} onChange={handleInputChange} />
 
-            <Form.Field control={Select} label='Gender' options={options} placeholder='Gender' value={gender} onChange={(e, {value}) => handleSelectChange(e, value, 'gender')} />
+            <Form.Field control={Select} required label='Gender' options={options} placeholder='Gender' value={gender} onChange={(e, {value}) => handleSelectChange(e, value, 'gender')} />
           </Form.Group>
           <Divider hidden />
           <Form.Group widths='equal'>
@@ -198,7 +198,7 @@ class PatientNew extends Component {
 
           <S3Subheader text='Referral Agent' />
           <Form.Group widths='equal'>
-            <Form.Field>
+            <Form.Field required>
               <label>Name</label>
               <input onClick={() => agentModalMethod('open')} type='text' name='agentName'
                 placeholder='Click here to search for agent'

@@ -5,7 +5,7 @@ const EditButton = (props) => {
   const { handleEditState, notEditing } = props
   const editButton = notEditing
   ? <Button type='button' primary floated='right' onClick={handleEditState}>Edit</Button>
-  : <Button type='button' primary basic floated='right' onClick={handleEditState}>Cancel</Button>
+  : <Button type='button' negative basic floated='right' onClick={handleEditState}>Cancel</Button>
   return editButton
 }
 

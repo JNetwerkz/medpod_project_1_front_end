@@ -32,32 +32,20 @@ export default class AddonNew extends Component {
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
 
-    console.log(name, value)
-
     this.setState({
       [name]: value
     })
   }
 
   handleSelectChange (event, value, name) {
-    console.log(name, value)
     this.setState({
       [name]: value
     })
   }
 
-  // handleChange () {
-  //   console.log($('#doctor_new-form'))
-  //   this.setState({
-  //     doctorNewForm: $('#doctor_new-form').serializeArray()
-  //   })
-  // }
-
   handleSubmit () {
     // event.preventDefault()
     const formData = this.state
-
-    console.log('at handlesubmit')
 
     if (!formData.name) return this.setState({ errors: ['Please specify NAME for Add-on'] })
 
@@ -67,7 +55,6 @@ export default class AddonNew extends Component {
       data: formData
     })
     .then((res) => {
-      console.log('new addon data', res.data)
       const {
         errors
       } = res.data
@@ -102,7 +89,6 @@ export default class AddonNew extends Component {
     } = this.state
 
     const {
-      handleSubmit,
       handleInputChange,
       handleOpenCloseConfirm,
       handleConfirm
@@ -117,12 +103,11 @@ export default class AddonNew extends Component {
         <Form id='addon_new-form'
           // onSubmit={(event) => handleSubmit(event)}
           ref={(input) => {
-            console.log('input', input)
             this.addonFormRef = input
           }}
           >
           <Form.Group widths='equal'>
-            <Form.Input label='Name' placeholder='Name' name='name' onChange={handleInputChange} />
+            <Form.Input required label='Name' placeholder='Name' name='name' onChange={handleInputChange} />
           </Form.Group>
           <Form.Button
             type='button'

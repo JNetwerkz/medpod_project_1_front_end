@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Switch, Route, Link } from 'react-router-dom'
 
-import { Container, Header, Icon, Dropdown, Divider } from 'semantic-ui-react'
+import { Container, Header, Icon, Dropdown } from 'semantic-ui-react'
 
 import AgentNew from './new/agent-new'
 import AgentShow from './show/agent-show'

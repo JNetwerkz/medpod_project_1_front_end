@@ -89,7 +89,6 @@ export default class AgentIndex extends Component {
     const pagesArray = Array.from({length: pages}, (v, i) => i + 1)
 
     const MenuItems = pagesArray.map((item, index) => {
-      console.log(typeof item)
       return (
         <Menu.Item link
           onClick={handlePaginate}
@@ -123,10 +122,6 @@ export default class AgentIndex extends Component {
           <Search
             showNoResults={false}
             onSearchChange={handleSearchChange}
-            // onResultSelect={this.handleResultSelect}
-            // results={results}
-            // value={value}
-            // {...this.props}
           />
           <Menu floated='right' pagination>
             <Menu.Item as='a' data-page={prevPage} icon onClick={handlePaginate}>
@@ -149,8 +144,6 @@ export default class AgentIndex extends Component {
       url: `${process.env.REACT_APP_API_ENDPOINT}/agent`
     })
     .then((res) => {
-      console.log('AgentIndex res', res.data)
-
       const {
         docs: agentIndex,
         page,

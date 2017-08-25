@@ -7,7 +7,7 @@ import DoctorNew from './new/doctor-new'
 import DoctorShow from './show/doctor-show'
 import DoctorIndex from './index/doctor-index'
 
-class DoctorMain extends Component {
+export default class DoctorMain extends Component {
   render () {
     return (
       <Container fluid>
@@ -50,5 +50,3 @@ class DoctorMain extends Component {
     )
   }
 }
-
-export default DoctorMain

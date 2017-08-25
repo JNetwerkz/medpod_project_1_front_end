@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import { Container, Header, Segment, List, Dropdown } from 'semantic-ui-react'
 
 import axios from 'axios'
 
-import { combineName } from 'custom-function'
 import ErrorMessage from 'partial/error'
 
 const AddonRow = (props) => {
@@ -51,13 +49,11 @@ export default class AddonIndex extends Component {
   }
 
   handleAddOnUpdate (event) {
-    console.log(event.currentTarget)
     const { dataset: { status, id } } = event.currentTarget
     axios
     .put(`${process.env.REACT_APP_API_ENDPOINT}/addon/${id}/status`,
       { status: status === 'active' ? 'archived' : 'active' })
     .then((res) => {
-      console.log(res)
       const { errors } = res.data
 
       errors
