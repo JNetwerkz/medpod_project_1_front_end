@@ -27,6 +27,7 @@ class TransactionNew extends Component {
       'invoice number': '',
       'transaction amount': '',
       additionalInfo: '',
+      procedureName: '',
       // patient modal selection
       patientModalOpen: false,
       patientSearchResult: [],
@@ -90,7 +91,8 @@ class TransactionNew extends Component {
       'invoice date': this.state['invoice date'],
       'invoice number': this.state['invoice number'],
       'transaction amount': this.state['transaction amount'],
-      additionalInfo: this.state.additionalInfo
+      additionalInfo: this.state.additionalInfo,
+      procedureName: this.state.procedureName
     }
 
     if (!formData.patient) return this.setState({ errors: ['Please select Patient from search function provided'] })
@@ -324,6 +326,7 @@ class TransactionNew extends Component {
             <Form.Field type='date' control={Input} label='Date of Transaction / Invoice' name='invoice date' placeholder='Date' onChange={handleInputChange} />
             <Form.Field type='text' control={Input} label='Transaction / Invoice Number' name='invoice number' placeholder='Transaction / Invoice Number' onChange={handleInputChange} />
             <Form.Field type='number' control={Input} label='Transaction / Invoice Amount' name='transaction amount' placeholder='Transaction / Invoice Amount' onChange={handleInputChange} />
+            <Form.Field type='text' control={Input} label='Procedure / Treatment Name (displayed on Outgoing Invoice)' name='procedureName' placeholder='Procedure / Treatment Name' onChange={handleInputChange} />
           </Form.Group>
           <S3Subheader text='Additional Information' />
           <Form.Field control={TextArea}

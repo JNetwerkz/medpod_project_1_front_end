@@ -43,7 +43,6 @@ export default class InvoiceNew extends Component {
     this.handleStageTwoAmtPercentChange = this.handleStageTwoAmtPercentChange.bind(this)
     this.handleStageTwoAddonMethod = this.handleStageTwoAddonMethod.bind(this)
     this.handleStageTwoSubmit = this.handleStageTwoSubmit.bind(this)
-    this.printingStuff = this.printingStuff.bind(this)
   }
 
   handleSelectChange (event, value, name) {

@@ -252,7 +252,8 @@ class TransactionShow extends Component {
       'invoice date': invoiceDate,
       'invoice number': invoiceNumber,
       'transaction amount': transactionAmount,
-      additionalInfo
+      additionalInfo,
+      procedureName
     } = transactionShow
 
     const momentInvoiceDate = moment(invoiceDate).format('DD MMM YYYY')
@@ -307,6 +308,10 @@ class TransactionShow extends Component {
         <Form.Field>
           <label>Transaction Amount</label>
           <p>{formattedTransactionAmount}</p>
+        </Form.Field>
+        <Form.Field>
+          <label>Procedure / Treatment Name</label>
+          <p>{procedureName}</p>
         </Form.Field>
       </Form.Group>
       <S3Subheader text='Additional Information' />
