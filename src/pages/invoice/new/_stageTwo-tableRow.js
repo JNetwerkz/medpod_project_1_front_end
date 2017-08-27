@@ -50,23 +50,12 @@ export default (props) => {
         <Table basic='very' selectable>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>
-                Transaction Record
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                Patient Name
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                Transaction Amount
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                Percentage (%)
-              </Table.HeaderCell>
-              <Table.HeaderCell
-                width='four'
-                >
-                Chargeable Amount
-              </Table.HeaderCell>
+              <Table.HeaderCell> Transaction Record </Table.HeaderCell>
+              <Table.HeaderCell> Patient Name </Table.HeaderCell>
+              <Table.HeaderCell> Procedure Name </Table.HeaderCell>
+              <Table.HeaderCell> Transaction Amount </Table.HeaderCell>
+              <Table.HeaderCell> Percentage (%) </Table.HeaderCell>
+              <Table.HeaderCell width='four' > Chargeable Amount </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
 
@@ -77,6 +66,9 @@ export default (props) => {
               </Table.Cell>
               <Table.Cell singleLine>
                 {`${combineName(item.patient)}`}
+              </Table.Cell>
+              <Table.Cell>
+                {item.procedureName}
               </Table.Cell>
               <Table.Cell>
                 {transactionAmount}

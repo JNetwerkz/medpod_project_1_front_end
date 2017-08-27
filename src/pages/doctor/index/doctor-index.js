@@ -47,7 +47,7 @@ export default class DoctorIndex extends Component {
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/agent`,
       params: {
-        page: parseInt(event.target.dataset.page)
+        page: parseInt(event.target.dataset.page, 10)
       }
     })
     .then((res) => {

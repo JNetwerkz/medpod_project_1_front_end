@@ -32,7 +32,7 @@ export default (props) => {
             </Form.Field>
             <Form.Field>
               <label>&nbsp;</label>
-              <Form.Button type='submit' fluid>
+              <Form.Button loading={props.searchLoading} type='submit' fluid>
                 Search
               </Form.Button>
             </Form.Field>

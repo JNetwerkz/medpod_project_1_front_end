@@ -195,7 +195,7 @@ export default class PatientNew extends Component {
               <input onClick={() => agentModalMethod('open')} type='text' name='agentName'
                 placeholder='Click here to search for agent'
                 readOnly
-                onChange={() => console.log()}
+                onChange={() => {}}
                 ref={(input) => {
                   this.agentNameRef = input
                 }}
@@ -207,8 +207,8 @@ export default class PatientNew extends Component {
               <input readOnly
                 type='text'
                 value={referralAgent}
+                onChange={() => {}}
                 name='referral_agent'
-                onChange={() => console.log()}
                 ref={(input) => {
                   this.agentIdRef = input
                 }}

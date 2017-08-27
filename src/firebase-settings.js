@@ -53,7 +53,6 @@ const userAccess = {
 }
 
 const isAuthenticated = () => {
-  console.log('running isAuthenticated', auth.currentUser, window.localStorage.getItem(storageKey))
   return !!auth.currentUser || !!window.localStorage.getItem(storageKey)
 }
 
@@ -61,4 +60,4 @@ const isGrantedAccess = (path) => {
   return userAccess[window.localStorage.getItem(userType)][path]
 }
 
-export { firebaseApp, auth, db, isAuthenticated, isGrantedAccess, storageKey, firebaseIdToken, userType, userEmail, userName}
+export { firebaseApp, auth, db, isAuthenticated, isGrantedAccess, storageKey, firebaseIdToken, userType, userEmail, userName }

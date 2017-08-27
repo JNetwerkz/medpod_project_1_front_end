@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import { Menu, Divider } from 'semantic-ui-react'
 
-import { userType, userEmail, userName, auth, isAuthenticated } from 'firebase-settings'
+import { userType, userEmail, auth, isAuthenticated } from 'firebase-settings'
 
 export default class NavMain extends Component {
   constructor (props) {
@@ -27,17 +27,13 @@ export default class NavMain extends Component {
   }
 
   componentDidMount () {
-    console.log(this.props)
     this.setState({ activeItem: this.props.pathname })
   }
-
 
   render () {
     if (!isAuthenticated()) return null
     const currentUserType = window.localStorage.getItem(userType)
     const currentUserEmail = window.localStorage.getItem(userEmail)
-    const currentUserName = window.localStorage.getItem(userName) || ''
-    console.log('currentusertype', currentUserType)
     const { activeItem } = this.state
     const { handleSignOut, handleNavItemClick } = this
     return (
@@ -73,40 +69,12 @@ export default class NavMain extends Component {
         <Divider section />
         <Menu.Item>
           <Menu.Header>
-            {/* {currentUserName || ''}<br /><br /> */}
             {currentUserEmail}<br /><br />
             {currentUserType}
           </Menu.Header>
-          {/* <Menu.Header>Access Level: {currentUserType}</Menu.Header> */}
         </Menu.Item>
         <Menu.Item as='a' onClick={handleSignOut}>Log out</Menu.Item>
       </Menu>
     )
   }
 }
-
-/* <Container fluid>
-  <li>
-   to='/patient'>Patients</NavLink> </li>
-  <li>
-    <NavLink activeStyle={{fontWeight: 'bold', color: 'red'}} to='/transaction'>Transactions</NavLink>
-  </li>
-  <li>
-    <NavLink activeStyle={{fontWeight: 'bold', color: 'red'}} to='/doctor'>Doctor</NavLink>
-  </li>
-  <li>
-    <NavLink activeStyle={{fontWeight: 'bold', color: 'red'}} to='/hospital'>Hospital</NavLink>
-  </li>
-  <li>
-    <NavLink activeStyle={{fontWeight: 'bold', color: 'red'}} to='/addon'>Addon</NavLink>
-  </li>
-  <li>
-    <NavLink activeStyle={{fontWeight: 'bold', color: 'red'}} to='/agent'>Agent</NavLink>
-  </li>
-  <li>
-    <NavLink activeStyle={{fontWeight: 'bold', color: 'red'}} to='/invoice'>Invoice</NavLink>
-  </li>
-  <li>
-    <NavLink activeStyle={{fontWeight: 'bold', color: 'red'}} to='/login'>Login</NavLink>
-  </li>
-</Container> */

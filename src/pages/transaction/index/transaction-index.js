@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 
-import { Container, Header, Table, Menu, Icon, Search, Form, Divider } from 'semantic-ui-react'
+import { Container, Table, Menu, Icon, Form, Divider } from 'semantic-ui-react'
 
 import axios from 'axios'
 import qs from 'qs'
 import moment from 'moment'
 
-import { AuthHeader, M6117, combineName, monthsSelectOption } from 'custom-function'
+import { monthsSelectOption } from 'custom-function'
 
 import IndexRow from './_index-row'
 import DoctorModal from 'partial/modal/doctor-modal'
@@ -79,7 +78,6 @@ export default class TransactionIndex extends Component {
       }
     })
     .then((res) => {
-      console.log('transaction index search', res)
       const {
         docs: transactionIndex,
         page,
@@ -98,12 +96,10 @@ export default class TransactionIndex extends Component {
         break
 
       case 'close':
-        console.log('closing modal')
         this.setState({ doctorModalOpen: false })
         break
 
       case 'change':
-          // console.log('searching doctor')
         if (event.currentTarget.value.length >= 2) {
           axios.get(`${process.env.REACT_APP_API_ENDPOINT}/doctor/search`, {
             params: { search: event.currentTarget.value }
@@ -115,11 +111,9 @@ export default class TransactionIndex extends Component {
         }
         break
       case 'select':
-          // console.log('select doctor')
         this.setState({
           selectedDoctor: data,
           doctorId: data._id
-            // patientModalOpen: false
         })
         const eventBubbleName = new Event('input', { bubbles: true })
         this.doctorNameRef.dispatchEvent(eventBubbleName)
@@ -150,7 +144,7 @@ export default class TransactionIndex extends Component {
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/transaction`,
       params: {
-        page: parseInt(event.target.dataset.page),
+        page: parseInt(event.target.dataset.page, 10),
         search: queryString
       }
     })
@@ -167,7 +161,6 @@ export default class TransactionIndex extends Component {
   }
 
   render () {
-    console.log(this.state)
     const {
       'transaction year': transactionYear,
       'transaction month': transactionMonth,
@@ -199,7 +192,6 @@ export default class TransactionIndex extends Component {
     const pagesArray = Array.from({length: pages}, (v, i) => i + 1)
 
     const MenuItems = pagesArray.map((item, index) => {
-      console.log(typeof item)
       return (
         <Menu.Item link
           onClick={handlePaginate}
@@ -214,10 +206,11 @@ export default class TransactionIndex extends Component {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Transaction Record</Table.HeaderCell>
-          <Table.HeaderCell>Transaction / Invoice Number</Table.HeaderCell>
-          <Table.HeaderCell>Transaction / Invoice Date</Table.HeaderCell>
           <Table.HeaderCell>Patient</Table.HeaderCell>
           <Table.HeaderCell>Doctor</Table.HeaderCell>
+          <Table.HeaderCell>Procedure</Table.HeaderCell>
+          <Table.HeaderCell>Transaction / Invoice Number</Table.HeaderCell>
+          <Table.HeaderCell>Transaction / Invoice Date</Table.HeaderCell>
           <Table.HeaderCell>Agent</Table.HeaderCell>
           <Table.HeaderCell>Transaction Amount</Table.HeaderCell>
         </Table.Row>
@@ -250,9 +243,8 @@ export default class TransactionIndex extends Component {
               <input
                 onClick={() => doctorModalMethod('open')} type='text' name='doctorName'
                 readOnly
-                onChange={() => console.log()}
+                onChange={() => {}}
                 ref={(input) => {
-                  console.log('input', input)
                   this.doctorNameRef = input
                 }}
                 value={`${selectedDoctor['first name'] || ''} ${selectedDoctor['last name'] || ''}`} />
@@ -262,9 +254,8 @@ export default class TransactionIndex extends Component {
               <input readOnly
                 type='text'
                 name='receiving doctor'
-                onChange={() => console.log()}
+                onChange={() => {}}
                 ref={(input) => {
-                  console.log('input', input)
                   this.doctorIdRef = input
                 }}
                 value={doctorId} />
@@ -305,8 +296,6 @@ export default class TransactionIndex extends Component {
 
     const queryString = qs.stringify(formData)
 
-    console.log(queryString)
-
     axios({
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/transaction`,
@@ -316,7 +305,6 @@ export default class TransactionIndex extends Component {
       }
     })
     .then((res) => {
-      console.log('TransactionIndex res', res.data)
       const {
         docs: transactionIndex,
         page,

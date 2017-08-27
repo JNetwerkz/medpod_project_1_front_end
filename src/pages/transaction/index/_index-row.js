@@ -14,6 +14,7 @@ const IndexRow = ({ transactionData, match }) => {
     'transaction amount': transactionAmount,
     receiving_doctor,
     patient,
+    procedureName,
     _id
   } = transactionData
 
@@ -39,29 +40,30 @@ const IndexRow = ({ transactionData, match }) => {
 
   return (
     <Table.Row>
-        <Table.Cell collapsing textAlign='right'>
-          <Link to={`${match.url}/${_id}`}>
-          {transactionRecord}
-          </Link>
-        </Table.Cell>
-        <Table.Cell>{invoiceNumber}</Table.Cell>
-        <Table.Cell>{momentInvoiceDate}</Table.Cell>
-        <Table.Cell>
-          <Link to={`/patient/${patientId}`}>
+      <Table.Cell collapsing textAlign='left'>
+        <Link to={`${match.url}/${_id}`}>{transactionRecord}</Link>
+          {/* <Link to={`/patient/${patientId}`}> {receivingPatient}</Link> |
+          <Link to={`/doctor/${doctorId}`}> {receivingDoctor} </Link> */}
+      </Table.Cell>
+      <Table.Cell>
+        <Link to={`/patient/${patientId}`}>
           {receivingPatient}
-          </Link>
-        </Table.Cell>
-        <Table.Cell>
-          <Link to={`/doctor/${doctorId}`}>
+        </Link>
+      </Table.Cell>
+      <Table.Cell>
+        <Link to={`/doctor/${doctorId}`}>
           {receivingDoctor}
-          </Link>
-        </Table.Cell>
-        <Table.Cell>
-          <Link to={`/agent/${referralAgentId}`}>
+        </Link>
+      </Table.Cell>
+      <Table.Cell>{procedureName}</Table.Cell>
+      <Table.Cell>{invoiceNumber}</Table.Cell>
+      <Table.Cell>{momentInvoiceDate}</Table.Cell>
+      <Table.Cell>
+        <Link to={`/agent/${referralAgentId}`}>
           {referralAgent}
-          </Link>
-        </Table.Cell>
-        <Table.Cell>{formattedTransactionAmount}</Table.Cell>
+        </Link>
+      </Table.Cell>
+      <Table.Cell>{formattedTransactionAmount}</Table.Cell>
     </Table.Row>
   )
 }

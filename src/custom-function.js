@@ -3,9 +3,7 @@ import moment from 'moment'
 
 const AuthHeader = () => {
   const token = window.localStorage.getItem(firebaseIdToken)
-  // console.log('authheader token', token)
   return `Bearer ${token}`
-  // return {'Authorization': `Bearer ${token}`}
 }
 
 const M6117 = (data) => {
@@ -78,7 +76,6 @@ const accessType = [
 ]
 
 const invoiceStatusType = [
-  // { key: 'master', text: 'Master', value: 'master' },
   { key: 'Interim Bill', text: 'Interim Bill', value: 'Interim Bill' },
   { key: 'Final Tax Invoice (FIT)', text: 'Final Tax Invoice (FIT)', value: 'Final Tax Invoice (FIT)' },
   { key: 'Bill Collection (BillC)', text: 'Bill Collection (BillC)', value: 'Bill Collection (BillC)' },

@@ -46,7 +46,7 @@ export default class CommissionTable extends Component {
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/commission`,
       params: {
-        page: parseInt(event.target.dataset.page),
+        page: parseInt(event.target.dataset.page, 10),
         search: queryString
       }
     })
@@ -59,7 +59,7 @@ export default class CommissionTable extends Component {
 
       const commissionInputs = {}
 
-      agentCommissions.map((item) => {
+      agentCommissions.forEach((item) => {
         commissionInputs[item._id] = item.commissionAmount
       })
 
@@ -112,7 +112,7 @@ export default class CommissionTable extends Component {
       } = res.data
       const commissionInputs = {}
 
-      agentCommissions.map((item) => {
+      agentCommissions.forEach((item) => {
         commissionInputs[item._id] = item.commissionAmount
       })
 
@@ -169,7 +169,7 @@ export default class CommissionTable extends Component {
       } = res.data
       const commissionInputs = {}
 
-      agentCommissions.map((item) => {
+      agentCommissions.forEach((item) => {
         commissionInputs[item._id] = item.commissionAmount
       })
 

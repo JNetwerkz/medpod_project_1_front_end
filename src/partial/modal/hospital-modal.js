@@ -1,19 +1,8 @@
 import React from 'react'
 import Modal from 'react-modal'
 
-import { Input, Button, List, Header, Icon, Segment, Table } from 'semantic-ui-react'
+import { Input, List, Header, Icon, Segment, Table } from 'semantic-ui-react'
 import ModalSelectedDetails from './_modalSelectedDetails'
-
-const HospitalDetails = (data) => {
-  return (
-    <div>
-      <h2>Details</h2>
-      <ul>
-        <li>{data.selectedHospital.name}</li>
-      </ul>
-    </div>
-  )
-}
 
 const HospitalModal = (props) => {
   const {
@@ -43,7 +32,6 @@ const HospitalModal = (props) => {
       </List.Item>
     )
   })
-  console.log(props)
 
   return (
     <Modal
@@ -144,11 +132,6 @@ const HospitalModal = (props) => {
               </Table.Cell>
             </Table.Row>
           </ModalSelectedDetails>
-          {/* <HospitalDetails selectedHospital={selectedHospital} />
-          <Button onClick={
-            () => modalMethod('close')}>
-            Close
-          </Button> */}
         </section>
       </div>
 

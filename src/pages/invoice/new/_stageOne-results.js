@@ -19,7 +19,7 @@ export default (props) => {
     return (
       <Segment className='grid__invoice-new-results'>
         <Header as='h4'>
-          Search results return empty!
+          Search results return empty! (Please select Doctor)
         </Header>
       </Segment>
     )

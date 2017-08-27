@@ -15,9 +15,7 @@ export default (invoiceData) => {
     associationAddress_postalcode,
     associationAddress_street,
     associationAddress_unit,
-    associationEmail,
-    associationName,
-    associationPhoneNumber
+    associationName
   } = invoicing_doctor
 
   const momentCreatedAt = moment(createdAt).format('DD MMM YYYY')

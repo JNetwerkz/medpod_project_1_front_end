@@ -5,11 +5,10 @@ import axios from 'axios'
 import { Container, Header, Icon, Table, Segment, Form, Input, Select } from 'semantic-ui-react'
 
 import IndexRow from './_index-row'
-import { auth, db, firebaseIdToken } from 'firebase-settings'
+import { db, firebaseIdToken } from 'firebase-settings'
 import { accessType } from 'custom-function'
 import ErrorMessage from 'partial/error'
 import LoadingSmall from 'partial/loading-small'
-
 
 export default class UserMain extends Component {
   constructor (props) {
@@ -39,14 +38,12 @@ export default class UserMain extends Component {
       : target.value
 
     const name = target.name
-    console.log(name, targetValue)
     this.setState({
       [name]: targetValue
     })
   }
 
   handleSelectChange (event, value, name) {
-    console.log(value, name)
     this.setState({
       [name]: value
     })
@@ -54,8 +51,6 @@ export default class UserMain extends Component {
 
   handleSubmit (event) {
     event.preventDefault()
-
-    console.log('handlesubmit event', event.target)
 
     const customErrorMsg = {
       email: 'Please specify a EMAIL for user',
@@ -85,14 +80,12 @@ export default class UserMain extends Component {
       data: formData
     })
     .then((res) => {
-      console.log(res)
       const { errors, uid, email, lastSignInTime, displayName } = res.data
       if (errors) return this.setState({ errors: [errors.message] })
       return new Promise((resolve, reject) => {
         let updateUserType = db.ref('users').update({
           [uid]: userType
         })
-        console.log('updateusertype', updateUserType)
         updateUserType
         ? resolve({
           uid, email, lastSignInTime, displayName, userType
@@ -120,7 +113,6 @@ export default class UserMain extends Component {
       url: `${process.env.REACT_APP_API_ENDPOINT}/user/${targetId}`
     })
     .then((res) => {
-      console.log('delete response', res)
       return db.ref(`users/${targetId}`).remove()
     })
     .then(() => {
@@ -175,8 +167,12 @@ export default class UserMain extends Component {
        handleUserDelete
      } = this
 
-    const IndexRows = userIndex.map((user) => {
-      if (user.userType !== 'master') return <IndexRow userData={user} key={user.uid} handleUserDelete={handleUserDelete} />
+    const IndexRows = []
+
+    userIndex.forEach((user) => {
+      if (user.userType !== 'master') {
+        IndexRows.push(<IndexRow userData={user} key={user.uid} handleUserDelete={handleUserDelete} />)
+      }
     })
 
     const userTable = tableLoading

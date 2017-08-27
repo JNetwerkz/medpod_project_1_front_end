@@ -160,7 +160,6 @@ class DoctorShow extends Component {
   render () {
     const {
       notEditing,
-      doctorShow,
       'first name': firstName,
       'last name': lastName,
       gender,

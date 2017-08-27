@@ -5,7 +5,6 @@ import { isAuthenticated, isGrantedAccess } from './firebase-settings'
 import UnauthorisedMain from 'pages/auth/unauthorised-main'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  console.log('...rest', rest)
   return isAuthenticated()
   ? isGrantedAccess(rest.path)
     ? <Route {...rest} render={(props) => <Component {...props} {...rest} />

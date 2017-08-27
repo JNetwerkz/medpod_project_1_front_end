@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-
-import { Container, Header, Table, Menu, Icon, Search } from 'semantic-ui-react'
+import { Container, Table, Menu, Icon, Search } from 'semantic-ui-react'
 
 import axios from 'axios'
 
@@ -51,7 +49,7 @@ export default class AgentIndex extends Component {
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/agent`,
       params: {
-        page: parseInt(event.target.dataset.page)
+        page: parseInt(event.target.dataset.page, 10)
       }
     })
     .then((res) => {

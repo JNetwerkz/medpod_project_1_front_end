@@ -3,7 +3,6 @@ import React from 'react'
 import { Message } from 'semantic-ui-react'
 
 const ErrorMessage = ({ errors }) => {
-  console.log('error component', errors)
   if (!errors) return null
   let errorListArr = errors
       ? Array.isArray(errors)

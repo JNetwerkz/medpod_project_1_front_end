@@ -3,7 +3,6 @@ import React from 'react'
 import { Form, Input, Button, Dropdown, Item } from 'semantic-ui-react'
 
 const FileInputRow = (props) => {
-  console.log(props)
   return (
     <Item>
       <Form onSubmit={(e) => e.preventDefault()}>
@@ -25,18 +24,18 @@ const FileInputRow = (props) => {
               onChange={
                 (event, {value}) => props.handleChange(event, value, props.index, 'fileChange')
               } />
-            </Form.Field>
-          </Form.Group>
-          <Form.TextArea autoHeight placeholder='IE: Invoice from Mount Elizabeth..'
-            label='Name / Description'
-            value={props.data.description}
-            onChange={
+          </Form.Field>
+        </Form.Group>
+        <Form.TextArea autoHeight placeholder='IE: Invoice from Mount Elizabeth..'
+          label='Name / Description'
+          value={props.data.description}
+          onChange={
               (event, {value}) =>
               props.handleChange(event, value, props.index, 'descripChange')
             } />
-            <Button type='button' compact negative onClick={() => props.handleDeleteInput(props.index)}>Remove</Button>
-            <Button compact positive onClick={() => props.handleFileUpload(props.index)}>Upload</Button>
-          </Form>
+        <Button type='button' compact negative onClick={() => props.handleDeleteInput(props.index)}>Remove</Button>
+        <Button compact positive onClick={() => props.handleFileUpload(props.index)}>Upload</Button>
+      </Form>
     </Item>
   )
 }

@@ -3,7 +3,7 @@ import { Redirect, Link } from 'react-router-dom'
 
 import axios from 'axios'
 
-import { Form, Input, Button, Header, Container, Divider, Checkbox, TextArea } from 'semantic-ui-react'
+import { Form, Input, Button, Header, Container, Checkbox, TextArea } from 'semantic-ui-react'
 
 import { combineName } from 'custom-function'
 
@@ -12,7 +12,7 @@ import DoctorModal from 'partial/modal/doctor-modal'
 import ErrorMessage from 'partial/error'
 import S3Subheader from 'partial/_subheaders'
 
-class TransactionNew extends Component {
+export default class TransactionNew extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -51,8 +51,6 @@ class TransactionNew extends Component {
   }
 
   handleInputChange (event, data) {
-    console.log(event, data, event.target.type)
-
     const target = event.target
     const value = target.type === 'checkbox' ? target.checked : target.value
     const name = target.name
@@ -63,9 +61,7 @@ class TransactionNew extends Component {
   }
 
   handleCheckboxChange (event, data) {
-    console.log(event, data)
     const {
-      referralAgentId,
       referralAgent } = this.state
 
     this.setState({
@@ -74,7 +70,6 @@ class TransactionNew extends Component {
   }
 
   handleSelectChange (event, value, name) {
-    console.log(name, value)
     this.setState({
       [name]: value
     })
@@ -82,8 +77,6 @@ class TransactionNew extends Component {
 
   handleSubmit (event) {
     event.preventDefault()
-
-    console.log(this.state.referralAgentId)
 
     const formData = {
       patient: this.state.patient,
@@ -104,7 +97,6 @@ class TransactionNew extends Component {
       data: formData
     })
     .then((transactionNewRes) => {
-      console.log('new transaction data', transactionNewRes.data)
       const { errors, _id, 'transaction month': transactionMonth, 'transaction year': transactionYear } = transactionNewRes.data
 
       if (errors) return this.setState({ errors })
@@ -142,12 +134,10 @@ class TransactionNew extends Component {
         break
 
       case 'close':
-        console.log('closing modal')
         this.setState({ patientModalOpen: false })
         break
 
       case 'change':
-        console.log('searching patient')
         if (event.currentTarget.value.length >= 2) {
           axios.get(`${process.env.REACT_APP_API_ENDPOINT}/patient/search`, {
             params: { search: event.currentTarget.value }
@@ -159,8 +149,6 @@ class TransactionNew extends Component {
         }
         break
       case 'select':
-        console.log('select patient')
-        console.log(data)
         this.setState({
           selectedPatient: data,
           patient: data._id,
@@ -187,12 +175,10 @@ class TransactionNew extends Component {
         break
 
       case 'close':
-        console.log('closing modal')
         this.setState({ doctorModalOpen: false })
         break
 
       case 'change':
-        console.log('searching doctor')
         if (event.currentTarget.value.length >= 2) {
           axios.get(`${process.env.REACT_APP_API_ENDPOINT}/doctor/search`, {
             params: { search: event.currentTarget.value }
@@ -204,12 +190,9 @@ class TransactionNew extends Component {
         }
         break
       case 'select':
-        console.log('select doctor')
-        console.log(data)
         this.setState({
           selectedDoctor: data,
           receiving_doctor: data._id
-          // patientModalOpen: false
         })
 
         const eventBubbleName = new Event('input', { bubbles: true })
@@ -225,7 +208,6 @@ class TransactionNew extends Component {
 
   render () {
     if (this.state.redirectToShow) {
-      console.log('redirectToShow trans new', this.state.redirectTo)
       return <Redirect to={this.state.redirectTo} />
     }
 
@@ -240,7 +222,6 @@ class TransactionNew extends Component {
       searchFocus,
       doctorModalOpen,
       doctorSearchResult,
-      agentChecked,
       referralAgent,
       referralAgentId,
       checkboxDisabled
@@ -268,9 +249,8 @@ class TransactionNew extends Component {
               <label>Name</label>
               <input onClick={() => patientModalMethod('open')} type='text' name='patientName'
                 readOnly
-                onChange={() => console.log()}
+                onChange={() => {}}
                 ref={(input) => {
-                  console.log('input', input)
                   this.patientNameRef = input
                 }}
                 value={`${selectedPatient['first name'] || ''} ${selectedPatient['last name'] || ''}`} />
@@ -280,9 +260,8 @@ class TransactionNew extends Component {
               <input readOnly
                 type='text'
                 name='patient'
-                onChange={() => console.log()}
+                onChange={() => {}}
                 ref={(input) => {
-                  console.log('input', input)
                   this.patientIdRef = input
                 }}
                 value={patient} />
@@ -301,9 +280,8 @@ class TransactionNew extends Component {
               <label>Name</label>
               <input onClick={() => doctorModalMethod('open')} type='text' name='doctorName'
                 readOnly
-                onChange={() => console.log()}
+                onChange={() => {}}
                 ref={(input) => {
-                  console.log('input', input)
                   this.doctorNameRef = input
                 }}
                 value={`${selectedDoctor['first name'] || ''} ${selectedDoctor['last name'] || ''}`} />
@@ -313,9 +291,8 @@ class TransactionNew extends Component {
               <input readOnly
                 type='text'
                 name='receiving_doctor'
-                onChange={() => console.log()}
+                onChange={() => {}}
                 ref={(input) => {
-                  console.log('input', input)
                   this.doctorIdRef = input
                 }}
                 value={receiving_doctor} />
@@ -348,5 +325,3 @@ class TransactionNew extends Component {
     )
   }
 }
-
-export default TransactionNew

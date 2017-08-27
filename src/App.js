@@ -23,7 +23,7 @@ import UserMain from './pages/user/user-main'
 import PrivateRoute from './private-route'
 import RedirectFromLoginRoute from './redirectFromLogin-route'
 
-class App extends Component {
+export default class App extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -33,7 +33,6 @@ class App extends Component {
 
   componentDidMount () {
     auth.onAuthStateChanged(user => {
-      console.log(user)
       if (user) {
         window.localStorage.setItem(storageKey, user.uid)
         window.localStorage.setItem(userEmail, user.email)
@@ -106,5 +105,3 @@ class App extends Component {
     )
   }
 }
-
-export default App

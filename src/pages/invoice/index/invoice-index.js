@@ -146,7 +146,7 @@ export default class InvoiceIndex extends Component {
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/invoice`,
       params: {
-        page: parseInt(event.target.dataset.page),
+        page: parseInt(event.target.dataset.page, 10),
         search: queryString
       }
     })

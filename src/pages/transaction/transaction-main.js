@@ -7,11 +7,7 @@ import TransactionNew from './new/transaction-new'
 import TransactionShow from './show/transaction-show'
 import TransactionIndex from './index/transaction-index'
 
-import { AuthHeader } from 'custom-function'
-
-import axios from 'axios'
-
-class TransactionMain extends Component {
+export default class TransactionMain extends Component {
   render () {
     return (
       <Container fluid>
@@ -52,5 +48,3 @@ class TransactionMain extends Component {
     )
   }
 }
-
-export default TransactionMain

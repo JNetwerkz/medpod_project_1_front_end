@@ -49,7 +49,7 @@ export default class HospitalIndex extends Component {
       method: 'GET',
       url: `${process.env.REACT_APP_API_ENDPOINT}/hospital`,
       params: {
-        page: parseInt(event.target.dataset.page)
+        page: parseInt(event.target.dataset.page, 10)
       }
     })
     .then((res) => {

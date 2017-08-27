@@ -18,7 +18,7 @@ import EditButton from 'partial/_editButton'
 import SaveButton from 'partial/_saveButton'
 import S3Subheader from 'partial/_subheaders'
 
-class PatientShow extends Component {
+export default class PatientShow extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -81,8 +81,6 @@ class PatientShow extends Component {
     this.setState({
       [name]: value
     })
-
-    console.log(name, value)
   }
 
   handleUpdateSubmit () {
@@ -106,7 +104,8 @@ class PatientShow extends Component {
       referral_agent: referral_agent._id,
       personalPhoneNumber,
       personalEmail,
-      additionalInfo
+      additionalInfo,
+      dob
     }
 
     axios({
@@ -136,12 +135,10 @@ class PatientShow extends Component {
         break
 
       case 'close':
-        console.log('closing modal')
         this.setState({ agentModalOpen: false })
         break
 
       case 'change':
-        console.log('searching agent')
         if (event.currentTarget.value.length >= 2) {
           axios.get(`${process.env.REACT_APP_API_ENDPOINT}/agent/search`, {
             params: { search: event.currentTarget.value }
@@ -153,8 +150,6 @@ class PatientShow extends Component {
         }
         break
       case 'select':
-        console.log('select agent')
-        console.log(data)
         this.setState({
           selectedAgent: data,
           referral_agent: data
@@ -182,9 +177,7 @@ class PatientShow extends Component {
 
     return downloadPromise
     .then((res) => {
-      console.log('file download respond', res)
       const file = new Blob([ res.Body ])
-      console.log('blob', file)
       return FileSaver.saveAs(file, Key)
     })
     .catch((err) => {
@@ -202,7 +195,6 @@ class PatientShow extends Component {
 
     return deletePromise
     .then((res) => {
-      console.log(res)
       return axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/file/${_id}`)
     })
     .then((res) => {
@@ -279,7 +271,6 @@ class PatientShow extends Component {
           return axios.post(`${process.env.REACT_APP_API_ENDPOINT}/file`, data)
         })
         .then((res) => {
-          console.log(res)
           if (res.status === 200) {
             const {
               uploadedFiles
@@ -331,11 +322,8 @@ class PatientShow extends Component {
   }
 
   render () {
-
-    console.log(this.state)
     const {
       notEditing,
-      patientShow,
       'first name': firstName,
       'last name': lastName,
       'ic / passport': icPassport,
@@ -518,9 +506,8 @@ class PatientShow extends Component {
                 ? <p>{agentFirstName} {agentLastName}</p>
                 : <input onClick={() => this.agentModalMethod('open')} type='text' name='agentName'
                   readOnly
-                  onChange={() => console.log()}
+                  onChange={() => {}}
                   ref={(input) => {
-                    console.log('input', input)
                     this.agentNameRef = input
                   }}
                   value={`${agentFirstName} ${agentLastName}`} />
@@ -538,9 +525,8 @@ class PatientShow extends Component {
                 : <input readOnly
                   type='text'
                   name='referral_agent'
-                  onChange={() => console.log()}
+                  onChange={() => {}}
                   ref={(input) => {
-                    console.log('input', input)
                     this.agentIdRef = input
                   }}
                   value={agentId} />
@@ -612,7 +598,6 @@ class PatientShow extends Component {
       url: `${process.env.REACT_APP_API_ENDPOINT}/patient/${this.props.match.params.id}`
     })
     .then((res) => {
-      console.log('PatientShow res', res.data)
       this.setState({ patientShow: res.data, ...res.data, segmentLoading: false })
 
       return axios
@@ -624,5 +609,3 @@ class PatientShow extends Component {
     .catch((err) => console.error(err))
   }
 }
-
-export default PatientShow

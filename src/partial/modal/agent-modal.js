@@ -1,7 +1,7 @@
 import React from 'react'
 import Modal from 'react-modal'
 
-import { Input, Button, Header, Icon, List, Segment, Table } from 'semantic-ui-react'
+import { Input, Header, Icon, List, Segment, Table } from 'semantic-ui-react'
 
 import { combineName } from 'custom-function'
 import ModalSelectedDetails from './_modalSelectedDetails'
@@ -101,11 +101,6 @@ const AgentModal = (props) => {
               </Table.Cell>
             </Table.Row>
           </ModalSelectedDetails>
-          {/* <AgentDetails selectedAgent={selectedAgent} /> */}
-          {/* <Button onClick={
-            () => modalMethod('close')}>
-            Close
-          </Button> */}
         </section>
       </div>
     </Modal>

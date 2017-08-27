@@ -1,23 +1,11 @@
 import React from 'react'
 import Modal from 'react-modal'
 
-import { Input, Button, Header, Icon, Segment, List, Table } from 'semantic-ui-react'
+import { Input, Header, Icon, Segment, List, Table } from 'semantic-ui-react'
 import moment from 'moment'
 
 import { combineName } from 'custom-function'
 import ModalSelectedDetails from './_modalSelectedDetails'
-
-const PatientDetails = (data) => {
-  console.log(data.selectedPatient)
-  return (
-    <div>
-      <h2>Details</h2>
-      <ul>
-        <li>{combineName(data.selectedPatient)}</li>
-      </ul>
-    </div>
-  )
-}
 
 const PatientModal = (props) => {
   const {
@@ -135,11 +123,6 @@ const PatientModal = (props) => {
               </Table.Cell>
             </Table.Row>
           </ModalSelectedDetails>
-          {/* <PatientDetails selectedPatient={selectedPatient} />
-          <Button onClick={
-            () => modalMethod('close')}>
-            Close
-          </Button> */}
         </section>
       </div>
     </Modal>

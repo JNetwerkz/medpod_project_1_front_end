@@ -1,26 +1,5 @@
 .App {
-  /*text-align: center;*/
   height: 100vh;
-}
-
-.App main {
-  /*width: 90%;*/
-  /*margin: 0 auto;*/
-  /*background-color: lightgrey;*/
-}
-
-#app__nav {
-  /*height: 100vh;*/
-  /*margin-bottom: 0;
-  padding-top: 1.5rem;
-  background-color: rgb(55, 55, 55);
-  width: 15rem;*/
-}
-
-#app__main {
-  /*height: 100vh;
-  padding: 1rem 3rem;*/
-  /*overflow-y: auto;*/
 }
 
 #app__nav {
@@ -50,20 +29,8 @@
   margin: auto;
 }
 
-/*
-#app__leftcolumn {
-  background-color: rgb(27, 28, 29);
-  margin-bottom: 0;
-}
-
-#app__rightcolumn {
-  height: 100vh;
-  overflow-y: auto;
-}*/
-
 .flex {
   display: flex;
-  /*flex-wrap: wrap;*/
 }
 
 .flex--row {
@@ -152,7 +119,6 @@
 .grid__invoice-new {
   grid-template-rows: auto 1fr;
   grid-template-columns: 100%;
-  /*grid-column-gap: 1.5em;*/
   grid-template-areas:
     "grid__invoice-new-search"
     "grid__invoice-new-results";

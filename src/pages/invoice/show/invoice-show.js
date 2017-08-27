@@ -99,9 +99,10 @@ export default class InvoiceShow extends Component {
     let lastStatus, lastStatusName
 
     const statusList = statuses.map((status, index) => {
-      index === lastIndexOfStatus
-      ? lastStatus = status
-      : ''
+      // if (index === lastIndexOfStatus) {
+      //   lastStatus = status
+      // }
+      lastStatus = index === lastIndexOfStatus ? status : ''
 
       const momentUpdatedAt = moment(status.createdAt).format('DD MMM YYYY')
       return <List.Item key={`${status.name}-${index}`}>

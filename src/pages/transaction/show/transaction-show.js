@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
-import { Container, Segment, Button, Header, Form, Input, Grid, Item, Divider } from 'semantic-ui-react'
+import { Container, Segment, Button, Header, Form, Grid, Item, Divider } from 'semantic-ui-react'
 
 import axios from 'axios'
 import moment from 'moment'
@@ -9,14 +9,14 @@ import * as currencyFormatter from 'currency-formatter'
 import * as fileExtension from 'file-extension'
 import * as FileSaver from 'file-saver'
 
-import { AuthHeader, M6117, combineName, uploadFileOption } from 'custom-function'
+import { M6117, combineName, uploadFileOption } from 'custom-function'
 import { s3, s3Bucket as Bucket } from 'aws'
 
 import FileInputRow from 'partial/_fileInputRow'
 import FileRow from 'partial/_fileRow'
 import S3Subheader from 'partial/_subheaders'
 
-class TransactionShow extends Component {
+export default class TransactionShow extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -54,9 +54,7 @@ class TransactionShow extends Component {
 
     return downloadPromise
     .then((res) => {
-      console.log('file download respond', res)
       const file = new Blob([ res.Body ])
-      console.log('blob', file)
       return FileSaver.saveAs(file, Key)
     })
     .catch((err) => {
@@ -74,7 +72,6 @@ class TransactionShow extends Component {
 
     return deletePromise
     .then((res) => {
-      console.log(res)
       return axios.delete(`${process.env.REACT_APP_API_ENDPOINT}/file/${_id}`)
     })
     .then((res) => {
@@ -96,7 +93,6 @@ class TransactionShow extends Component {
     } = this.state
 
     filesToUpload.push({ file: '', description: '', fileType: '', uploading: false })
-    // filesStatus.push({ uploading: false })
 
     this.setState({
       filesToUpload, filesStatus
@@ -152,7 +148,6 @@ class TransactionShow extends Component {
           return axios.post(`${process.env.REACT_APP_API_ENDPOINT}/file`, data)
         })
         .then((res) => {
-          console.log(res)
           if (res.status === 200) {
             const {
               uploadedFiles
@@ -169,31 +164,6 @@ class TransactionShow extends Component {
         })
     )
   }
-
-  // handleAllFileUpload () {
-  //   const patientId = this.transactionShow.patient._id
-  //   const files = this.files
-  //
-  //   const uploadPromise = files.map((item) => {
-  //     console.log(item)
-  //     const fileExt = fileExtension(item.file.name)
-  //     console.log(fileExt)
-  //     const stamp = moment().format('DDMMYYHHmmssSS')
-  //     const Key = `${patientId}_${item.fileType || ''}_${stamp}.${fileExt}`
-  //     const params = {
-  //       Body: item.file,
-  //       Bucket,
-  //       Key
-  //     }
-  //     return s3.putObject(params).promise()
-  //   })
-  //   //
-  //   Promise.all(uploadPromise)
-  //   .then((res) => {
-  //     console.log(res)
-  //   })
-  //   .catch((err) => console.error(err))
-  // }
 
 // handle onChange event of <input> file
   handleFileInputChange (event, value, index, type) {
@@ -361,18 +331,14 @@ class TransactionShow extends Component {
     axios
     .get(`${process.env.REACT_APP_API_ENDPOINT}/transaction/${this.props.match.params.id}`)
     .then((res) => {
-      console.log('TransactionShow res', res.data)
       this.setState({ transactionShow: res.data, mounted: true })
 
       return axios
       .get(`${process.env.REACT_APP_API_ENDPOINT}/file`, { params: { transaction: res.data._id } })
     })
     .then((res) => {
-      console.log(res)
       this.setState({ uploadedFiles: res.data, segmentLoading: false })
     })
     .catch((err) => console.error(err))
   }
 }
-
-export default TransactionShow

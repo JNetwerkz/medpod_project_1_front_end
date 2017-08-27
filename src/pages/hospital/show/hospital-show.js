@@ -87,7 +87,6 @@ export default class HospitalShow extends Component {
   render () {
     const {
       notEditing,
-      hospitalShow,
       name,
       nameAbbreviation,
       associationAddress_street,

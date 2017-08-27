@@ -18,6 +18,7 @@ export default class InvoiceNew extends Component {
       //
       redirectToShow: false,
       redirectTo: '',
+      searchLoading: false,
       //
       'transaction month': moment().month() + 1,
       'transaction year': moment().year(),
@@ -63,6 +64,7 @@ export default class InvoiceNew extends Component {
 
   handleSearchSubmit (event) {
     event.preventDefault()
+    this.setState({ searchLoading: true })
     const formData = {
       'transaction month': this.state['transaction month'],
       'transaction year': this.state['transaction year'],
@@ -89,7 +91,8 @@ export default class InvoiceNew extends Component {
       this.setState({
         transactionSearchResult: res.data,
         checkedTransaction: checkedTransaction,
-        selectedTransaction: selectedTransaction
+        selectedTransaction: selectedTransaction,
+        searchLoading: false
       })
     })
     .catch((err) => console.error(err))
@@ -264,9 +267,9 @@ export default class InvoiceNew extends Component {
     .then((res) => {
       const { errors } = res.data
 
-      errors
-      ? window.scrollTo(0, 0)
-      : ''
+      // errors
+      // ? window.scrollTo(0, 0)
+      // : ''
 
       errors
       ? (this.setState({ errors }))
@@ -322,6 +325,7 @@ export default class InvoiceNew extends Component {
                 handleTransactionCheckboxChange={this.handleTransactionCheckboxChange}
                 handleRouteSwitch={this.handleRouteSwitch}
                 // state as props
+                searchLoading={this.state.searchLoading}
                 doctorModalOpen={this.state.doctorModalOpen}
                 doctorSearchResult={this.state.doctorSearchResult}
                 transactionYear={this.state['transaction year']}

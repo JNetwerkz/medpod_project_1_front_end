@@ -17,20 +17,18 @@ const InvoiceItem = (props) => {
   const {
     'invoice date': invoiceDate,
     'invoice number': invoiceNumber,
-    patient
-
+    patient,
+    procedureName
   } = transaction
 
-  const parsedAmount = currencyFormatter.format(receivable.amount, { code: 'SGD' })
-
-  const momentInvoiceDate = moment(invoiceDate).format('DD MMM YYYY')
-  const parsedPatientName = combineName(patient)
-
   const {
-    percentage,
     amount
   } = receivable
 
+  const parsedAmount = currencyFormatter.format(amount, { code: 'SGD' })
+
+  const momentInvoiceDate = moment(invoiceDate).format('DD MMM YYYY')
+  const parsedPatientName = combineName(patient)
 
   const AddonItems = addons.map((addon, index) => {
     return (
@@ -49,19 +47,19 @@ const InvoiceItem = (props) => {
   })
 
   return (
-      <Table.Row>
-        <Table.Cell>{invoiceNumber}</Table.Cell>
-        <Table.Cell>{momentInvoiceDate}</Table.Cell>
-        <Table.Cell>{parsedPatientName}</Table.Cell>
-        <Table.Cell>
-          Base<br />
-          {AddonItems}
-        </Table.Cell>
-        <Table.Cell textAlign='right'>
-          {parsedAmount}<br />
-          {AddonAmount}
-        </Table.Cell>
-      </Table.Row>
+    <Table.Row>
+      <Table.Cell>{invoiceNumber}</Table.Cell>
+      <Table.Cell>{momentInvoiceDate}</Table.Cell>
+      <Table.Cell>{parsedPatientName}</Table.Cell>
+      <Table.Cell>
+        {procedureName}<br />
+        {AddonItems}
+      </Table.Cell>
+      <Table.Cell textAlign='right'>
+        {parsedAmount}<br />
+        {AddonAmount}
+      </Table.Cell>
+    </Table.Row>
   )
 }
 

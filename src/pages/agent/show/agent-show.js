@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 
-import { Input, Button, Container, Header, Segment, Form, Divider, TextArea } from 'semantic-ui-react'
+import { Input, Container, Header, Segment, Form, Divider, TextArea } from 'semantic-ui-react'
 import axios from 'axios'
-import qs from 'qs'
-import moment from 'moment'
 
 import CommissionTable from './_show-table'
 import ErrorMessage from 'partial/error'
@@ -58,8 +56,6 @@ export default class AgentShow extends Component {
     this.setState({
       [name]: value
     })
-
-    console.log(name, value)
   }
 
   handleUpdateSubmit () {
@@ -85,16 +81,13 @@ export default class AgentShow extends Component {
         ...res.data,
         errors: null
       })
-      // this.setState({ agentShow: res.data, notEditing: true, ...res.data })
     })
     .catch((err) => console.error(err))
   }
 
   render () {
-    console.log(this.state)
     const {
       notEditing,
-      agentShow,
       'first name': firstName,
       'last name': lastName,
       gender,
@@ -102,24 +95,14 @@ export default class AgentShow extends Component {
       personalPhoneNumber,
       personalEmail,
       additionalInfo,
-      'transaction year': transactionYear,
-      'transaction month': transactionMonth,
-      page,
-      pages,
       segmentLoading,
-      commissionTableLoading,
-      agentCommissions,
       errors
     } = this.state
 
     const {
       handleEditState,
       handleEditChange,
-      handleUpdateSubmit,
-      handleSelectChange,
-      handleInputChange,
-      handleSearchChange,
-      handlePaginate
+      handleUpdateSubmit
     } = this
 
     const content = segmentLoading
@@ -242,17 +225,7 @@ export default class AgentShow extends Component {
           Commission Record
         </Header>
         <CommissionTable
-          // handleSelectChange={handleSelectChange}
-          // handleInputChange={handleInputChange}
-          // handleSearchChange={handleSearchChange}
-          // transactionYear={transactionYear}
-          // transactionMonth={transactionMonth}
-          // handlePaginate={handlePaginate}
-          // page={page}
-          // pages={pages}
-          // agentCommissions={agentCommissions}
           match={this.props.match}
-          // commissionTableLoading={commissionTableLoading}
         />
       </Container>
     )
@@ -265,11 +238,9 @@ export default class AgentShow extends Component {
       url: `${process.env.REACT_APP_API_ENDPOINT}/agent/${referralAgentId}`
     })
     .then((res) => {
-      console.log('AgentShow res', res.data)
       const {
         _id
       } = res.data
-
       this.setState({ agentShow: res.data, ...res.data, segmentLoading: false })
       return _id
     })
