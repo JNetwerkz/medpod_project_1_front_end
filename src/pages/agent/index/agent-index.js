@@ -102,7 +102,7 @@ export default class AgentIndex extends Component {
         <Table.Row>
           <Table.HeaderCell>Name</Table.HeaderCell>
           <Table.HeaderCell>IC / Passport</Table.HeaderCell>
-          <Table.HeaderCell>Contact Numeber</Table.HeaderCell>
+          <Table.HeaderCell>Contact Number</Table.HeaderCell>
           <Table.HeaderCell>Email</Table.HeaderCell>
           <Table.HeaderCell>Gender</Table.HeaderCell>
         </Table.Row>

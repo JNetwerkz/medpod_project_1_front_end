@@ -6,7 +6,6 @@ import axios from 'axios'
 import ErrorMessage from 'partial/error'
 
 const AddonRow = (props) => {
-  console.log(props)
   const {
     addonData: { name, status, _id },
     handleAddOnUpdate
@@ -93,7 +92,6 @@ export default class AddonIndex extends Component {
       url: `${process.env.REACT_APP_API_ENDPOINT}/addon`
     })
     .then((res) => {
-      console.log('AddonIndex res', res.data)
       this.setState({ addonIndex: res.data, segmentLoading: false })
     })
   }

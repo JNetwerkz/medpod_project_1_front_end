@@ -162,7 +162,6 @@ export default class CommissionTable extends Component {
       }
     })
     .then((res) => {
-      console.log(res.data.docs)
       const {
         docs: agentCommissions,
         ...rest

@@ -16,15 +16,15 @@ const IndexRow = ({ agentData, match }) => {
 
   return (
     <Table.Row>
-        <Table.Cell collapsing textAlign='right'>
-          <Link to={`${match.url}/${_id}`}>
+      <Table.Cell collapsing textAlign='right'>
+        <Link to={`${match.url}/${_id}`}>
           {`${combineName(agentData)}`}
-          </Link>
-        </Table.Cell>
-        <Table.Cell>{icPassport}</Table.Cell>
-        <Table.Cell>{personalPhoneNumber}</Table.Cell>
-        <Table.Cell>{personalEmail}</Table.Cell>
-        <Table.Cell>{gender}</Table.Cell>
+        </Link>
+      </Table.Cell>
+      <Table.Cell>{icPassport}</Table.Cell>
+      <Table.Cell>{personalPhoneNumber}</Table.Cell>
+      <Table.Cell>{personalEmail}</Table.Cell>
+      <Table.Cell>{gender}</Table.Cell>
     </Table.Row>
   )
 }
